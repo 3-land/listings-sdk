@@ -1,0 +1,27 @@
+{
+  "name": "3land_sdk",
+  "version": "1.0.0",
+  "description": "sdk for interacting with 3land's solana program",
+  "main": "./src/library/examples/storeExample.ts",
+  "type": "module",
+  "scripts": {
+    "test": "npx tsx ./src/library/examples/storeExample.ts"
+  },
+  "author": "biccs",
+  "license": "ISC",
+  "dependencies": {
+    "@coral-xyz/borsh": "^0.30.1",
+    "@project-serum/anchor": "^0.26.0",
+    "@solana/web3.js": "^1.95.4",
+    "bn": "^1.0.5",
+    "bn.js": "^5.2.1",
+    "fs": "^0.0.1-security",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/bn.js": "^5.1.6",
+    "@types/node": "^22.7.7",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.3"
+  }
+}
