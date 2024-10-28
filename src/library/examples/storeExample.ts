@@ -1,6 +1,5 @@
 import { BN } from "bn.js";
 import { StoreConfig, MetadataArgs, SaleConfig, Store } from "../Store";
-// import { CnFaucetSDK, StoreConfig, MetadataArgs, SaleConfig } from "../src";
 import { Keypair, PublicKey, SendTransactionError } from "@solana/web3.js";
 import {
   Creator,
@@ -17,86 +16,121 @@ import {
   TokenProgramVersion,
 } from "../../types/types";
 import { Wallet } from "@project-serum/anchor";
-import * as fs from "fs";
+import * as fs2 from "fs";
+import fs from "fs/promises"; // Note: using fs/promises
+import { PROGRAM_CNFT, SOLANA_ENDPOINT } from "../../types/programId";
+// import fetch from "node-fetch";
+import path from "path";
+import { Blob } from "buffer";
+import { arrayBuffer } from "stream/consumers";
 
-// Replace with your actual endpoint
-const SOLANA_ENDPOINT = "https://api.devnet.solana.com";
+interface StoreInitOptions {
+  walletPath: string;
+}
 
-async function main() {
-  // Initialize the SDK
+function initializeSDKAndWallet(options: StoreInitOptions) {
   const sdk = new Store(SOLANA_ENDPOINT);
-
-  // Create a new keypair for testing (replace with your actual keypair in production)
-  const secretKey = JSON.parse(
-    fs.readFileSync(
-      "/home/biccsdev/3land/packs_sdk/wallet/my-keypair.json",
-      "utf-8"
-    )
-  );
+  const secretKey = JSON.parse(fs2.readFileSync(options.walletPath, "utf-8"));
   const walletKeypair = Keypair.fromSecretKey(Uint8Array.from(secretKey));
   const payer = new Wallet(walletKeypair);
-  console.log("connected wallet: ", payer.publicKey.toString());
-  //   const payer = Keypair.generate();
 
-  // Example: Create a store
-  const storeConfig: StoreConfig = {
-    fee: new BN(1000),
-    feePercentage: 5,
-    feeType: new FeeType.AllMints(),
-    trust: payer.publicKey,
-    rules: [],
-    toJSON: function (): StoreConfigJSON {
-      throw new Error("Function not implemented.");
-    },
-    toEncodable: function (): {
-      fee: import("bn.js");
-      feePercentage: number;
-      feeType:
-        | { AllMints: {} }
-        | { PricedMintsOnly: {} }
-        | { SkipBurnMints: {} };
-      trust: PublicKey;
-      rules: (
-        | { ListingPerWallet: { config: { amount: number } } }
-        | {
-            AllowedCurrency: {
-              config:
-                | { Native: {} }
-                | { Spl: { id: PublicKey } }
-                | { Collection: { id: PublicKey } }
-                | { None: {} };
-            };
-          }
-      )[];
-    } {
-      throw new Error("Function not implemented.");
-    },
-  };
+  return { sdk, walletKeypair, payer };
+}
 
-  //   const storeAccount = Keypair.generate();
-  //   const holderAccount = Keypair.generate();
+async function createStoreTest(options: StoreInitOptions) {
+  const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
 
   try {
-    // const createStoreTxId = await sdk.createStore(
-    //   walletKeypair,
-    //   "biccs Test Store",
-    //   storeConfig,
-    //   Math.random() * 100,
-    //   payer.publicKey
-    // );
-    // console.log("Store created. Transaction ID:", createStoreTxId);
+    const storeConfig: StoreConfig = {
+      fee: new BN(1000),
+      feePercentage: 5,
+      feeType: new FeeType.AllMints(),
+      trust: payer.publicKey,
+      rules: [],
+      toJSON: function (): StoreConfigJSON {
+        throw new Error("Function not implemented.");
+      },
+      toEncodable: function () {
+        throw new Error("Function not implemented.");
+      },
+    };
 
+    const storeId = Math.floor(Math.random() * 100);
+
+    const createStoreTxId = await sdk.createStore(
+      walletKeypair,
+      "biccs Test Store 2",
+      storeConfig,
+      storeId,
+      payer.publicKey
+    );
+
+    return {
+      transactionId: createStoreTxId,
+      payerPublicKey: payer.publicKey.toString(),
+    };
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+}
+
+async function createSingleTest(
+  options: StoreInitOptions,
+  storeAccount: string
+) {
+  const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
+
+  try {
     const creator = new Creator({
       address: payer.publicKey,
-      verified: true,
+      verified: false,
       share: 100,
     });
 
-    // Example: Create a single edition
+    // const imageBuffer = fs2.readFileSync(
+    //   path.join(process.cwd(), "assets", "4.png")
+    // ).buffer;
+    // const coverBuffer = fs2.readFileSync(
+    //   path.join(process.cwd(), "assets", "3land_rebrand.gif")
+    // ).buffer;
+
+    // const options = {
+    //   metadata: {
+    //     name: "My NFT",
+    //     description: "Some description for my nft",
+    //     files: {
+    //       file: {
+    //         arrayBuffer() {
+    //           return imageBuffer;
+    //         },
+    //         type: "image/png",
+    //       },
+    //       cover: {
+    //         arrayBuffer() {
+    //           return coverBuffer;
+    //         },
+    //         type: "image/gif",
+    //       },
+    //     },
+    //   },
+    //   sellerFeeBasisPoints: 500,
+    //   traits: [],
+    // };
+    // console.log("options: ", options);
+    // const offChainMetadata = await sdk.uploadFilesIrys(
+    //   payer.publicKey,
+    //   payer.publicKey,
+    //   walletKeypair,
+    //   options
+    // );
+
+    // console.log("result from irys upload: ", offChainMetadata);
+
     const metadata: MetadataArgs = {
       name: "My NFT",
-      symbol: "MNFT",
-      uri: "https://example.com/nft.json",
+      symbol: "MYNFT",
+      uri: "https://arweave.net/BT_tVDNA3xLDdmaPoxjawg6nhBT3OCjViMVS8fdDlFY",
       sellerFeeBasisPoints: 500,
       primarySaleHappened: false,
       isMutable: true,
@@ -109,29 +143,7 @@ async function main() {
       toJSON: function (): MetadataArgsJSON {
         throw new Error("Function not implemented.");
       },
-      toEncodable: function (): {
-        name: string;
-        symbol: string;
-        uri: string;
-        sellerFeeBasisPoints: number;
-        primarySaleHappened: boolean;
-        isMutable: boolean;
-        editionNonce: number | null;
-        tokenStandard:
-          | { NonFungible: {} }
-          | { FungibleAsset: {} }
-          | { Fungible: {} }
-          | { NonFungibleEdition: {} }
-          | null;
-        collection: { verified: boolean; key: PublicKey } | null;
-        uses: {
-          useMethod: { Burn: {} } | { Multiple: {} } | { Single: {} };
-          remaining: import("bn.js");
-          total: import("bn.js");
-        } | null;
-        tokenProgramVersion: { Original: {} } | { Token2022: {} };
-        creators: { address: PublicKey; verified: boolean; share: number }[];
-      } {
+      toEncodable: function () {
         throw new Error("Function not implemented.");
       },
     };
@@ -144,116 +156,113 @@ async function main() {
           toJSON: function (): PriceJSON {
             throw new Error("Function not implemented.");
           },
-          toEncodable: function (): {
-            amount: import("bn.js");
-            priceType:
-              | { Native: {} }
-              | { Spl: { id: PublicKey } }
-              | { Collection: { id: PublicKey } }
-              | { None: {} };
-          } {
+          toEncodable: function () {
             throw new Error("Function not implemented.");
           },
         },
       ],
       priceType: new PriceRule.None(),
       rules: [],
-      editionStoreType: new EditionStoreType.None(),
+      sendToVault: 0,
       saleType: new SaleType.Normal(),
       toJSON: function (): SaleConfigJSON {
         throw new Error("Function not implemented.");
       },
-      toEncodable: function (): {
-        prices: {
-          amount: import("bn.js");
-          priceType:
-            | { Native: {} }
-            | { Spl: { id: PublicKey } }
-            | { Collection: { id: PublicKey } }
-            | { None: {} };
-        }[];
-        priceType: { None: {} } | { And: {} } | { Or: {} };
-        rules: (
-          | { CollectionGate: { id: PublicKey } }
-          | { DateGate: { time: number; ends: number } }
-          | {
-              DatePriorityGate: { starts: number; ends: number; index: number };
-            }
-          | { ListGate: { id: PublicKey } }
-          | {
-              AuthorityGate: {
-                types: ({ IPGate: {} } | { BiometricsGate: {} })[];
-              };
-            }
-        )[];
-        editionStoreType: { None: {} } | { Name: {} } | { Url: {} };
-        saleType: { Normal: {} } | { NoMarketFee: {} };
-      } {
+      toEncodable: function () {
         throw new Error("Function not implemented.");
       },
     };
 
-    // const itemAccount = Keypair.generate();
-    // const creatorAuthority = Keypair.generate();
-    // const itemReserveList = Keypair.generate();
-
-    const storeAccount = "B2VKuCgz5PqxrRjz7oha4aDy8SMpjgTzqvGMTSL38kkL";
-
     const createSingleEditionTxId = await sdk.createSingleEdition(
       walletKeypair,
       new PublicKey(storeAccount),
-      //   itemAccount.publicKey,
-      //   creatorAuthority.publicKey,
-      //   itemReserveList.publicKey,
       100,
       metadata,
       saleConfig,
-      1,
+      Math.floor(Math.random() * 100),
       [1, 2, 3],
       [1, 2],
       1,
       12345,
-      payer.publicKey
+      payer.publicKey,
+      new PublicKey("2rQq34FJG1613i7H8cDfxuGCtEjJmFAUNbAPJqK699oD")
     );
+
+    return {
+      transactionId: createSingleEditionTxId,
+      payerPublicKey: payer.publicKey.toString(),
+    };
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+}
+
+async function buySingleTest(options: StoreInitOptions, storeAccount: string) {
+  const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
+
+  try {
+    const owner = Keypair.generate();
+
+    const buySingleEditionTxId = await sdk.buySingleEdition(
+      walletKeypair,
+      payer.publicKey,
+      PROGRAM_CNFT,
+      PROGRAM_CNFT,
+      owner.publicKey,
+      [0, 0, 0, 0, 0, 0],
+      new PublicKey(storeAccount),
+      payer.publicKey,
+      1
+    );
+
+    return {
+      transactionId: buySingleEditionTxId,
+      ownerPublicKey: owner.publicKey.toString(),
+    };
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+}
+
+function handleError(error: unknown) {
+  if (error instanceof SendTransactionError) {
+    console.error("Transaction failed. Error message:", error.message);
+    console.error("Transaction logs:", error.logs);
+  } else {
+    console.error("An unexpected error occurred:", error);
+  }
+}
+
+async function main() {
+  const options: StoreInitOptions = {
+    walletPath: "/home/biccsdev/3land/packs_sdk/wallet/my-keypair.json",
+  };
+
+  try {
+    // Create store
+    // const storeResult = await createStoreTest(options);
+    // console.log("Store created. Transaction ID:", storeResult.transactionId);
+    // Create single edition
+    const storeAccount = "7eK22v8AjrWZYnfia9uTfVXP3WktPZQMbfMJhshuoTFL";
+    const singleEditionResult = await createSingleTest(options, storeAccount);
     console.log(
       "Single edition created. Transaction ID:",
-      createSingleEditionTxId,
-      payer.publicKey
+      singleEditionResult.transactionId
     );
-
-    // // Example: Buy a single edition
-    // const paymentAccount = Keypair.generate();
-    // const packAccount = Keypair.generate();
-    // const burnProgress = Keypair.generate();
-    // const owner = Keypair.generate();
-
-    // const buySingleEditionTxId = await sdk.buySingleEdition(
-    //   payer,
-    //   paymentAccount.publicKey,
-    //   itemAccount.publicKey,
-    //   packAccount.publicKey,
-    //   burnProgress.publicKey,
-    //   holderAccount.publicKey,
-    //   owner.publicKey,
-    //   [1, 2, 3, 4, 5, 6]
-    // );
+    // Buy single edition
+    // const itemAccount = "6sicpV1UBo3T2z7T5Z8PDBLswE1BQg8sRsgtP8sFmoju";
+    // const buyResult = await buySingleTest(options, storeAccount);
     // console.log(
     //   "Single edition purchased. Transaction ID:",
-    //   buySingleEditionTxId
+    //   buyResult.transactionId
     // );
   } catch (error) {
-    if (error instanceof SendTransactionError) {
-      console.error("Transaction failed. Error message:", error.message);
-      console.error("Transaction logs:", error.logs);
-
-      // If you specifically want to use getLogs()
-      //   const logs = error.getLogs(connection);
-      //   console.error("Detailed logs:", logs);
-    } else {
-      console.error("An unexpected error occurred:", error);
-    }
-    // console.error("Error:", error);
+    handleError(error);
   }
 }
 
 main();
+
+export { createStoreTest, createSingleTest, buySingleTest, SOLANA_ENDPOINT };

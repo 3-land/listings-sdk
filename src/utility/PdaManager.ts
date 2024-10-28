@@ -1,6 +1,10 @@
 import BN from "bn.js";
-import { PROGRAM_ID } from "../types/programId";
+import { PROGRAM_ID, TOKEN_METADATA_PROGRAM_ID } from "../types/programId";
 import { PublicKey } from "@solana/web3.js";
+import { ApproveCollectionAuthorityInstructionAccounts } from "@metaplex-foundation/mpl-token-metadata";
+import { web3 } from "@project-serum/anchor";
+
+export const METADATA_PREFIX = "metadata";
 
 export function holderPDA({ creator, slot }: any) {
   if (!slot) slot = 0;
@@ -8,6 +12,19 @@ export function holderPDA({ creator, slot }: any) {
   return PublicKey.findProgramAddress(
     [
       Buffer.from("holder"),
+      creator.toBytes(),
+      new BN(slot).toArrayLike(Buffer, "le", 8),
+    ],
+    toPublicKey(PROGRAM_ID)
+  );
+}
+
+export function holderAccountPDA({ creator, slot }: any) {
+  if (!slot) slot = 0;
+  creator = toPublicKey(creator);
+  return PublicKey.findProgramAddress(
+    [
+      Buffer.from("holder_account"),
       creator.toBytes(),
       new BN(slot).toArrayLike(Buffer, "le", 8),
     ],
@@ -31,6 +48,7 @@ export function storePDA({ storeId, creator, holder }: any) {
 }
 
 export function creatorAuthorityPDA({ creator, store }: any) {
+  console.log("creator auth: ", store, creator);
   store = toPublicKey(store);
   creator = toPublicKey(creator);
   return PublicKey.findProgramAddress(
@@ -63,7 +81,7 @@ export function itemReserveListPDA({ item }: any) {
   );
 }
 
-const toPublicKey = (key: string | PublicKey) => {
+export const toPublicKey = (key: string | PublicKey | boolean) => {
   if (typeof key !== "string") return key;
   const PubKeysInternedMap = new Map();
   let result = PubKeysInternedMap.get(key);
@@ -73,3 +91,150 @@ const toPublicKey = (key: string | PublicKey) => {
   }
   return result;
 };
+
+export const getMetadataPDA = async (mint: any) => {
+  const [publicKey] = await PublicKey.findProgramAddress(
+    [
+      Buffer.from("metadata"),
+      TOKEN_METADATA_PROGRAM_ID.toBuffer(),
+      mint.toBuffer(),
+    ],
+    TOKEN_METADATA_PROGRAM_ID
+  );
+  return publicKey;
+};
+
+export const getEditionPDA = async (mint: any, full: any) => {
+  const tk = await PublicKey.findProgramAddress(
+    [
+      Buffer.from(METADATA_PREFIX),
+      PROGRAM_ID.toBuffer(),
+      mint.toBuffer(),
+      Buffer.from("edition"),
+    ],
+    PROGRAM_ID
+  );
+  return tk[0];
+};
+
+export const collectionAuthorityRecord = async ({
+  mint,
+  new_authority,
+}: any) => {
+  mint = toPublicKey(mint);
+  new_authority = toPublicKey(new_authority);
+  return PublicKey.findProgramAddress(
+    [
+      Buffer.from("metadata"),
+      TOKEN_METADATA_PROGRAM_ID.toBuffer(),
+      mint.toBuffer(),
+      Buffer.from("collection_authority"),
+      new_authority.toBuffer(),
+    ],
+    TOKEN_METADATA_PROGRAM_ID
+  );
+};
+
+export const creatorRegistryPDA = ({ user, currency, store }: any) => {
+  user = toPublicKey(user);
+  currency = toPublicKey(currency);
+  store = toPublicKey(store);
+  return PublicKey.findProgramAddress(
+    [
+      Buffer.from("creator_registry"),
+      currency.toBytes(),
+      user.toBytes(),
+      store.toBytes(),
+    ],
+    toPublicKey(PROGRAM_ID)
+  );
+};
+
+export const userActivityPDA = async ({ user, store }: any) => {
+  user = toPublicKey(user);
+
+  store = toPublicKey(store);
+  return PublicKey.findProgramAddress(
+    [Buffer.from("user_activity_tracking"), user.toBytes(), store.toBytes()],
+    toPublicKey(PROGRAM_ID)
+  );
+};
+
+// import * as beet from "@metaplex-foundation/beet";
+
+// export const ApproveCollectionAuthorityStruct = new beet.BeetArgsStruct<{
+//   instructionDiscriminator: number;
+// }>(
+//   [["instructionDiscriminator", beet.u8]],
+//   "ApproveCollectionAuthorityInstructionArgs"
+// );
+
+// export const approveCollectionAuthorityInstructionDiscriminator = 23;
+
+// /**
+//  * Creates a _ApproveCollectionAuthority_ instruction.
+//  *
+//  * @param accounts that will be accessed while the instruction is processed
+//  * @category Instructions
+//  * @category ApproveCollectionAuthority
+//  * @category generated
+//  */
+// export function createApproveCollectionAuthorityInstruction(
+//   accounts: any,
+//   // accounts: ApproveCollectionAuthorityInstructionAccounts,
+//   programId = new web3.PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s")
+// ) {
+//   const [data] = ApproveCollectionAuthorityStruct.serialize({
+//     instructionDiscriminator:
+//       approveCollectionAuthorityInstructionDiscriminator,
+//   });
+//   const keys: any[] = [
+//     {
+//       pubkey: accounts.collectionAuthorityRecord,
+//       isWritable: true,
+//       isSigner: false,
+//     },
+//     {
+//       pubkey: accounts.newCollectionAuthority,
+//       isWritable: false,
+//       isSigner: false,
+//     },
+//     {
+//       pubkey: accounts.updateAuthority,
+//       isWritable: true,
+//       isSigner: true,
+//     },
+//     {
+//       pubkey: accounts.payer,
+//       isWritable: true,
+//       isSigner: true,
+//     },
+//     {
+//       pubkey: accounts.metadata,
+//       isWritable: false,
+//       isSigner: false,
+//     },
+//     {
+//       pubkey: accounts.mint,
+//       isWritable: false,
+//       isSigner: false,
+//     },
+//     {
+//       pubkey: accounts.systemProgram ?? web3.SystemProgram.programId,
+//       isWritable: false,
+//       isSigner: false,
+//     },
+//     {
+//       pubkey: accounts.rent ?? web3.SYSVAR_RENT_PUBKEY,
+//       isWritable: false,
+//       isSigner: false,
+//     },
+//   ];
+
+//   const ix = new web3.TransactionInstruction({
+//     programId,
+//     keys,
+//     data,
+//   });
+//   return ix;
+// }
