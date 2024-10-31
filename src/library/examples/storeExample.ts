@@ -233,7 +233,7 @@ function handleError(error: unknown) {
 
 async function main() {
   const options: StoreInitOptions = {
-    walletPath: "/home/biccsdev/3land/packs_sdk/wallet/my-keypair.json",
+    walletPath: "", //route to keypair.json generated from the solana cli
   };
 
   try {
@@ -241,14 +241,14 @@ async function main() {
     // const storeResult = await createStoreTest(options);
     // console.log("Store created. Transaction ID:", storeResult.transactionId);
     // Create single edition
-    const storeAccount = "7eK22v8AjrWZYnfia9uTfVXP3WktPZQMbfMJhshuoTFL";
+    const storeAccount = "7eK22v8AjrWZYnfia9uTfVXP3WktPZQMbfMJhshuoTFL"; //current store created for testing
     // const singleEditionResult = await createSingleTest(options, storeAccount);
     // console.log(
     //   "Single edition created. Transaction ID:",
     //   singleEditionResult.transactionId
     // );
     // Buy single edition
-    const itemAccount = "9LWov3FX7UdYLj6p8ULWnPSRFDVqW8WreJHBEjTvKeDZ";
+    const itemAccount = "9LWov3FX7UdYLj6p8ULWnPSRFDVqW8WreJHBEjTvKeDZ"; //current item created for testing
     const buyResult = await buySingleTest(options, storeAccount, itemAccount);
     console.log(
       "Single edition purchased. Transaction ID:",
