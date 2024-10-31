@@ -1,23 +1,36 @@
-import { PublicKey, TransactionInstruction } from "@solana/web3.js";
-import { init as Irys } from "../../Irys/irys";
+import {
+  Keypair,
+  PublicKey,
+  Signer,
+  TransactionInstruction,
+} from "@solana/web3.js";
+import { init as Irys, UploadOptions } from "../../Irys/irys";
 import { checkFileType } from "../../../utility/utils";
+import { Blob } from "node:buffer";
 
 export async function uploadFilesIrysInstruction(
-  address: PublicKey,
-  payer: PublicKey,
-  options: any
-): Promise<TransactionInstruction> {
-  const irys = await Irys(payer.toBase58(), options);
-  const signer = irys?.getWallet();
-
+  options: any,
+  irysObj: any,
+  uuid: string
+): Promise<{
+  instruction: TransactionInstruction;
+  signerIrys: Signer;
+  metadataUrl: string | undefined;
+}> {
+  const irys = irysObj;
+  const signer = await irys?.getWallet();
   let main_file: any = false;
   let cover_file: any = false;
 
   if (options.metadata.files.file) {
+    console.log("main file b4:", options.metadata.files.file);
     main_file = await irys?.bundle(options.metadata.files.file, false);
+    console.log("main file after:", main_file);
   }
   if (options.metadata.files.cover) {
+    console.log("cover file b4:", options.metadata.files.cover);
     cover_file = await irys?.bundle(options.metadata.files.cover, false);
+    console.log("cover file after:", cover_file);
   }
 
   const offchain_metadata = {
@@ -39,15 +52,22 @@ export async function uploadFilesIrysInstruction(
     category: checkFileType(main_file),
   };
 
-  const metadata_file = new Blob([JSON.stringify(offchain_metadata)], {
+  const metadata_blob = new Blob([JSON.stringify(offchain_metadata)], {
     type: "application/json",
   });
 
-  const bundled_metadata_file = await irys?.bundle(
-    { ...metadata_file, name: "fileName" },
-    true
-  );
+  const metadata_file = {
+    data: metadata_blob,
+    name: "metadata.json",
+    type: "application/json",
+    size: metadata_blob.size,
+    arrayBuffer: () => metadata_blob.arrayBuffer(),
+  };
+
+  const bundled_metadata_file = await irys?.bundle(metadata_file, true);
   const irys_url = bundled_metadata_file?.irys?.url;
+
+  console.log("arweave url: ", irys_url);
 
   const irys_files = [bundled_metadata_file];
 
@@ -58,9 +78,20 @@ export async function uploadFilesIrysInstruction(
     files: irys_files,
     payer: false,
   });
+
+  //Register files in arweave
+  const registeredFiles = await irys.registerFiles({ files: irys_files, uuid });
+
   if (!irys_ix) {
     throw new Error("Failed to get funding instructions");
   }
-
-  return irys_ix as unknown as TransactionInstruction;
+  if (signer) {
+    return {
+      instruction: irys_ix as unknown as TransactionInstruction,
+      signerIrys: Keypair.fromSecretKey(signer.secretKey),
+      metadataUrl: irys_url,
+    };
+  } else {
+    throw new Error("no signer found in upload files irys instruction");
+  }
 }

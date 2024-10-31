@@ -48,7 +48,6 @@ export function storePDA({ storeId, creator, holder }: any) {
 }
 
 export function creatorAuthorityPDA({ creator, store }: any) {
-  console.log("creator auth: ", store, creator);
   store = toPublicKey(store);
   creator = toPublicKey(creator);
   return PublicKey.findProgramAddress(
@@ -74,7 +73,6 @@ export function itemAccountPDA({ creator, store, identifier }: any) {
 
 export function itemReserveListPDA({ item }: any) {
   item = toPublicKey(item);
-  console.log("-- item reserve: ", item.toString());
   return PublicKey.findProgramAddress(
     [Buffer.from("item_reserve_list"), item.toBytes()],
     toPublicKey(PROGRAM_ID)
@@ -160,81 +158,48 @@ export const userActivityPDA = async ({ user, store }: any) => {
   );
 };
 
-// import * as beet from "@metaplex-foundation/beet";
+export const collectorArtistRegistryPDA = async ({
+  user,
+  artist,
+  currency,
+  store,
+}: any) => {
+  user = toPublicKey(user);
+  currency = toPublicKey(currency);
+  artist = toPublicKey(artist);
+  store = toPublicKey(store);
+  return PublicKey.findProgramAddress(
+    [
+      Buffer.from("collectors_artist_registry"),
+      user.toBytes(),
+      currency.toBytes(),
+      artist.toBytes(),
+      store.toBytes(),
+    ],
+    toPublicKey(PROGRAM_ID)
+  );
+};
 
-// export const ApproveCollectionAuthorityStruct = new beet.BeetArgsStruct<{
-//   instructionDiscriminator: number;
-// }>(
-//   [["instructionDiscriminator", beet.u8]],
-//   "ApproveCollectionAuthorityInstructionArgs"
-// );
+export const collectorGlobalRegistryPDA = ({ user, currency, store }: any) => {
+  user = toPublicKey(user);
+  currency = toPublicKey(currency);
+  store = toPublicKey(store);
+  return PublicKey.findProgramAddress(
+    [
+      Buffer.from("collectors_global_registry"),
+      user.toBytes(),
+      currency.toBytes(),
+      store.toBytes(),
+    ],
+    toPublicKey(PROGRAM_ID)
+  );
+};
 
-// export const approveCollectionAuthorityInstructionDiscriminator = 23;
-
-// /**
-//  * Creates a _ApproveCollectionAuthority_ instruction.
-//  *
-//  * @param accounts that will be accessed while the instruction is processed
-//  * @category Instructions
-//  * @category ApproveCollectionAuthority
-//  * @category generated
-//  */
-// export function createApproveCollectionAuthorityInstruction(
-//   accounts: any,
-//   // accounts: ApproveCollectionAuthorityInstructionAccounts,
-//   programId = new web3.PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s")
-// ) {
-//   const [data] = ApproveCollectionAuthorityStruct.serialize({
-//     instructionDiscriminator:
-//       approveCollectionAuthorityInstructionDiscriminator,
-//   });
-//   const keys: any[] = [
-//     {
-//       pubkey: accounts.collectionAuthorityRecord,
-//       isWritable: true,
-//       isSigner: false,
-//     },
-//     {
-//       pubkey: accounts.newCollectionAuthority,
-//       isWritable: false,
-//       isSigner: false,
-//     },
-//     {
-//       pubkey: accounts.updateAuthority,
-//       isWritable: true,
-//       isSigner: true,
-//     },
-//     {
-//       pubkey: accounts.payer,
-//       isWritable: true,
-//       isSigner: true,
-//     },
-//     {
-//       pubkey: accounts.metadata,
-//       isWritable: false,
-//       isSigner: false,
-//     },
-//     {
-//       pubkey: accounts.mint,
-//       isWritable: false,
-//       isSigner: false,
-//     },
-//     {
-//       pubkey: accounts.systemProgram ?? web3.SystemProgram.programId,
-//       isWritable: false,
-//       isSigner: false,
-//     },
-//     {
-//       pubkey: accounts.rent ?? web3.SYSVAR_RENT_PUBKEY,
-//       isWritable: false,
-//       isSigner: false,
-//     },
-//   ];
-
-//   const ix = new web3.TransactionInstruction({
-//     programId,
-//     keys,
-//     data,
-//   });
-//   return ix;
-// }
+export const buyPaymentPDA = ({ owner, itemAccount }: any) => {
+  owner = toPublicKey(owner);
+  itemAccount = toPublicKey(itemAccount);
+  return PublicKey.findProgramAddress(
+    [Buffer.from("buy_payment"), owner.toBytes(), itemAccount.toBytes()],
+    toPublicKey(PROGRAM_ID)
+  );
+};

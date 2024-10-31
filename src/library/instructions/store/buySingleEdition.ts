@@ -1,4 +1,9 @@
-import { Connection, PublicKey, TransactionInstruction } from "@solana/web3.js";
+import {
+  Connection,
+  PublicKey,
+  SystemProgram,
+  TransactionInstruction,
+} from "@solana/web3.js";
 import {
   PROGRAM_ID,
   BUBBLEGUM_PROGRAM_ID,
@@ -6,6 +11,7 @@ import {
   TOKEN_METADATA_PROGRAM_ID,
   SPL_ACCOUNT_COMPRESSION_PROGRAM_ID,
   PROGRAM_CNFT,
+  DEVNET_PROGRAM_ID,
 } from "../../../types/programId";
 import {
   buyPay,
@@ -26,6 +32,7 @@ import { BN } from "bn.js";
 import { ExtraParameter } from "../../../types/types";
 import { getConnection } from "../../../utility/Connection";
 import { SOLANA_ENDPOINT } from "../../examples/storeExample";
+import { devnetHolder } from "../../../utility/Holders";
 
 export let lutAccount = toPublicKey(
   "EJbrXVgac2wEL2H7FJr38vD7LQpEujWZiSPHSYZ3htCa"
@@ -63,9 +70,10 @@ export async function buySingleEditionInstruction(
   printSingleArgs: PrintSingleArgs,
   printSingleAccounts: PrintSingleAccounts,
   data: any,
-  storeAccount: PublicKey
+  storeAccount: PublicKey,
+  identifier: number
 ): Promise<TransactionInstruction[]> {
-  const systemProgram = PROGRAM_CNFT;
+  const systemProgram = SystemProgram.programId;
 
   const pay = buyPay(
     { distributionBumps },
@@ -85,11 +93,6 @@ export async function buySingleEditionInstruction(
   let itemCreator = payer;
   const currency = toPublicKey(data?.track?.currency || PROGRAM_ID);
 
-  // const anchor = new Stores();
-  // anchor.init({ wallet: payer, forced: false });
-
-  console.log("itemCreator", itemCreator, data);
-
   const bubblegumSigner = toPublicKey(
     "4ewWZC5gT6TGpm5LZNDs9wVonfUT2q5PP5sc9kVbwMAK"
   );
@@ -101,7 +104,6 @@ export async function buySingleEditionInstruction(
   const lut = useGlobal
     ? toPublicKey(merkleOptions?.global?.lutAccount)
     : merkleOptions?.lutAccount;
-  console.log("merkle", merkle);
   const [treeAuthority, _bump] = PublicKey.findProgramAddressSync(
     [merkle.toBuffer()],
     BUBBLEGUM_PROGRAM_ID
@@ -125,8 +127,6 @@ export async function buySingleEditionInstruction(
     store: storeAccount,
   });
 
-  console.log("creatorAuthority", creatorAuthority.toBase58()); //DLUEnHLzyLP3wEXbYTjB8mPLUwnqB9bj219z5ENBjDTr
-
   const collectionAuthorityRecordPda = BUBBLEGUM_PROGRAM_ID;
 
   const collectionMetadata = await getMetadataPDA(collectionMint);
@@ -145,7 +145,6 @@ export async function buySingleEditionInstruction(
 	pub artist_verifier:u32 //4
 	*/
   let _amount = new BN(1);
-  console.log("_amount", _amount);
 
   //const joint = itemCreator.toBase58()+""+currency.toBase58();
 
@@ -197,11 +196,11 @@ export async function buySingleEditionInstruction(
     //   tipo,
     //   storedata.data
     // );
-    const identifier = new BN(1);
+    const identifierdt = new BN(identifier);
     const [_, itemBump] = await itemAccountPDA({
       creator: itemCreator,
       store: storeAccount,
-      identifier: identifier,
+      identifier: identifierdt,
     });
     data.itemBump = itemBump;
   }
@@ -209,7 +208,15 @@ export async function buySingleEditionInstruction(
   if (!data) data = {};
   if (!data?.pre) data.pre = [];
   if (!data?.post) data.post = [];
-
+  console.log("pay ix: ", pay);
+  console.log("args: ", {
+    proof,
+    storeBump: useGlobal ? 255 - data.storeBump : data.storeBump,
+    creatorAuthBump,
+    itemBump: data.itemBump,
+    treeBump,
+    extra: new ExtraParameter.None(),
+  });
   const single = printSingle(
     {
       proof,
@@ -238,9 +245,11 @@ export async function buySingleEditionInstruction(
       tokenMetadataProgram,
       compressionProgram,
       systemProgram,
-    }
+    },
+    PROGRAM_ID
     /*,{managerBump, creatorAuthorityBump}*/
   );
+  console.log("single ix: ", single);
   // const single = printSingle(printSingleArgs, printSingleAccounts, PROGRAM_ID);
   return [pay, single];
 }

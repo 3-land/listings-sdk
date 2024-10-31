@@ -13,6 +13,10 @@ export const BUBBLEGUM_PROGRAM_ID = toPublicKey(
   "BGUMAp9Gq7iTEuizy4pqaxsTyUCBK68MDfK752saRPUY"
 );
 
+export const DEVNET_PROGRAM_ID = toPublicKey(
+  "GyPCu89S63P9NcCQAtuSJesiefhhgpGWrNVJs4bF2cSK"
+);
+
 export const PROGRAM_CNFT = toPublicKey(
   "HgtiJuEcdN6bN6WyYpamL3QKpyMcF8g8FxutDQNB96J9"
 );

@@ -4,9 +4,7 @@ import { Keypair, PublicKey, SendTransactionError } from "@solana/web3.js";
 import {
   Creator,
   CurrencyType,
-  EditionStoreType,
   FeeType,
-  FeeTypeKind,
   MetadataArgsJSON,
   PriceJSON,
   PriceRule,
@@ -17,12 +15,8 @@ import {
 } from "../../types/types";
 import { Wallet } from "@project-serum/anchor";
 import * as fs2 from "fs";
-import fs from "fs/promises"; // Note: using fs/promises
 import { PROGRAM_CNFT, SOLANA_ENDPOINT } from "../../types/programId";
-// import fetch from "node-fetch";
 import path from "path";
-import { Blob } from "buffer";
-import { arrayBuffer } from "stream/consumers";
 
 interface StoreInitOptions {
   walletPath: string;
@@ -88,49 +82,10 @@ async function createSingleTest(
       share: 100,
     });
 
-    // const imageBuffer = fs2.readFileSync(
-    //   path.join(process.cwd(), "assets", "4.png")
-    // ).buffer;
-    // const coverBuffer = fs2.readFileSync(
-    //   path.join(process.cwd(), "assets", "3land_rebrand.gif")
-    // ).buffer;
-
-    // const options = {
-    //   metadata: {
-    //     name: "My NFT",
-    //     description: "Some description for my nft",
-    //     files: {
-    //       file: {
-    //         arrayBuffer() {
-    //           return imageBuffer;
-    //         },
-    //         type: "image/png",
-    //       },
-    //       cover: {
-    //         arrayBuffer() {
-    //           return coverBuffer;
-    //         },
-    //         type: "image/gif",
-    //       },
-    //     },
-    //   },
-    //   sellerFeeBasisPoints: 500,
-    //   traits: [],
-    // };
-    // console.log("options: ", options);
-    // const offChainMetadata = await sdk.uploadFilesIrys(
-    //   payer.publicKey,
-    //   payer.publicKey,
-    //   walletKeypair,
-    //   options
-    // );
-
-    // console.log("result from irys upload: ", offChainMetadata);
-
     const metadata: MetadataArgs = {
       name: "My NFT",
-      symbol: "MYNFT",
-      uri: "https://arweave.net/BT_tVDNA3xLDdmaPoxjawg6nhBT3OCjViMVS8fdDlFY",
+      symbol: "IC",
+      uri: "",
       sellerFeeBasisPoints: 500,
       primarySaleHappened: false,
       isMutable: true,
@@ -148,10 +103,42 @@ async function createSingleTest(
       },
     };
 
+    const imageBuffer = fs2.readFileSync(
+      path.join(process.cwd(), "assets", "3land_rebrand.gif")
+    ).buffer;
+    const coverBuffer = fs2.readFileSync(
+      path.join(process.cwd(), "assets", "3land_rebrand.gif")
+    ).buffer;
+
+    const options = {
+      symbol: metadata.symbol,
+      metadata: {
+        name: metadata.name,
+        description: "Some new description for my nft 2",
+        files: {
+          file: {
+            arrayBuffer() {
+              return imageBuffer;
+            },
+            type: "image/gif",
+          },
+          cover: {
+            arrayBuffer() {
+              return coverBuffer;
+            },
+            type: "image/gif",
+          },
+        },
+      },
+      creators: metadata.creators,
+      traits: [{ color: "green" }, { size: "big" }],
+      sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
+    };
+
     const saleConfig: SaleConfig = {
       prices: [
         {
-          amount: new BN(1000000000),
+          amount: new BN(1000000),
           priceType: new CurrencyType.Native(),
           toJSON: function (): PriceJSON {
             throw new Error("Function not implemented.");
@@ -179,13 +166,19 @@ async function createSingleTest(
       100,
       metadata,
       saleConfig,
-      Math.floor(Math.random() * 100),
+      234234, //Math.floor(Math.random() * 100)
       [1, 2, 3],
       [1, 2],
       1,
       12345,
       payer.publicKey,
-      new PublicKey("2rQq34FJG1613i7H8cDfxuGCtEjJmFAUNbAPJqK699oD")
+      new PublicKey("2rQq34FJG1613i7H8cDfxuGCtEjJmFAUNbAPJqK699oD"), //hardcoded collection
+      {
+        address: payer.publicKey,
+        payer: payer.publicKey,
+        signer: walletKeypair,
+        options: options,
+      }
     );
 
     return {
@@ -198,7 +191,11 @@ async function createSingleTest(
   }
 }
 
-async function buySingleTest(options: StoreInitOptions, storeAccount: string) {
+async function buySingleTest(
+  options: StoreInitOptions,
+  storeAccount: string,
+  item: string
+) {
   const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
 
   try {
@@ -206,14 +203,13 @@ async function buySingleTest(options: StoreInitOptions, storeAccount: string) {
 
     const buySingleEditionTxId = await sdk.buySingleEdition(
       walletKeypair,
-      payer.publicKey,
       PROGRAM_CNFT,
       PROGRAM_CNFT,
       owner.publicKey,
       [0, 0, 0, 0, 0, 0],
       new PublicKey(storeAccount),
       payer.publicKey,
-      1
+      234234
     );
 
     return {
@@ -246,18 +242,18 @@ async function main() {
     // console.log("Store created. Transaction ID:", storeResult.transactionId);
     // Create single edition
     const storeAccount = "7eK22v8AjrWZYnfia9uTfVXP3WktPZQMbfMJhshuoTFL";
-    const singleEditionResult = await createSingleTest(options, storeAccount);
-    console.log(
-      "Single edition created. Transaction ID:",
-      singleEditionResult.transactionId
-    );
-    // Buy single edition
-    // const itemAccount = "6sicpV1UBo3T2z7T5Z8PDBLswE1BQg8sRsgtP8sFmoju";
-    // const buyResult = await buySingleTest(options, storeAccount);
+    // const singleEditionResult = await createSingleTest(options, storeAccount);
     // console.log(
-    //   "Single edition purchased. Transaction ID:",
-    //   buyResult.transactionId
+    //   "Single edition created. Transaction ID:",
+    //   singleEditionResult.transactionId
     // );
+    // Buy single edition
+    const itemAccount = "9LWov3FX7UdYLj6p8ULWnPSRFDVqW8WreJHBEjTvKeDZ";
+    const buyResult = await buySingleTest(options, storeAccount, itemAccount);
+    console.log(
+      "Single edition purchased. Transaction ID:",
+      buyResult.transactionId
+    );
   } catch (error) {
     handleError(error);
   }

@@ -1,4 +1,4 @@
-import { WebIrys } from "@irys/sdk";
+import { WebIrys, NodeIrys } from "@irys/sdk";
 import { sleep, nowS } from "../../utility/utils";
 import { toPublicKey } from "../../utility/PdaManager";
 import crypto from "crypto";
@@ -34,10 +34,10 @@ interface IrysFile {
   };
 }
 
-interface UploadOptions {
+export interface UploadOptions {
   uuid: string;
   signature: any;
-  files: IrysFile[];
+  // files: IrysFile[];
 }
 
 interface RegisterOptions {
@@ -51,7 +51,7 @@ interface FundingInstructionsOptions {
 }
 
 export class IrysHelper {
-  private irys!: WebIrys;
+  private irys!: WebIrys | NodeIrys;
   private wallet!: Keypair;
   private owner!: string;
   private files_bridge: { [key: string]: IrysFile };
@@ -72,19 +72,32 @@ export class IrysHelper {
     }
   }
 
-  async verifyBalance(id: any): Promise<boolean> {
-    this.ensureInitialized();
+  // async verifyBalance(id: any): Promise<boolean> {
+  //   this.ensureInitialized();
+  //   try {
+  //     const fundtx = await this.irys.fund(id);
+  //     return !!fundtx;
+  //   } catch (e) {
+  //     console.log("CANNOT VERIFY FUND", e);
+  //   }
+  //   return false;
+  // }
+
+  // async getBalance(): Promise<any> {
+  //   this.ensureInitialized();
+  //   return this.irys.getLoadedBalance();
+  // }
+
+  async verifyBalance(id: any) {
     try {
-      const fundtx = await this.irys.fund(id);
-      return !!fundtx;
+      const submited = await this.irys.funder.submitTransaction(id);
+      return submited;
     } catch (e) {
       console.log("CANNOT VERIFY FUND", e);
     }
     return false;
   }
-
-  async getBalance(): Promise<any> {
-    this.ensureInitialized();
+  async getBalance() {
     return this.irys.getLoadedBalance();
   }
 
@@ -182,10 +195,7 @@ export class IrysHelper {
     }
   }
 
-  async getFundingInstructions({
-    files,
-    payer = false,
-  }: FundingInstructionsOptions) {
+  async getFundingInstructions({ files, payer }: FundingInstructionsOptions) {
     this.ensureInitialized();
     if (!payer) payer = this.owner;
 
@@ -240,29 +250,16 @@ export class IrysHelper {
     return "irys-preupload-" + x;
   }
 
-  async uploadFiles({ uuid, signature, files }: UploadOptions) {
+  async uploadFiles({ uuid, signature }: UploadOptions) {
     this.ensureInitialized();
     await this.irys.ready();
 
-    const saved_signature = files[0]?.transaction
-      ? this.parseTransaction(files[0].transaction)
-      : null;
-    const values = { tried_at: nowS(), transaction: false };
-
-    if (saved_signature) {
-      await this.verifyBalance(saved_signature);
-    } else if (signature) {
-      values.transaction = signature;
-      if (!Array.isArray(signature)) signature = [signature];
-      await this.verifyBalance(signature[0]);
+    const files = [];
+    for (const file in this.files_bridge) {
+      files.push(this.files_bridge[file]);
     }
 
-    for (const file of files) {
-      if (file.status != "uploaded") {
-        const data = { ...file.data, ...values };
-        file.data = data;
-      }
-    }
+    await this.verifyBalance(signature);
 
     const errors: string[] = [];
     const succeeds: string[] = [];
@@ -379,10 +376,13 @@ export class IrysHelper {
 
     this.owner = address;
 
-    this.irys = new WebIrys({
-      url: irys_network,
+    this.irys = new NodeIrys({
+      // url: irys_network,
       token: "solana",
-      wallet: { rpcUrl: rpc, provider },
+      key: wallet.secretKey,
+      network: "devnet",
+      config: { providerUrl: irys_network },
+      // wallet: { rpcUrl: rpc, provider },
     });
 
     await this.irys.ready();
