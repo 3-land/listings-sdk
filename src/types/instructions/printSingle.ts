@@ -24,7 +24,7 @@ export interface PrintSingleAccounts {
   treeAuthority: PublicKey;
   storeAccount: PublicKey;
   creatorAuthority: PublicKey;
-  // paymentAccount: PublicKey
+  paymentAccount: PublicKey;
   merkleTree: PublicKey;
   merkleManager: PublicKey;
   /**
@@ -36,8 +36,8 @@ export interface PrintSingleAccounts {
   collectionMetadata: PublicKey;
   collectionMint: PublicKey;
   bubblegumSigner: PublicKey;
-  // buytrackAccount: PublicKey
-  // revealForMe: PublicKey
+  buytrackAccount: PublicKey;
+  revealForMe: PublicKey;
   payer: PublicKey;
   logWrapper: PublicKey;
   bubblegumProgram: PublicKey;
@@ -66,7 +66,7 @@ export function printSingle(
     { pubkey: accounts.treeAuthority, isSigner: false, isWritable: true },
     { pubkey: accounts.storeAccount, isSigner: false, isWritable: true },
     { pubkey: accounts.creatorAuthority, isSigner: false, isWritable: false },
-    // { pubkey: accounts.paymentAccount, isSigner: false, isWritable: true },
+    { pubkey: accounts.paymentAccount, isSigner: false, isWritable: true },
     { pubkey: accounts.merkleTree, isSigner: false, isWritable: true },
     { pubkey: accounts.merkleManager, isSigner: false, isWritable: true },
     {
@@ -78,8 +78,8 @@ export function printSingle(
     { pubkey: accounts.collectionMetadata, isSigner: false, isWritable: true },
     { pubkey: accounts.collectionMint, isSigner: false, isWritable: false },
     { pubkey: accounts.bubblegumSigner, isSigner: false, isWritable: false },
-    // { pubkey: accounts.buytrackAccount, isSigner: false, isWritable: true },
-    // { pubkey: accounts.revealForMe, isSigner: false, isWritable: true },
+    { pubkey: accounts.buytrackAccount, isSigner: false, isWritable: true },
+    { pubkey: accounts.revealForMe, isSigner: false, isWritable: true },
     { pubkey: accounts.payer, isSigner: true, isWritable: true },
     { pubkey: accounts.logWrapper, isSigner: false, isWritable: false },
     { pubkey: accounts.bubblegumProgram, isSigner: false, isWritable: false },

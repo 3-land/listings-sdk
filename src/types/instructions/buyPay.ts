@@ -31,6 +31,7 @@ export const layout = borsh.struct([
 export function buyPay(
   args: BuyPayArgs,
   accounts: BuyPayAccounts,
+  extraAccounts: any[],
   programId: PublicKey = PROGRAM_ID
 ) {
   const keys: Array<AccountMeta> = [
@@ -42,12 +43,15 @@ export function buyPay(
     { pubkey: accounts.owner, isSigner: false, isWritable: false },
     { pubkey: accounts.payer, isSigner: true, isWritable: true },
     { pubkey: accounts.systemProgram, isSigner: false, isWritable: false },
-    {
-      pubkey: new PublicKey("GyPCu89S63P9NcCQAtuSJesiefhhgpGWrNVJs4bF2cSK"), //global store
-      isSigner: false,
-      isWritable: true,
-    },
+    { pubkey: accounts.payer, isSigner: false, isWritable: true },
   ];
+  for (let item of extraAccounts) {
+    keys.push({
+      pubkey: item.pubkey,
+      isSigner: item.isSigner,
+      isWritable: item.isWritable,
+    });
+  }
   const identifier = Buffer.from([100, 229, 162, 27, 130, 173, 68, 1]);
   const buffer = Buffer.alloc(1000);
   const len = layout.encode(

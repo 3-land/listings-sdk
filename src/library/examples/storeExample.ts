@@ -83,7 +83,7 @@ async function createSingleTest(
     });
 
     const metadata: MetadataArgs = {
-      name: "My NFT",
+      name: "Mi NFTi",
       symbol: "IC",
       uri: "",
       sellerFeeBasisPoints: 500,
@@ -114,7 +114,7 @@ async function createSingleTest(
       symbol: metadata.symbol,
       metadata: {
         name: metadata.name,
-        description: "Some new description for my nft 2",
+        description: "Some new description for my nft 55",
         files: {
           file: {
             arrayBuffer() {
@@ -166,10 +166,10 @@ async function createSingleTest(
       100,
       metadata,
       saleConfig,
-      234234, //Math.floor(Math.random() * 100)
-      [1, 2, 3],
-      [1, 2],
-      1,
+      876333354652487, //Math.floor(Math.random() * 100) //234234
+      [1, 0, 0],
+      [1, 0],
+      0,
       12345,
       payer.publicKey,
       new PublicKey("2rQq34FJG1613i7H8cDfxuGCtEjJmFAUNbAPJqK699oD"), //hardcoded collection
@@ -194,12 +194,14 @@ async function createSingleTest(
 async function buySingleTest(
   options: StoreInitOptions,
   storeAccount: string,
-  item: string
+  item: string,
+  itemCreator: string
 ) {
   const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
 
   try {
-    const owner = Keypair.generate();
+    // const owner = Keypair.generate();
+    const owner = payer;
 
     const buySingleEditionTxId = await sdk.buySingleEdition(
       walletKeypair,
@@ -208,8 +210,15 @@ async function buySingleTest(
       owner.publicKey,
       [0, 0, 0, 0, 0, 0],
       new PublicKey(storeAccount),
-      payer.publicKey,
-      234234
+      new PublicKey(itemCreator),
+      6688, //234234,
+      [
+        {
+          pubkey: new PublicKey("GyPCu89S63P9NcCQAtuSJesiefhhgpGWrNVJs4bF2cSK"), //global store
+          isSigner: false,
+          isWritable: true,
+        },
+      ]
     );
 
     return {
@@ -233,7 +242,7 @@ function handleError(error: unknown) {
 
 async function main() {
   const options: StoreInitOptions = {
-    walletPath: "", //route to keypair.json generated from the solana cli
+    walletPath: "/home/biccsdev/3land/packs_sdk/wallet/my-keypair.json", //route to keypair.json generated from the solana cli
   };
 
   try {
@@ -242,18 +251,24 @@ async function main() {
     // console.log("Store created. Transaction ID:", storeResult.transactionId);
     // Create single edition
     const storeAccount = "7eK22v8AjrWZYnfia9uTfVXP3WktPZQMbfMJhshuoTFL"; //current store created for testing
-    // const singleEditionResult = await createSingleTest(options, storeAccount);
-    // console.log(
-    //   "Single edition created. Transaction ID:",
-    //   singleEditionResult.transactionId
-    // );
-    // Buy single edition
-    const itemAccount = "9LWov3FX7UdYLj6p8ULWnPSRFDVqW8WreJHBEjTvKeDZ"; //current item created for testing
-    const buyResult = await buySingleTest(options, storeAccount, itemAccount);
+    const singleEditionResult = await createSingleTest(options, storeAccount);
     console.log(
-      "Single edition purchased. Transaction ID:",
-      buyResult.transactionId
+      "Single edition created. Transaction ID:",
+      singleEditionResult.transactionId
     );
+    // Buy single edition
+    // const itemCreator = "kon4KawBAv91adTeyvJZqMpprkq1WRm2YyKHpBngwj6";
+    // const itemAccount = "2YH2f4UrqHja1KecBCHMMGixq1etzwtWknTY2vfLHaQD"; //current item created for testing
+    // const buyResult = await buySingleTest(
+    //   options,
+    //   storeAccount,
+    //   itemAccount,
+    //   itemCreator
+    // );
+    // console.log(
+    //   "Single edition purchased. Transaction ID:",
+    //   buyResult.transactionId
+    // );
   } catch (error) {
     handleError(error);
   }

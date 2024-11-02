@@ -1,5 +1,9 @@
 import BN from "bn.js";
-import { PROGRAM_ID, TOKEN_METADATA_PROGRAM_ID } from "../types/programId";
+import {
+  BUBBLEGUM_PROGRAM_ID,
+  PROGRAM_ID,
+  TOKEN_METADATA_PROGRAM_ID,
+} from "../types/programId";
 import { PublicKey } from "@solana/web3.js";
 import { ApproveCollectionAuthorityInstructionAccounts } from "@metaplex-foundation/mpl-token-metadata";
 import { web3 } from "@project-serum/anchor";
@@ -97,7 +101,7 @@ export const getMetadataPDA = async (mint: any) => {
       TOKEN_METADATA_PROGRAM_ID.toBuffer(),
       mint.toBuffer(),
     ],
-    TOKEN_METADATA_PROGRAM_ID
+    TOKEN_METADATA_PROGRAM_ID //PROGRAM_ID
   );
   return publicKey;
 };
@@ -201,5 +205,14 @@ export const buyPaymentPDA = ({ owner, itemAccount }: any) => {
   return PublicKey.findProgramAddress(
     [Buffer.from("buy_payment"), owner.toBytes(), itemAccount.toBytes()],
     toPublicKey(PROGRAM_ID)
+  );
+};
+
+export const treeAuthority = ({ tree }: any) => {
+  tree = toPublicKey(tree);
+
+  return PublicKey.findProgramAddressSync(
+    [tree.toBuffer()],
+    toPublicKey(BUBBLEGUM_PROGRAM_ID)
   );
 };

@@ -118,14 +118,27 @@ export class Store {
 
     const collection_mint = toPublicKey(collection);
 
-    const new_authority = PROGRAM_ID;
+    const new_authority = creatorAuthority; //PROGRAM_ID;
 
     const [authRecord] = await collectionAuthorityRecord({
       mint: collection_mint,
       new_authority: new_authority,
     });
-    if (!authRecord) {
+
+    let collection_permission = false;
+
+    try {
+      const res = await this.connection.getAccountInfo(authRecord);
+      console.log("account info: ", res);
+      if (res) collection_permission = true;
+    } catch (e) {
+      collection_permission = false;
+    }
+
+    console.log("authrecord: ", authRecord);
+    if (!collection_permission) {
       const metadataPda = await getMetadataPDA(collection_mint);
+      console.log("metadataPda: ", metadataPda);
 
       const accounts = {
         collectionAuthorityRecord: authRecord,
@@ -138,6 +151,7 @@ export class Store {
       const approveInstruction =
         createApproveCollectionAuthorityInstruction(accounts);
       instructions.push(approveInstruction);
+      console.log("approve ix: ", approveInstruction);
       // signers.push(new_authority)
     }
 
@@ -230,7 +244,8 @@ export class Store {
     distributionBumps: number[],
     storeAccount: PublicKey,
     creator: PublicKey,
-    identifier: number
+    identifier: number,
+    extraAccounts: any[]
   ): Promise<string> {
     /*
       1. BuyPay
@@ -243,7 +258,10 @@ export class Store {
       identifier: new BN(identifier),
     });
 
-    const [paymentAccount] = await buyPaymentPDA({ owner, itemAccount });
+    const [paymentAccount] = await buyPaymentPDA({
+      owner: payer.publicKey,
+      itemAccount,
+    });
 
     // const [holderAccount] = await holderPDA({
     //   creator: devnetHolder.creator,
@@ -271,40 +289,11 @@ export class Store {
       owner,
       payer.publicKey,
       distributionBumps,
-      {
-        proof: null,
-        storeBump: 123,
-        creatorAuthBump: 123,
-        itemBump: 123,
-        treeBump: 123,
-        extra: new ExtraParameter.None(),
-      },
-      {
-        owner: owner,
-        itemAccount: itemAccount,
-        treeAuthority: storeAccount,
-        storeAccount: storeAccount,
-        creatorAuthority: creatorAuthority,
-        // paymentAccount: new PublicKey("asdfadsf"),
-        merkleTree: storeAccount,
-        merkleManager: storeAccount,
-        collectionAuthorityRecordPda: storeAccount,
-        editionAccount: storeAccount,
-        collectionMetadata: storeAccount,
-        collectionMint: storeAccount,
-        bubblegumSigner: storeAccount,
-        // buytrackAccount: new PublicKey("asdfadsf"),
-        // revealForMe: new PublicKey("asdfadsf"),
-        payer: payer.publicKey,
-        logWrapper: storeAccount,
-        bubblegumProgram: storeAccount,
-        compressionProgram: storeAccount,
-        tokenMetadataProgram: storeAccount,
-        systemProgram: storeAccount,
-      },
       {},
       storeAccount,
-      identifier
+      identifier,
+      extraAccounts,
+      creator
     );
     console.log("buypay and the other: ", instruction);
     instructions.push(...instruction);
