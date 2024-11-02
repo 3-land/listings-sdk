@@ -166,7 +166,7 @@ async function createSingleTest(
       100,
       metadata,
       saleConfig,
-      876333354652487, //Math.floor(Math.random() * 100) //234234
+      Math.floor(Math.random() * 100), //234234
       [1, 0, 0],
       [1, 0],
       0,
@@ -251,24 +251,24 @@ async function main() {
     // console.log("Store created. Transaction ID:", storeResult.transactionId);
     // Create single edition
     const storeAccount = "7eK22v8AjrWZYnfia9uTfVXP3WktPZQMbfMJhshuoTFL"; //current store created for testing
-    const singleEditionResult = await createSingleTest(options, storeAccount);
-    console.log(
-      "Single edition created. Transaction ID:",
-      singleEditionResult.transactionId
-    );
-    // Buy single edition
-    // const itemCreator = "kon4KawBAv91adTeyvJZqMpprkq1WRm2YyKHpBngwj6";
-    // const itemAccount = "2YH2f4UrqHja1KecBCHMMGixq1etzwtWknTY2vfLHaQD"; //current item created for testing
-    // const buyResult = await buySingleTest(
-    //   options,
-    //   storeAccount,
-    //   itemAccount,
-    //   itemCreator
-    // );
+    // const singleEditionResult = await createSingleTest(options, storeAccount);
     // console.log(
-    //   "Single edition purchased. Transaction ID:",
-    //   buyResult.transactionId
+    //   "Single edition created. Transaction ID:",
+    //   singleEditionResult.transactionId
     // );
+    // Buy single edition
+    const itemCreator = "kon4KawBAv91adTeyvJZqMpprkq1WRm2YyKHpBngwj6";
+    const itemAccount = "2YH2f4UrqHja1KecBCHMMGixq1etzwtWknTY2vfLHaQD"; //current item created for testing
+    const buyResult = await buySingleTest(
+      options,
+      storeAccount,
+      itemAccount,
+      itemCreator
+    );
+    console.log(
+      "Single edition purchased. Transaction ID:",
+      buyResult.transactionId
+    );
   } catch (error) {
     handleError(error);
   }

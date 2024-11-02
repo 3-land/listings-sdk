@@ -275,10 +275,10 @@ export class Store {
     //   "8JddrxSrSt9csoixQcuyvzGoj8srfjPgcrKKWEePrZbY"
     // );
 
-    const [creatorAuthority] = await creatorAuthorityPDA({
-      creator: creator,
-      store: storeAccount,
-    });
+    // const [creatorAuthority] = await creatorAuthorityPDA({
+    //   creator: creator,
+    //   store: storeAccount,
+    // });
     let instructions = [];
     const instruction = await buySingleEditionInstruction(
       paymentAccount,
