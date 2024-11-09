@@ -37,6 +37,407 @@
       ]
     },
     {
+      "name": "createCollection",
+      "accounts": [
+        {
+          "name": "creatorAuthority",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "metadata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "edition",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "storeAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMetadataProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "tokenMetadata",
+          "type": {
+            "defined": "TokenMetadata"
+          }
+        }
+      ]
+    },
+    {
+      "name": "deleteTokenLauncher",
+      "accounts": [
+        {
+          "name": "tokenManager",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "storeAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMetadataProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "buyToken",
+      "accounts": [
+        {
+          "name": "tokenManager",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMintRegistry",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenGlobalRegistry",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "storeAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMetadataProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "createTokenLauncher",
+      "accounts": [
+        {
+          "name": "tokenManager",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "metadata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "storeTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "genericUser",
+          "isMut": true,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
+          "name": "storeAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMetadataProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "price",
+          "type": "u64"
+        },
+        {
+          "name": "decimals",
+          "type": "u8"
+        },
+        {
+          "name": "tokenMetadata",
+          "type": {
+            "defined": "TokenMetadata"
+          }
+        },
+        {
+          "name": "share",
+          "type": "u16"
+        },
+        {
+          "name": "tokenType",
+          "type": {
+            "defined": "TokenType"
+          }
+        }
+      ]
+    },
+    {
+      "name": "registerGenericUser",
+      "accounts": [
+        {
+          "name": "genericUser",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "storeAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "profileHolder",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "categoryHolder",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "oldCategoryHolder",
+          "isMut": true,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "merkleTree",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "treeAuthority",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merkleManager",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "logWrapper",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "bubblegumProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "compressionProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMetadataProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "username",
+          "type": "string"
+        },
+        {
+          "name": "subApp",
+          "type": "u64"
+        },
+        {
+          "name": "subWallet",
+          "type": "publicKey"
+        },
+        {
+          "name": "category",
+          "type": "u64"
+        },
+        {
+          "name": "lut",
+          "type": {
+            "option": "publicKey"
+          }
+        },
+        {
+          "name": "genericData",
+          "type": {
+            "option": {
+              "vec": {
+                "defined": "GenericStore"
+              }
+            }
+          }
+        },
+        {
+          "name": "arweave",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "cnft",
+          "type": {
+            "option": {
+              "defined": "CompactCnftData"
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "registerUser",
       "accounts": [
         {
@@ -912,9 +1313,9 @@
           "type": "u64"
         },
         {
-          "name": "metadata",
+          "name": "shortMetadata",
           "type": {
-            "defined": "MetadataArgs"
+            "defined": "ShortMetadataArgs"
           }
         },
         {
@@ -2016,10 +2417,6 @@
         {
           "name": "userActivityBump",
           "type": "u8"
-        },
-        {
-          "name": "currency",
-          "type": "publicKey"
         }
       ]
     },
@@ -3220,6 +3617,94 @@
       }
     },
     {
+      "name": "TokenManager",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "class",
+            "type": {
+              "defined": "AccountClass"
+            }
+          },
+          {
+            "name": "storeHash",
+            "type": "u64"
+          },
+          {
+            "name": "tokenType",
+            "type": {
+              "defined": "TokenType"
+            }
+          },
+          {
+            "name": "state",
+            "type": {
+              "defined": "TokenState"
+            }
+          },
+          {
+            "name": "currency",
+            "type": "publicKey"
+          },
+          {
+            "name": "creator",
+            "type": "publicKey"
+          },
+          {
+            "name": "communityShare",
+            "type": "u16"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "base",
+            "type": "u64"
+          },
+          {
+            "name": "price",
+            "type": "u64"
+          },
+          {
+            "name": "supply",
+            "type": "u64"
+          },
+          {
+            "name": "created",
+            "type": "u64"
+          },
+          {
+            "name": "pool",
+            "type": "u64"
+          },
+          {
+            "name": "pending",
+            "type": "u64"
+          },
+          {
+            "name": "taxes",
+            "type": {
+              "array": ["u16", 4]
+            }
+          },
+          {
+            "name": "options",
+            "type": {
+              "array": ["u8", 8]
+            }
+          },
+          {
+            "name": "extra",
+            "type": {
+              "array": ["u8", 64]
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "CreatorRegistry",
       "type": {
         "kind": "struct",
@@ -4222,6 +4707,74 @@
       }
     },
     {
+      "name": "GenericUser",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "class",
+            "type": {
+              "defined": "AccountClass"
+            }
+          },
+          {
+            "name": "subApp",
+            "type": "u64"
+          },
+          {
+            "name": "holderHash",
+            "type": "u64"
+          },
+          {
+            "name": "category",
+            "type": "u64"
+          },
+          {
+            "name": "creator",
+            "type": "publicKey"
+          },
+          {
+            "name": "lutAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "subWallets",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "extended",
+            "type": "u8"
+          },
+          {
+            "name": "flags",
+            "type": {
+              "array": ["u8", 8]
+            }
+          },
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "genericStore",
+            "type": {
+              "vec": {
+                "defined": "GenericStore"
+              }
+            }
+          },
+          {
+            "name": "extra",
+            "type": {
+              "array": ["u8", 32]
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "ThreeId",
       "type": {
         "kind": "struct",
@@ -4673,6 +5226,26 @@
       }
     },
     {
+      "name": "TokenMetadata",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "arweave",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
       "name": "StoreConfig",
       "type": {
         "kind": "struct",
@@ -4968,6 +5541,28 @@
                 }
               }
             ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "CompactCnftData",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "root",
+            "type": {
+              "array": ["u8", 32]
+            }
+          },
+          {
+            "name": "arweave",
+            "type": "string"
+          },
+          {
+            "name": "index",
+            "type": "u32"
           }
         ]
       }
@@ -5735,6 +6330,53 @@
       }
     },
     {
+      "name": "GenericValue",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "None"
+          },
+          {
+            "name": "Key",
+            "fields": [
+              {
+                "name": "value",
+                "type": "publicKey"
+              }
+            ]
+          },
+          {
+            "name": "EightBytes",
+            "fields": [
+              {
+                "name": "value",
+                "type": "u64"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "GenericStore",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "storeType",
+            "type": "u16"
+          },
+          {
+            "name": "data",
+            "type": {
+              "defined": "GenericValue"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "Uses",
       "type": {
         "kind": "struct",
@@ -6082,6 +6724,42 @@
             "type": {
               "vec": {
                 "defined": "Creator"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "ShortMetadataArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          },
+          {
+            "name": "uriType",
+            "type": "u8"
+          },
+          {
+            "name": "sellerFeeBasisPoints",
+            "type": "u16"
+          },
+          {
+            "name": "collection",
+            "type": "publicKey"
+          },
+          {
+            "name": "creators",
+            "type": {
+              "vec": {
+                "defined": "ShortCreator"
               }
             }
           }
@@ -6793,6 +7471,12 @@
           },
           {
             "name": "PoolVaultV1"
+          },
+          {
+            "name": "GenericUserV1"
+          },
+          {
+            "name": "TokenManagerV1"
           }
         ]
       }
@@ -6813,6 +7497,34 @@
           },
           {
             "name": "FlaggedPirate"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TokenType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Basic"
+          },
+          {
+            "name": "OnlyUp"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TokenState",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "New"
+          },
+          {
+            "name": "Active"
           }
         ]
       }

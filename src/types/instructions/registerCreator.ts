@@ -6,11 +6,11 @@ import {
 import BN from "bn.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
 import * as borsh from "@coral-xyz/borsh"; // eslint-disable-line @typescript-eslint/no-unused-vars
 import * as types from "../types"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import { PROGRAM_ID } from "../programId";
+import { PROGRAM_CNFT, PROGRAM_ID } from "../programId";
+// import { toPublicKey } from "../../utility/PdaManager";
 
 export interface RegisterCreatorArgs {
   userActivityBump: number;
-  currency: PublicKey;
 }
 
 export interface RegisterCreatorAccounts {
@@ -22,14 +22,16 @@ export interface RegisterCreatorAccounts {
   systemProgram: PublicKey;
 }
 
-export const layout = borsh.struct([
-  borsh.u8("userActivityBump"),
-  borsh.publicKey("currency"),
-]);
+export const layout = borsh.struct([borsh.u8("userActivityBump")]);
+
+// export const layout = borsh.struct([
+//   borsh.u8("userActivityBump"),
+//   borsh.publicKey("currency"),
+// ]);
 
 export function registerCreator(
-  accounts: RegisterCreatorAccounts,
   args: RegisterCreatorArgs,
+  accounts: RegisterCreatorAccounts,
   programId: PublicKey = PROGRAM_ID
 ) {
   const keys: Array<AccountMeta> = [
@@ -45,7 +47,7 @@ export function registerCreator(
   const len = layout.encode(
     {
       userActivityBump: args.userActivityBump,
-      currency: args.currency,
+      // currency: toPublicKey(PROGRAM_CNFT),
     },
     buffer
   );

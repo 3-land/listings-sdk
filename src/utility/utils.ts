@@ -59,7 +59,7 @@ export const validateSolAddress = (address: any) => {
 };
 
 export const checkFileType = (file: any) => {
-  return file?.type?.includes("image")
+  return file?.type?.includes("gif") ? "image/gif": file?.type?.includes("image")
     ? "image"
     : file?.type?.includes("audio")
     ? "audio"

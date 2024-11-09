@@ -1,6 +1,4 @@
-import { Idl } from "@project-serum/anchor";
-
-export const idl: Idl = {
+export const idl = {
   version: "0.1.0",
   name: "cnfaucet",
   instructions: [
@@ -39,10 +37,10 @@ export const idl: Idl = {
       ],
     },
     {
-      name: "createTokenLauncher",
+      name: "createCollection",
       accounts: [
         {
-          name: "tokenManager",
+          name: "creatorAuthority",
           isMut: true,
           isSigner: false,
         },
@@ -52,8 +50,76 @@ export const idl: Idl = {
           isSigner: false,
         },
         {
+          name: "edition",
+          isMut: true,
+          isSigner: false,
+        },
+        {
           name: "mint",
           isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "tokenAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "storeAccount",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "payer",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "tokenProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "tokenMetadataProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "associatedTokenProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "rent",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "systemProgram",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: "tokenMetadata",
+          type: {
+            defined: "TokenMetadata",
+          },
+        },
+      ],
+    },
+    {
+      name: "deleteTokenLauncher",
+      accounts: [
+        {
+          name: "tokenManager",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "mint",
+          isMut: false,
           isSigner: false,
         },
         {
@@ -82,9 +148,147 @@ export const idl: Idl = {
           isSigner: false,
         },
       ],
+      args: [],
+    },
+    {
+      name: "buyToken",
+      accounts: [
+        {
+          name: "tokenManager",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "tokenAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "tokenMintRegistry",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "tokenGlobalRegistry",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "mint",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "storeAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "payer",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "tokenProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "associatedTokenProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "tokenMetadataProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "systemProgram",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
       args: [
         {
-          name: "supply",
+          name: "amount",
+          type: "u64",
+        },
+      ],
+    },
+    {
+      name: "createTokenLauncher",
+      accounts: [
+        {
+          name: "tokenManager",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "metadata",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "mint",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "tokenAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "storeTokenAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "genericUser",
+          isMut: true,
+          isSigner: false,
+          isOptional: true,
+        },
+        {
+          name: "storeAccount",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "payer",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "tokenProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "associatedTokenProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "tokenMetadataProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "rent",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "systemProgram",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: "price",
           type: "u64",
         },
         {
@@ -95,6 +299,16 @@ export const idl: Idl = {
           name: "tokenMetadata",
           type: {
             defined: "TokenMetadata",
+          },
+        },
+        {
+          name: "share",
+          type: "u16",
+        },
+        {
+          name: "tokenType",
+          type: {
+            defined: "TokenType",
           },
         },
       ],
@@ -1099,9 +1313,9 @@ export const idl: Idl = {
           type: "u64",
         },
         {
-          name: "metadata",
+          name: "shortMetadata",
           type: {
-            defined: "MetadataArgs",
+            defined: "ShortMetadataArgs",
           },
         },
         {
@@ -2203,10 +2417,6 @@ export const idl: Idl = {
         {
           name: "userActivityBump",
           type: "u8",
-        },
-        {
-          name: "currency",
-          type: "publicKey",
         },
       ],
     },
@@ -3402,6 +3612,94 @@ export const idl: Idl = {
           {
             name: "creator",
             type: "publicKey",
+          },
+        ],
+      },
+    },
+    {
+      name: "TokenManager",
+      type: {
+        kind: "struct",
+        fields: [
+          {
+            name: "class",
+            type: {
+              defined: "AccountClass",
+            },
+          },
+          {
+            name: "storeHash",
+            type: "u64",
+          },
+          {
+            name: "tokenType",
+            type: {
+              defined: "TokenType",
+            },
+          },
+          {
+            name: "state",
+            type: {
+              defined: "TokenState",
+            },
+          },
+          {
+            name: "currency",
+            type: "publicKey",
+          },
+          {
+            name: "creator",
+            type: "publicKey",
+          },
+          {
+            name: "communityShare",
+            type: "u16",
+          },
+          {
+            name: "name",
+            type: "string",
+          },
+          {
+            name: "base",
+            type: "u64",
+          },
+          {
+            name: "price",
+            type: "u64",
+          },
+          {
+            name: "supply",
+            type: "u64",
+          },
+          {
+            name: "created",
+            type: "u64",
+          },
+          {
+            name: "pool",
+            type: "u64",
+          },
+          {
+            name: "pending",
+            type: "u64",
+          },
+          {
+            name: "taxes",
+            type: {
+              array: ["u16", 4],
+            },
+          },
+          {
+            name: "options",
+            type: {
+              array: ["u8", 8],
+            },
+          },
+          {
+            name: "extra",
+            type: {
+              array: ["u8", 64],
+            },
           },
         ],
       },
@@ -6024,6 +6322,15 @@ export const idl: Idl = {
               },
             ],
           },
+          {
+            name: "EightBytes",
+            fields: [
+              {
+                name: "value",
+                type: "u64",
+              },
+            ],
+          },
         ],
       },
     },
@@ -6393,6 +6700,42 @@ export const idl: Idl = {
             type: {
               vec: {
                 defined: "Creator",
+              },
+            },
+          },
+        ],
+      },
+    },
+    {
+      name: "ShortMetadataArgs",
+      type: {
+        kind: "struct",
+        fields: [
+          {
+            name: "name",
+            type: "string",
+          },
+          {
+            name: "uri",
+            type: "string",
+          },
+          {
+            name: "uriType",
+            type: "u8",
+          },
+          {
+            name: "sellerFeeBasisPoints",
+            type: "u16",
+          },
+          {
+            name: "collection",
+            type: "publicKey",
+          },
+          {
+            name: "creators",
+            type: {
+              vec: {
+                defined: "ShortCreator",
               },
             },
           },
@@ -7108,6 +7451,9 @@ export const idl: Idl = {
           {
             name: "GenericUserV1",
           },
+          {
+            name: "TokenManagerV1",
+          },
         ],
       },
     },
@@ -7127,6 +7473,34 @@ export const idl: Idl = {
           },
           {
             name: "FlaggedPirate",
+          },
+        ],
+      },
+    },
+    {
+      name: "TokenType",
+      type: {
+        kind: "enum",
+        variants: [
+          {
+            name: "Basic",
+          },
+          {
+            name: "OnlyUp",
+          },
+        ],
+      },
+    },
+    {
+      name: "TokenState",
+      type: {
+        kind: "enum",
+        variants: [
+          {
+            name: "New",
+          },
+          {
+            name: "Active",
           },
         ],
       },

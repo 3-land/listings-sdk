@@ -16,6 +16,8 @@ import {
   SaleConfig,
   ExtraParameter,
   MetadataArgsJSON,
+  ShortMetadataArgs,
+  ShortMetadataArgsJSON,
 } from "../types/types";
 import {
   holderPDA,
@@ -83,7 +85,7 @@ export class Store {
     payer: Signer,
     storeAccount: PublicKey,
     supply: number,
-    metadata: MetadataArgs,
+    metadata: ShortMetadataArgs,
     saleConfig: SaleConfig,
     identifier: number,
     category: number[],
@@ -102,6 +104,7 @@ export class Store {
       store: storeAccount,
       identifier: new BN(identifier),
     });
+    console.log("item acc: ", itemAccount);
     const [creatorAuthority] = await creatorAuthorityPDA({
       creator: payer.publicKey,
       store: storeAccount,
@@ -155,20 +158,35 @@ export class Store {
       // signers.push(new_authority)
     }
 
-    const meta: MetadataArgs = {
+    // const meta: MetadataArgs = {
+    //   name: metadata.name,
+    //   symbol: metadata.symbol,
+    //   uri: metadataUrl ? metadataUrl : "",
+    //   sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
+    //   primarySaleHappened: metadata.primarySaleHappened,
+    //   isMutable: metadata.isMutable,
+    //   editionNonce: metadata.editionNonce || null,
+    //   tokenStandard: metadata.tokenStandard || null,
+    //   collection: metadata.collection || null,
+    //   uses: metadata.uses || null,
+    //   tokenProgramVersion: metadata.tokenProgramVersion,
+    //   creators: metadata.creators,
+    //   toJSON: function (): MetadataArgsJSON {
+    //     throw new Error("Function not implemented.");
+    //   },
+    //   toEncodable: function () {
+    //     throw new Error("Function not implemented.");
+    //   },
+    // };
+
+    const meta: ShortMetadataArgs = {
       name: metadata.name,
-      symbol: metadata.symbol,
       uri: metadataUrl ? metadataUrl : "",
+      uriType: 1,
       sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
-      primarySaleHappened: metadata.primarySaleHappened,
-      isMutable: metadata.isMutable,
-      editionNonce: metadata.editionNonce || null,
-      tokenStandard: metadata.tokenStandard || null,
-      collection: metadata.collection || null,
-      uses: metadata.uses || null,
-      tokenProgramVersion: metadata.tokenProgramVersion,
+      collection: metadata.collection,
       creators: metadata.creators,
-      toJSON: function (): MetadataArgsJSON {
+      toJSON: function (): ShortMetadataArgsJSON {
         throw new Error("Function not implemented.");
       },
       toEncodable: function () {
@@ -195,28 +213,52 @@ export class Store {
     instructions.push(instructionSing);
 
     const [userActivity, userActivityBump] = await userActivityPDA({
-      user: payer.publicKey,
+      user: creator,
       store: storeAccount,
     });
 
     const [creatorRegistry] = await creatorRegistryPDA({
-      user: payer.publicKey,
+      user: creator,
       store: storeAccount,
       currency: toPublicKey(PROGRAM_CNFT),
     });
 
-    const registerIX = registerCreator(
+    // try {
+    //   const res = await this.connection.getAccountInfo(creatorRegistry);
+    //   console.log("creator registry trycatch info: ", res);
+    // } catch (e) {
+    //   console.log("errrr", e);
+    // }
+
+    console.log("craetor re: ", creatorRegistry);
+    console.log(
+      "registercreator params: ",
+      {
+        // currency: toPublicKey(PROGRAM_CNFT),
+        userActivityBump: userActivityBump,
+      },
       {
         creatorRegistry: creatorRegistry,
         userActivity: userActivity,
-        itemAccount: itemAccount,
+        itemAccount: itemAccount, //empty on solscan
         store: storeAccount,
         payer: payer.publicKey,
         systemProgram: SystemProgram.programId,
+      }
+    );
+
+    const registerIX = registerCreator(
+      {
+        // currency: toPublicKey(PROGRAM_CNFT),
+        userActivityBump: userActivityBump,
       },
       {
-        currency: toPublicKey(PROGRAM_CNFT),
-        userActivityBump: userActivityBump,
+        creatorRegistry,
+        userActivity,
+        itemAccount,
+        store: storeAccount,
+        payer: payer.publicKey,
+        systemProgram: SystemProgram.programId,
       }
     );
 
@@ -243,6 +285,7 @@ export class Store {
     owner: PublicKey,
     distributionBumps: number[],
     storeAccount: PublicKey,
+    globalStoreAccount: PublicKey,
     creator: PublicKey,
     identifier: number,
     extraAccounts: any[]
@@ -259,7 +302,7 @@ export class Store {
     });
 
     const [paymentAccount] = await buyPaymentPDA({
-      owner: payer.publicKey,
+      owner: owner,
       itemAccount,
     });
 
@@ -291,6 +334,7 @@ export class Store {
       distributionBumps,
       {},
       storeAccount,
+      globalStoreAccount,
       identifier,
       extraAccounts,
       creator
@@ -322,7 +366,8 @@ export class Store {
       store: storeAccount,
     });
 
-    const registerIX = registerCollector(
+    console.log(
+      "register collector params: ",
       {
         creatorBump: creatorBump,
         activityBump: userActivityBump,
@@ -338,9 +383,26 @@ export class Store {
       }
     );
 
+    const registerIX = registerCollector(
+      {
+        creatorBump: creatorBump,
+        activityBump: userActivityBump,
+      },
+      {
+        collectorArtistRegistry: collectorRegistry,
+        collectorGlobalRegistry: collectorGlobalRegistry,
+        userActivity: userActivity,
+        creatorRegistry: creatorRegistry,
+        store: storeAccount,
+        payer: payer.publicKey,
+        systemProgram: SystemProgram.programId,
+      }
+    );
+    console.log("registerIX", registerIX);
     instructions.push(registerIX);
 
     const transaction = new Transaction().add(...instructions);
+    console.log("transa: ", payer.publicKey);
     return sendAndConfirmTransaction(this.connection, transaction, [payer]);
   }
 

@@ -1,6 +1,10 @@
 import { PublicKey, TransactionInstruction } from "@solana/web3.js";
 import { PROGRAM_ID } from "../../../types/programId";
-import { MetadataArgs, SaleConfig } from "../../../types/types";
+import {
+  MetadataArgs,
+  SaleConfig,
+  ShortMetadataArgs,
+} from "../../../types/types";
 import { createSingle } from "../../../types/instructions";
 import BN from "bn.js";
 
@@ -12,7 +16,7 @@ export function createSingleEditionInstruction(
   creator: PublicKey,
   payer: PublicKey,
   supply: number,
-  metadata: MetadataArgs,
+  shortMetadata: ShortMetadataArgs,
   saleConfig: SaleConfig,
   identifier: number,
   category: number[],
@@ -23,7 +27,7 @@ export function createSingleEditionInstruction(
   return createSingle(
     {
       supply: new BN(supply),
-      metadata,
+      shortMetadata,
       saleConfig,
       identifier: new BN(identifier),
       category,

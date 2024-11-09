@@ -6,7 +6,7 @@ import { PROGRAM_ID } from "../programId"
 
 export interface CreateSingleArgs {
   supply: BN
-  metadata: types.MetadataArgsFields
+  shortMetadata: types.ShortMetadataArgsFields
   saleConfig: types.SaleConfigFields
   identifier: BN
   category: Array<number>
@@ -27,7 +27,7 @@ export interface CreateSingleAccounts {
 
 export const layout = borsh.struct([
   borsh.u64("supply"),
-  types.MetadataArgs.layout("metadata"),
+  types.ShortMetadataArgs.layout("shortMetadata"),
   types.SaleConfig.layout("saleConfig"),
   borsh.u64("identifier"),
   borsh.array(borsh.u16(), 3, "category"),
@@ -55,7 +55,7 @@ export function createSingle(
   const len = layout.encode(
     {
       supply: args.supply,
-      metadata: types.MetadataArgs.toEncodable(args.metadata),
+      shortMetadata: types.ShortMetadataArgs.toEncodable(args.shortMetadata),
       saleConfig: types.SaleConfig.toEncodable(args.saleConfig),
       identifier: args.identifier,
       category: args.category,

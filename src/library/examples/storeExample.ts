@@ -10,12 +10,18 @@ import {
   PriceRule,
   SaleConfigJSON,
   SaleType,
+  ShortMetadataArgs,
+  ShortMetadataArgsJSON,
   StoreConfigJSON,
   TokenProgramVersion,
 } from "../../types/types";
 import { Wallet } from "@project-serum/anchor";
 import * as fs2 from "fs";
-import { PROGRAM_CNFT, SOLANA_ENDPOINT } from "../../types/programId";
+import {
+  PROGRAM_CNFT,
+  PROGRAM_ID,
+  SOLANA_ENDPOINT,
+} from "../../types/programId";
 import path from "path";
 
 interface StoreInitOptions {
@@ -36,7 +42,7 @@ async function createStoreTest(options: StoreInitOptions) {
 
   try {
     const storeConfig: StoreConfig = {
-      fee: new BN(1000),
+      fee: new BN(1000000),
       feePercentage: 5,
       feeType: new FeeType.AllMints(),
       trust: payer.publicKey,
@@ -53,7 +59,7 @@ async function createStoreTest(options: StoreInitOptions) {
 
     const createStoreTxId = await sdk.createStore(
       walletKeypair,
-      "biccs Test Store 2",
+      "biccs store",
       storeConfig,
       storeId,
       payer.publicKey
@@ -82,20 +88,35 @@ async function createSingleTest(
       share: 100,
     });
 
-    const metadata: MetadataArgs = {
-      name: "Mi NFTi",
-      symbol: "IC",
+    // const metadata: MetadataArgs = {
+    //   name: "Mi NFTi",
+    //   symbol: "IC",
+    //   uri: "",
+    //   sellerFeeBasisPoints: 500,
+    //   primarySaleHappened: false,
+    //   isMutable: true,
+    //   editionNonce: null,
+    //   tokenStandard: null,
+    //   collection: null,
+    //   uses: null,
+    //   tokenProgramVersion: new TokenProgramVersion.Original(),
+    //   creators: [creator],
+    //   toJSON: function (): MetadataArgsJSON {
+    //     throw new Error("Function not implemented.");
+    //   },
+    //   toEncodable: function () {
+    //     throw new Error("Function not implemented.");
+    //   },
+    // };
+
+    const metadata: ShortMetadataArgs = {
+      name: "SDK NFT",
       uri: "",
+      uriType: 1,
       sellerFeeBasisPoints: 500,
-      primarySaleHappened: false,
-      isMutable: true,
-      editionNonce: null,
-      tokenStandard: null,
-      collection: null,
-      uses: null,
-      tokenProgramVersion: new TokenProgramVersion.Original(),
+      collection: new PublicKey("2rQq34FJG1613i7H8cDfxuGCtEjJmFAUNbAPJqK699oD"), //hardcoded collection niic
       creators: [creator],
-      toJSON: function (): MetadataArgsJSON {
+      toJSON: function (): ShortMetadataArgsJSON {
         throw new Error("Function not implemented.");
       },
       toEncodable: function () {
@@ -111,10 +132,10 @@ async function createSingleTest(
     ).buffer;
 
     const options = {
-      symbol: metadata.symbol,
+      symbol: "SDK",
       metadata: {
         name: metadata.name,
-        description: "Some new description for my nft 55",
+        description: "Some description ",
         files: {
           file: {
             arrayBuffer() {
@@ -166,7 +187,7 @@ async function createSingleTest(
       100,
       metadata,
       saleConfig,
-      Math.floor(Math.random() * 100), //234234
+      66884218555312, // Math.floor(Math.random() * 100),
       [1, 0, 0],
       [1, 0],
       0,
@@ -210,8 +231,9 @@ async function buySingleTest(
       owner.publicKey,
       [0, 0, 0, 0, 0, 0],
       new PublicKey(storeAccount),
+      new PublicKey("GyPCu89S63P9NcCQAtuSJesiefhhgpGWrNVJs4bF2cSK"),
       new PublicKey(itemCreator),
-      6688, //234234,
+      66884218555312,
       [
         {
           pubkey: new PublicKey("GyPCu89S63P9NcCQAtuSJesiefhhgpGWrNVJs4bF2cSK"), //global store
@@ -220,12 +242,13 @@ async function buySingleTest(
         },
       ]
     );
-
+    console.log("res buy si: ", buySingleEditionTxId);
     return {
       transactionId: buySingleEditionTxId,
       ownerPublicKey: owner.publicKey.toString(),
     };
   } catch (error) {
+    console.log("enelerrr", error);
     handleError(error);
     throw error;
   }
@@ -250,7 +273,7 @@ async function main() {
     // const storeResult = await createStoreTest(options);
     // console.log("Store created. Transaction ID:", storeResult.transactionId);
     // Create single edition
-    const storeAccount = "7eK22v8AjrWZYnfia9uTfVXP3WktPZQMbfMJhshuoTFL"; //current store created for testing
+    const storeAccount = "P1c4bboejX24NbY3vMw8EncKVmvcGEryznWLs4PGp9j"; //current store created for testing
     // const singleEditionResult = await createSingleTest(options, storeAccount);
     // console.log(
     //   "Single edition created. Transaction ID:",
@@ -258,7 +281,7 @@ async function main() {
     // );
     // Buy single edition
     const itemCreator = "kon4KawBAv91adTeyvJZqMpprkq1WRm2YyKHpBngwj6";
-    const itemAccount = "2YH2f4UrqHja1KecBCHMMGixq1etzwtWknTY2vfLHaQD"; //current item created for testing
+    const itemAccount = "7BhKXmc5obiwn5hhrUhErVBrAT7TErYcTpRYE8ggfjKV"; //current item created for testing
     const buyResult = await buySingleTest(
       options,
       storeAccount,

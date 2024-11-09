@@ -15,6 +15,8 @@ export type {
 } from "./CollectorRegistry"
 export { LutVault } from "./LutVault"
 export type { LutVaultFields, LutVaultJSON } from "./LutVault"
+export { TokenManager } from "./TokenManager"
+export type { TokenManagerFields, TokenManagerJSON } from "./TokenManager"
 export { CreatorRegistry } from "./CreatorRegistry"
 export type {
   CreatorRegistryFields,
@@ -74,6 +76,8 @@ export { Single } from "./Single"
 export type { SingleFields, SingleJSON } from "./Single"
 export { Pack } from "./Pack"
 export type { PackFields, PackJSON } from "./Pack"
+export { GenericUser } from "./GenericUser"
+export type { GenericUserFields, GenericUserJSON } from "./GenericUser"
 export { ThreeId } from "./ThreeId"
 export type { ThreeIdFields, ThreeIdJSON } from "./ThreeId"
 export { StoresHolder } from "./StoresHolder"

@@ -601,6 +601,52 @@ export class PoolVaultV1 {
   }
 }
 
+export interface GenericUserV1JSON {
+  kind: "GenericUserV1"
+}
+
+export class GenericUserV1 {
+  static readonly discriminator = 26
+  static readonly kind = "GenericUserV1"
+  readonly discriminator = 26
+  readonly kind = "GenericUserV1"
+
+  toJSON(): GenericUserV1JSON {
+    return {
+      kind: "GenericUserV1",
+    }
+  }
+
+  toEncodable() {
+    return {
+      GenericUserV1: {},
+    }
+  }
+}
+
+export interface TokenManagerV1JSON {
+  kind: "TokenManagerV1"
+}
+
+export class TokenManagerV1 {
+  static readonly discriminator = 27
+  static readonly kind = "TokenManagerV1"
+  readonly discriminator = 27
+  readonly kind = "TokenManagerV1"
+
+  toJSON(): TokenManagerV1JSON {
+    return {
+      kind: "TokenManagerV1",
+    }
+  }
+
+  toEncodable() {
+    return {
+      TokenManagerV1: {},
+    }
+  }
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function fromDecoded(obj: any): types.AccountClassKind {
   if (typeof obj !== "object") {
@@ -684,6 +730,12 @@ export function fromDecoded(obj: any): types.AccountClassKind {
   }
   if ("PoolVaultV1" in obj) {
     return new PoolVaultV1()
+  }
+  if ("GenericUserV1" in obj) {
+    return new GenericUserV1()
+  }
+  if ("TokenManagerV1" in obj) {
+    return new TokenManagerV1()
   }
 
   throw new Error("Invalid enum object")
@@ -769,6 +821,12 @@ export function fromJSON(obj: types.AccountClassJSON): types.AccountClassKind {
     case "PoolVaultV1": {
       return new PoolVaultV1()
     }
+    case "GenericUserV1": {
+      return new GenericUserV1()
+    }
+    case "TokenManagerV1": {
+      return new TokenManagerV1()
+    }
   }
 }
 
@@ -800,6 +858,8 @@ export function layout(property?: string) {
     borsh.struct([], "ThreeIdV1"),
     borsh.struct([], "DonationRegistryV1"),
     borsh.struct([], "PoolVaultV1"),
+    borsh.struct([], "GenericUserV1"),
+    borsh.struct([], "TokenManagerV1"),
   ])
   if (property !== undefined) {
     return ret.replicate(property)

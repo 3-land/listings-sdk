@@ -107,16 +107,15 @@ export const getMetadataPDA = async (mint: any) => {
 };
 
 export const getEditionPDA = async (mint: any, full: any) => {
-  const tk = await PublicKey.findProgramAddress(
+  return await PublicKey.findProgramAddress(
     [
       Buffer.from(METADATA_PREFIX),
-      PROGRAM_ID.toBuffer(),
+      toPublicKey(TOKEN_METADATA_PROGRAM_ID).toBuffer(),
       mint.toBuffer(),
       Buffer.from("edition"),
     ],
-    PROGRAM_ID
+    toPublicKey(TOKEN_METADATA_PROGRAM_ID)
   );
-  return tk[0];
 };
 
 export const collectionAuthorityRecord = async ({
@@ -137,10 +136,26 @@ export const collectionAuthorityRecord = async ({
   );
 };
 
+// export const creatorRegistryPDA = ({ user, store, currency }: any) => {
+//   user = toPublicKey(user);
+//   currency = toPublicKey(currency);
+//   store = toPublicKey(store);
+//   return PublicKey.findProgramAddress(
+//     [
+//       Buffer.from("creator_registry"),
+//       currency.toBytes(),
+//       user.toBytes(),
+//       store.toBytes(),
+//     ],
+//     toPublicKey(PROGRAM_ID)
+//   );
+// };
+
 export const creatorRegistryPDA = ({ user, currency, store }: any) => {
   user = toPublicKey(user);
   currency = toPublicKey(currency);
   store = toPublicKey(store);
+
   return PublicKey.findProgramAddress(
     [
       Buffer.from("creator_registry"),

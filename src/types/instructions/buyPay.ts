@@ -34,6 +34,7 @@ export function buyPay(
   extraAccounts: any[],
   programId: PublicKey = PROGRAM_ID
 ) {
+  console.log("reer: ", extraAccounts[0].pubkey);
   const keys: Array<AccountMeta> = [
     { pubkey: accounts.paymentAccount, isSigner: false, isWritable: true },
     { pubkey: accounts.itemAccount, isSigner: false, isWritable: false },
@@ -43,8 +44,9 @@ export function buyPay(
     { pubkey: accounts.owner, isSigner: false, isWritable: false },
     { pubkey: accounts.payer, isSigner: true, isWritable: true },
     { pubkey: accounts.systemProgram, isSigner: false, isWritable: false },
-    { pubkey: accounts.payer, isSigner: false, isWritable: true },
+    { pubkey: accounts.payer, isSigner: true, isWritable: true },
   ];
+  console.log("keyss: ", keys.length);
   for (let item of extraAccounts) {
     keys.push({
       pubkey: item.pubkey,
@@ -52,6 +54,7 @@ export function buyPay(
       isWritable: item.isWritable,
     });
   }
+  console.log("keyss afte: ", keys.length, keys);
   const identifier = Buffer.from([100, 229, 162, 27, 130, 173, 68, 1]);
   const buffer = Buffer.alloc(1000);
   const len = layout.encode(
