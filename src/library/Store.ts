@@ -5,7 +5,35 @@ import {
   sendAndConfirmTransaction,
   Signer,
   SystemProgram,
+  sendAndConfirmRawTransaction,
+  SYSVAR_INSTRUCTIONS_PUBKEY,
+  TransactionInstruction,
+  TransactionMessage,
+  VersionedTransaction,
+  AddressLookupTableProgram,
+  AddressLookupTableAccount,
+  clusterApiUrl as clusterApiUrl2,
+  Keypair,
 } from "@solana/web3.js";
+import {
+  createUpdateMetadataAccountInstruction,
+  createUpdateMetadataAccountV2Instruction,
+  createCreateMasterEditionV3Instruction,
+  createCreateMetadataAccountV3Instruction,
+  //DataV2,
+  createMintNewEditionFromMasterEditionViaTokenInstruction,
+  PROGRAM_ID as metaPROGRAM_ID,
+} from "@metaplex-foundation/mpl-token-metadata";
+
+import {
+  MintLayout,
+  getAssociatedTokenAddress,
+  createAssociatedTokenAccountInstruction,
+  createMintToInstruction,
+  createInitializeMintInstruction,
+  createBurnInstruction,
+  getAccount,
+} from "@solana/spl-token";
 import { getConnection } from "../utility/Connection";
 import { createStoreInstruction } from "./instructions/store/createStore";
 import { createSingleEditionInstruction } from "./instructions/store/createSingleEdition";
@@ -14,10 +42,9 @@ import {
   StoreConfig,
   MetadataArgs,
   SaleConfig,
-  ExtraParameter,
-  MetadataArgsJSON,
   ShortMetadataArgs,
   ShortMetadataArgsJSON,
+  TokenMetadataFields,
 } from "../types/types";
 import {
   holderPDA,
@@ -25,7 +52,6 @@ import {
   itemAccountPDA,
   creatorAuthorityPDA,
   toPublicKey,
-  holderAccountPDA,
   userActivityPDA,
   creatorRegistryPDA,
   getMetadataPDA,
@@ -33,16 +59,28 @@ import {
   collectorArtistRegistryPDA,
   collectorGlobalRegistryPDA,
   buyPaymentPDA,
+  getATAPDA,
+  getEditionPDA,
 } from "../utility/PdaManager";
 import { devnetHolder } from "../utility/Holders";
 import BN from "bn.js";
 import { uploadFilesIrysInstruction } from "./instructions/store/uploadFilesIryis";
-import { PROGRAM_CNFT, PROGRAM_ID } from "../types/programId";
+import {
+  PROGRAM_CNFT,
+  PROGRAM_ID,
+  TOKEN_METADATA_PROGRAM_ID,
+  TOKEN_PROGRAM_ID,
+} from "../types/programId";
 
 import { registerCreator } from "../types/instructions/registerCreator";
 import { init as Irys } from "./Irys/irys";
 import { createApproveCollectionAuthorityInstruction } from "@metaplex-foundation/mpl-token-metadata";
-import { registerCollector } from "../types/instructions";
+import {
+  createCollection,
+  CreateCollectionArgs,
+  registerCollector,
+} from "../types/instructions";
+import * as types from "../types/types";
 
 export class Store {
   private connection: Connection;
@@ -81,6 +119,147 @@ export class Store {
     return sendAndConfirmTransaction(this.connection, transaction, [payer]);
   }
 
+  async createCollection(
+    payer: Signer,
+    collectionDetails: any,
+    supply: number,
+    metadata: any,
+    mutable: Boolean,
+    irysData: any
+    // symbol: string,
+    // name: string
+  ) {
+    try {
+      let instructions = [];
+      let signers = [payer];
+
+      if (metadata.uri.length !== 0) throw new Error("-- URI must be empty --");
+      const irys = await Irys(payer.publicKey.toBase58(), {});
+      const uuid = "random_uuid_per_upload_session";
+      const { instruction, signerIrys, metadataUrl } =
+        await uploadFilesIrysInstruction(irysData.options, irys, uuid);
+      instructions.push(instruction);
+      signers.push(signerIrys);
+
+      /***************** */
+
+      const mint = Keypair.generate();
+      console.log("mint: ", mint.publicKey);
+      const connection = this.connection;
+      const updateAuthority = payer.publicKey;
+      collectionDetails = collectionDetails || null;
+
+      const mintRent = await connection.getMinimumBalanceForRentExemption(
+        MintLayout.span
+      );
+      console.log("conssdf 1");
+      instructions.push(
+        SystemProgram.createAccount({
+          fromPubkey: payer.publicKey,
+          newAccountPubkey: mint.publicKey,
+          lamports: mintRent,
+          space: MintLayout.span,
+          programId: TOKEN_PROGRAM_ID,
+        })
+      );
+      console.log("conssdf 2");
+
+      const owner = payer.publicKey;
+      const freezeAuthority = owner;
+      instructions.push(
+        createInitializeMintInstruction(
+          mint.publicKey, //mint
+          0, //decimals
+          owner, //mintAuthority
+          freezeAuthority, //freezeAuthority
+          TOKEN_PROGRAM_ID
+        )
+      );
+      signers.push(mint);
+      console.log("conssdf 3");
+
+      const ownerATA = await getATAPDA({ owner, mint: mint.publicKey });
+      instructions.push(
+        createAssociatedTokenAccountInstruction(
+          payer.publicKey,
+          ownerATA, //associatedTokenAddress
+          owner, //walletAddress
+          mint.publicKey
+        )
+      );
+
+      const metadataAccount = await getMetadataPDA(mint.publicKey);
+
+      const create_accounts = {
+        metadata: metadataAccount,
+        mint: mint.publicKey,
+        mintAuthority: payer.publicKey,
+        payer: payer.publicKey,
+        updateAuthority,
+      };
+
+      const create_args = {
+        createMetadataAccountArgsV3: {
+          data: metadata,
+          isMutable: mutable === false ? false : true,
+          collectionDetails,
+        },
+      };
+      console.log("conssdf 4");
+
+      instructions.push(
+        createCreateMetadataAccountV3Instruction(create_accounts, create_args)
+      );
+      console.log("conssdf 4.1");
+
+      instructions.push(
+        createMintToInstruction(
+          mint.publicKey,
+          ownerATA,
+          owner /*authority*/,
+          1,
+          []
+        )
+      );
+      console.log("conssdf 4.2");
+
+      const supplies = {
+        maxSupply: supply || supply === 0 ? new BN(supply) : null,
+      };
+      const [editionAccount] = await getEditionPDA(mint.publicKey, false);
+      const accounts = {
+        edition: editionAccount,
+        mint: mint.publicKey,
+        updateAuthority,
+        mintAuthority: owner,
+        payer: payer.publicKey,
+        metadata: metadataAccount,
+      };
+      console.log("conssdf 5");
+
+      const args = { createMasterEditionArgs: { ...supplies } };
+      instructions.push(createCreateMasterEditionV3Instruction(accounts, args));
+
+      //if(priority_fee?.rate) instructions.push(ComputeBudgetProgram.setComputeUnitPrice({microLamports: priority_fee.rate}));
+
+      const transaction = new Transaction().add(...instructions);
+      console.log("conssdf 6");
+
+      const sendedconfirmedTransaction = await sendAndConfirmTransaction(
+        this.connection,
+        transaction,
+        signers
+      );
+      const { errors, succeeds }: any = await irys?.uploadFiles({
+        uuid,
+        signature: sendedconfirmedTransaction,
+      });
+      return sendedconfirmedTransaction;
+    } catch (error) {
+      console.log("error in create collection: ", error);
+    }
+  }
+
   async createSingleEdition(
     payer: Signer,
     storeAccount: PublicKey,
@@ -104,7 +283,6 @@ export class Store {
       store: storeAccount,
       identifier: new BN(identifier),
     });
-    console.log("item acc: ", itemAccount);
     const [creatorAuthority] = await creatorAuthorityPDA({
       creator: payer.publicKey,
       store: storeAccount,
@@ -121,7 +299,7 @@ export class Store {
 
     const collection_mint = toPublicKey(collection);
 
-    const new_authority = creatorAuthority; //PROGRAM_ID;
+    const new_authority = creatorAuthority;
 
     const [authRecord] = await collectionAuthorityRecord({
       mint: collection_mint,
@@ -132,16 +310,13 @@ export class Store {
 
     try {
       const res = await this.connection.getAccountInfo(authRecord);
-      console.log("account info: ", res);
       if (res) collection_permission = true;
     } catch (e) {
       collection_permission = false;
     }
 
-    console.log("authrecord: ", authRecord);
     if (!collection_permission) {
       const metadataPda = await getMetadataPDA(collection_mint);
-      console.log("metadataPda: ", metadataPda);
 
       const accounts = {
         collectionAuthorityRecord: authRecord,
@@ -154,30 +329,8 @@ export class Store {
       const approveInstruction =
         createApproveCollectionAuthorityInstruction(accounts);
       instructions.push(approveInstruction);
-      console.log("approve ix: ", approveInstruction);
       // signers.push(new_authority)
     }
-
-    // const meta: MetadataArgs = {
-    //   name: metadata.name,
-    //   symbol: metadata.symbol,
-    //   uri: metadataUrl ? metadataUrl : "",
-    //   sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
-    //   primarySaleHappened: metadata.primarySaleHappened,
-    //   isMutable: metadata.isMutable,
-    //   editionNonce: metadata.editionNonce || null,
-    //   tokenStandard: metadata.tokenStandard || null,
-    //   collection: metadata.collection || null,
-    //   uses: metadata.uses || null,
-    //   tokenProgramVersion: metadata.tokenProgramVersion,
-    //   creators: metadata.creators,
-    //   toJSON: function (): MetadataArgsJSON {
-    //     throw new Error("Function not implemented.");
-    //   },
-    //   toEncodable: function () {
-    //     throw new Error("Function not implemented.");
-    //   },
-    // };
 
     const meta: ShortMetadataArgs = {
       name: metadata.name,
@@ -223,33 +376,8 @@ export class Store {
       currency: toPublicKey(PROGRAM_CNFT),
     });
 
-    // try {
-    //   const res = await this.connection.getAccountInfo(creatorRegistry);
-    //   console.log("creator registry trycatch info: ", res);
-    // } catch (e) {
-    //   console.log("errrr", e);
-    // }
-
-    console.log("craetor re: ", creatorRegistry);
-    console.log(
-      "registercreator params: ",
-      {
-        // currency: toPublicKey(PROGRAM_CNFT),
-        userActivityBump: userActivityBump,
-      },
-      {
-        creatorRegistry: creatorRegistry,
-        userActivity: userActivity,
-        itemAccount: itemAccount, //empty on solscan
-        store: storeAccount,
-        payer: payer.publicKey,
-        systemProgram: SystemProgram.programId,
-      }
-    );
-
     const registerIX = registerCreator(
       {
-        // currency: toPublicKey(PROGRAM_CNFT),
         userActivityBump: userActivityBump,
       },
       {
@@ -286,15 +414,11 @@ export class Store {
     distributionBumps: number[],
     storeAccount: PublicKey,
     globalStoreAccount: PublicKey,
+    collectionAddress: PublicKey,
     creator: PublicKey,
     identifier: number,
     extraAccounts: any[]
   ): Promise<string> {
-    /*
-      1. BuyPay
-      2. PrintSingle
-      3. RegisterCollector
-    */
     const [itemAccount] = await itemAccountPDA({
       creator: creator,
       store: storeAccount,
@@ -306,22 +430,8 @@ export class Store {
       itemAccount,
     });
 
-    // const [holderAccount] = await holderPDA({
-    //   creator: devnetHolder.creator,
-    //   slot: devnetHolder.slot,
-    // });
-    // const [holderAccount] = await holderAccountPDA({
-    //   creator: payer.publicKey,
-    //});
     const holderAccount = storeAccount;
-    // const holderAccount = toPublicKey(
-    //   "8JddrxSrSt9csoixQcuyvzGoj8srfjPgcrKKWEePrZbY"
-    // );
 
-    // const [creatorAuthority] = await creatorAuthorityPDA({
-    //   creator: creator,
-    //   store: storeAccount,
-    // });
     let instructions = [];
     const instruction = await buySingleEditionInstruction(
       paymentAccount,
@@ -337,9 +447,9 @@ export class Store {
       globalStoreAccount,
       identifier,
       extraAccounts,
-      creator
+      creator,
+      collectionAddress
     );
-    console.log("buypay and the other: ", instruction);
     instructions.push(...instruction);
 
     const [userActivity, userActivityBump] = await userActivityPDA({
@@ -366,23 +476,6 @@ export class Store {
       store: storeAccount,
     });
 
-    console.log(
-      "register collector params: ",
-      {
-        creatorBump: creatorBump,
-        activityBump: userActivityBump,
-      },
-      {
-        collectorArtistRegistry: collectorRegistry,
-        collectorGlobalRegistry: collectorGlobalRegistry,
-        userActivity: userActivity,
-        creatorRegistry: creatorRegistry,
-        store: storeAccount,
-        payer: payer.publicKey,
-        systemProgram: SystemProgram.programId,
-      }
-    );
-
     const registerIX = registerCollector(
       {
         creatorBump: creatorBump,
@@ -398,54 +491,12 @@ export class Store {
         systemProgram: SystemProgram.programId,
       }
     );
-    console.log("registerIX", registerIX);
     instructions.push(registerIX);
 
     const transaction = new Transaction().add(...instructions);
-    console.log("transa: ", payer.publicKey);
+    console.log("transaction: ", payer.publicKey);
     return sendAndConfirmTransaction(this.connection, transaction, [payer]);
   }
-
-  //   async uploadFilesIrys(
-  //     address: PublicKey,
-  //     payer: PublicKey,
-  //     signer: Signer,
-  //     options: any
-  //   ): Promise<{ tx: string; url: string | undefined }> {
-  //     const uuid = "random_uuid_per_upload_session";
-
-  //     const { instruction, signerIrys, metadataUrl, irys_files } =
-  //       await uploadFilesIrysInstruction(address, payer, options);
-  //     // console.log("********* instruction upload files: ", instruction);
-  //     const transaction = new Transaction().add(instruction);
-  //     // transaction.recentBlockhash = (
-  //     //   await this.connection.getLatestBlockhash()
-  //     // ).blockhash;
-  //     // console.log("********* transaction upload files: ", transaction);
-  //     transaction.recentBlockhash = (
-  //       await this.connection.getLatestBlockhashAndContext()
-  //     ).value.blockhash;
-  //     const sendedconfirmedTransaction = await sendAndConfirmTransaction(
-  //       this.connection,
-  //       transaction,
-  //       [signer, signerIrys]
-  //     );
-  //     await uploadFiles(
-  //       { uuid, signature: sendedconfirmedTransaction, files: irys_files },
-  //       payer
-  //     );
-
-  //     let res = {
-  //       tx: sendedconfirmedTransaction,
-  //       url: metadataUrl ? metadataUrl : undefined,
-  //       // upload: async (signature: any) => {
-  //       //   console.log("***** SIGNATURE!!");
-  //       //   await uploadFiles({ uuid, signature, files: irys_files }, payer);
-  //       // },
-  //     };
-
-  //     return res;
-  //   }
 }
 
 export { StoreConfig, MetadataArgs, SaleConfig };

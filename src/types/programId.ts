@@ -36,4 +36,7 @@ export const PROGRAM_CLAIMZ = toPublicKey(
   "52zRX47uXYzpYDmW4PVQTnxjrNhYaCsVEauXm8xF9ARq"
 );
 
+export const SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID = toPublicKey(
+  "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+);
 export const SOLANA_ENDPOINT = "https://api.devnet.solana.com";

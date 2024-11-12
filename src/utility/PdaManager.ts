@@ -2,11 +2,11 @@ import BN from "bn.js";
 import {
   BUBBLEGUM_PROGRAM_ID,
   PROGRAM_ID,
+  SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID,
   TOKEN_METADATA_PROGRAM_ID,
+  TOKEN_PROGRAM_ID,
 } from "../types/programId";
 import { PublicKey } from "@solana/web3.js";
-import { ApproveCollectionAuthorityInstructionAccounts } from "@metaplex-foundation/mpl-token-metadata";
-import { web3 } from "@project-serum/anchor";
 
 export const METADATA_PREFIX = "metadata";
 
@@ -136,21 +136,6 @@ export const collectionAuthorityRecord = async ({
   );
 };
 
-// export const creatorRegistryPDA = ({ user, store, currency }: any) => {
-//   user = toPublicKey(user);
-//   currency = toPublicKey(currency);
-//   store = toPublicKey(store);
-//   return PublicKey.findProgramAddress(
-//     [
-//       Buffer.from("creator_registry"),
-//       currency.toBytes(),
-//       user.toBytes(),
-//       store.toBytes(),
-//     ],
-//     toPublicKey(PROGRAM_ID)
-//   );
-// };
-
 export const creatorRegistryPDA = ({ user, currency, store }: any) => {
   user = toPublicKey(user);
   currency = toPublicKey(currency);
@@ -230,4 +215,16 @@ export const treeAuthority = ({ tree }: any) => {
     [tree.toBuffer()],
     toPublicKey(BUBBLEGUM_PROGRAM_ID)
   );
+};
+
+export const getATAPDA = async ({ owner, mint }: any) => {
+  const [publicKey] = await PublicKey.findProgramAddress(
+    [
+      toPublicKey(owner).toBuffer(),
+      TOKEN_PROGRAM_ID.toBuffer(),
+      toPublicKey(mint).toBuffer(),
+    ],
+    SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID
+  );
+  return publicKey;
 };

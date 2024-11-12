@@ -3,11 +3,8 @@ import {
   PublicKey,
   AccountMeta,
 } from "@solana/web3.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import BN from "bn.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
 import * as borsh from "@coral-xyz/borsh"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import * as types from "../types"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import { PROGRAM_CNFT, PROGRAM_ID } from "../programId";
-// import { toPublicKey } from "../../utility/PdaManager";
+import { PROGRAM_ID } from "../programId";
 
 export interface RegisterCreatorArgs {
   userActivityBump: number;
@@ -23,11 +20,6 @@ export interface RegisterCreatorAccounts {
 }
 
 export const layout = borsh.struct([borsh.u8("userActivityBump")]);
-
-// export const layout = borsh.struct([
-//   borsh.u8("userActivityBump"),
-//   borsh.publicKey("currency"),
-// ]);
 
 export function registerCreator(
   args: RegisterCreatorArgs,
@@ -47,7 +39,6 @@ export function registerCreator(
   const len = layout.encode(
     {
       userActivityBump: args.userActivityBump,
-      // currency: toPublicKey(PROGRAM_CNFT),
     },
     buffer
   );

@@ -1,36 +1,36 @@
-import { PublicKey } from "@solana/web3.js" // eslint-disable-line @typescript-eslint/no-unused-vars
-import BN from "bn.js" // eslint-disable-line @typescript-eslint/no-unused-vars
-import * as types from "../types" // eslint-disable-line @typescript-eslint/no-unused-vars
-import * as borsh from "@coral-xyz/borsh"
+import { PublicKey } from "@solana/web3.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import BN from "bn.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import * as types from "../types"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import * as borsh from "@coral-xyz/borsh";
 
 export interface TokenMetadataFields {
-  name: string
-  symbol: string
-  arweave: string
+  name: string;
+  symbol: string;
+  arweave: string;
 }
 
 export interface TokenMetadataJSON {
-  name: string
-  symbol: string
-  arweave: string
+  name: string;
+  symbol: string;
+  arweave: string;
 }
 
 export class TokenMetadata {
-  readonly name: string
-  readonly symbol: string
-  readonly arweave: string
+  readonly name: string;
+  readonly symbol: string;
+  readonly arweave: string;
 
   constructor(fields: TokenMetadataFields) {
-    this.name = fields.name
-    this.symbol = fields.symbol
-    this.arweave = fields.arweave
+    this.name = fields.name;
+    this.symbol = fields.symbol;
+    this.arweave = fields.arweave;
   }
 
   static layout(property?: string) {
     return borsh.struct(
       [borsh.str("name"), borsh.str("symbol"), borsh.str("arweave")],
       property
-    )
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -39,7 +39,7 @@ export class TokenMetadata {
       name: obj.name,
       symbol: obj.symbol,
       arweave: obj.arweave,
-    })
+    });
   }
 
   static toEncodable(fields: TokenMetadataFields) {
@@ -47,7 +47,7 @@ export class TokenMetadata {
       name: fields.name,
       symbol: fields.symbol,
       arweave: fields.arweave,
-    }
+    };
   }
 
   toJSON(): TokenMetadataJSON {
@@ -55,7 +55,7 @@ export class TokenMetadata {
       name: this.name,
       symbol: this.symbol,
       arweave: this.arweave,
-    }
+    };
   }
 
   static fromJSON(obj: TokenMetadataJSON): TokenMetadata {
@@ -63,10 +63,10 @@ export class TokenMetadata {
       name: obj.name,
       symbol: obj.symbol,
       arweave: obj.arweave,
-    })
+    });
   }
 
   toEncodable() {
-    return TokenMetadata.toEncodable(this)
+    return TokenMetadata.toEncodable(this);
   }
 }

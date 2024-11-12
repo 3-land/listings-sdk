@@ -1,10 +1,4 @@
-import {
-  Keypair,
-  PublicKey,
-  Signer,
-  TransactionInstruction,
-} from "@solana/web3.js";
-import { init as Irys, UploadOptions } from "../../Irys/irys";
+import { Keypair, Signer, TransactionInstruction } from "@solana/web3.js";
 import { checkFileType } from "../../../utility/utils";
 import { Blob } from "node:buffer";
 
@@ -23,14 +17,10 @@ export async function uploadFilesIrysInstruction(
   let cover_file: any = false;
 
   if (options.metadata.files.file) {
-    // console.log("main file b4:", options.metadata.files.file);
     main_file = await irys?.bundle(options.metadata.files.file, false);
-    // console.log("main file after:", main_file);
   }
   if (options.metadata.files.cover) {
-    // console.log("cover file b4:", options.metadata.files.cover);
     cover_file = await irys?.bundle(options.metadata.files.cover, false);
-    // console.log("cover file after:", cover_file);
   }
 
   const offchain_metadata = {
@@ -79,7 +69,6 @@ export async function uploadFilesIrysInstruction(
     payer: false,
   });
 
-  //Register files in arweave
   const registeredFiles = await irys.registerFiles({ files: irys_files, uuid });
 
   if (!irys_ix) {

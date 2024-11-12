@@ -11,24 +11,15 @@ import {
   TOKEN_METADATA_PROGRAM_ID,
   SPL_ACCOUNT_COMPRESSION_PROGRAM_ID,
   PROGRAM_CNFT,
-  DEVNET_PROGRAM_ID,
-  TOKEN_PROGRAM_ID,
 } from "../../../types/programId";
-import {
-  buyPay,
-  printSingle,
-  PrintSingleAccounts,
-  PrintSingleArgs,
-} from "../../../types/instructions";
+import { buyPay, printSingle } from "../../../types/instructions";
 import {
   creatorAuthorityPDA,
   getEditionPDA,
   getMetadataPDA,
   itemAccountPDA,
   storePDA,
-  treeAuthority,
   toPublicKey,
-  buyPaymentPDA,
   collectionAuthorityRecord,
 } from "../../../utility/PdaManager";
 import { bytesToU32, cyrb53 } from "../../../utility/utils";
@@ -36,8 +27,7 @@ import { BN } from "bn.js";
 import { ExtraParameter } from "../../../types/types";
 import { getConnection } from "../../../utility/Connection";
 import { SOLANA_ENDPOINT } from "../../examples/storeExample";
-import { devnetHolder } from "../../../utility/Holders";
-import { BorshCoder, web3 } from "@project-serum/anchor";
+import { BorshCoder } from "@project-serum/anchor";
 import { idl } from "./idl";
 export let lutAccount = toPublicKey(
   "EJbrXVgac2wEL2H7FJr38vD7LQpEujWZiSPHSYZ3htCa"
@@ -66,7 +56,6 @@ const compressionProgram = SPL_ACCOUNT_COMPRESSION_PROGRAM_ID;
 let connection: Connection;
 connection = getConnection(SOLANA_ENDPOINT);
 
-//Pays for the edition, after that it prints one
 export async function buySingleEditionInstruction(
   paymentAccount: PublicKey,
   itemAccount: PublicKey,
@@ -81,7 +70,8 @@ export async function buySingleEditionInstruction(
   globalStoreAccount: PublicKey,
   identifier: number,
   extraAccounts: any[],
-  creator: PublicKey
+  creator: PublicKey,
+  collectionAddress: PublicKey
 ): Promise<TransactionInstruction[]> {
   const systemProgram = SystemProgram.programId;
 
@@ -128,9 +118,7 @@ export async function buySingleEditionInstruction(
     PROGRAM_CNFT
   );
 
-  const collectionMint = new PublicKey(
-    "2rQq34FJG1613i7H8cDfxuGCtEjJmFAUNbAPJqK699oD" //todo: change to dynamic
-  );
+  const collectionMint = collectionAddress;
   const [creatorAuthority, creatorAuthBump] = await creatorAuthorityPDA({
     creator: itemCreator,
     store: storeAccount,
@@ -190,19 +178,13 @@ export async function buySingleEditionInstruction(
   if (!data?.post) data.post = [];
 
   const coder = new BorshCoder(idl);
-  const storedata = await connection.getAccountInfo(
-    toPublicKey(storeAccount)
-  );
-  console.log("storedata: ", storedata);
+  const storedata = await connection.getAccountInfo(toPublicKey(storeAccount));
   if (!storedata) {
     throw new Error("no store data in print single");
   }
   const store_decoded = coder.accounts.decode("Store", storedata.data);
-  console.log("store_decoded: ", store_decoded);
   const [_, storeBump] = await storePDA({ ...store_decoded });
   data.storeBump = storeBump;
-  console.log("store bump: ", data.storeBump);
-
 
   const single = printSingle(
     {
