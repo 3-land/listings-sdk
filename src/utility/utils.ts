@@ -59,13 +59,33 @@ export const validateSolAddress = (address: any) => {
 };
 
 export const checkFileType = (file: any) => {
-  return file?.type?.includes("gif") ? "image/gif": file?.type?.includes("image")
+  return file?.type?.includes("video/webp")
+    ? "video/webp"
+    : file?.type?.includes("image/webp")
+    ? "image/webp"
+    : file?.type?.includes("jpeg") || file?.type?.includes("jpg")
+    ? "image/jpeg"
+    : file?.type?.includes("gif")
+    ? "image/gif"
+    : file?.type?.includes("png")
+    ? "image/png"
+    : file?.type?.includes("audio")
+    ? "audio"
+    : file?.type?.includes("mp4")
+    ? "video/mp4"
+    : file?.name?.includes("glb") || file?.type?.includes("model")
+    ? "model/gltf-binary"
+    : null;
+};
+
+export const checkCategory = (file: any) => {
+  return file?.type?.includes("image")
     ? "image"
     : file?.type?.includes("audio")
     ? "audio"
     : file?.type?.includes("video")
     ? "video"
-    : file?.name?.includes(".glb") || file?.type?.includes("model")
+    : file?.name?.includes("glb") || file?.type?.includes("model")
     ? "vr"
     : null;
 };

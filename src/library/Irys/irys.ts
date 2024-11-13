@@ -113,7 +113,9 @@ export class IrysHelper {
       const tags = [{ name: "Content-Type", value: type }];
       const irys_wallet = this.irys.address;
       const arrayBuffer = await file.arrayBuffer();
+      console.log("main image buffer 2: ", arrayBuffer);
       const buffer = Buffer.from(arrayBuffer);
+      console.log("main image buffer 3: ", arrayBuffer);
 
       let transaction = this.irys.createTransaction(buffer, {
         anchor: nonce,

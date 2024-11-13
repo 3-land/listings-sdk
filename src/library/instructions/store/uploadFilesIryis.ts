@@ -1,5 +1,5 @@
 import { Keypair, Signer, TransactionInstruction } from "@solana/web3.js";
-import { checkFileType } from "../../../utility/utils";
+import { checkCategory, checkFileType } from "../../../utility/utils";
 import { Blob } from "node:buffer";
 
 export async function uploadFilesIrysInstruction(
@@ -37,9 +37,9 @@ export async function uploadFilesIrysInstruction(
       ],
       creators: options.creators,
     },
-    image: (cover_file || main_file)?.irys?.url,
+    image: (main_file || cover_file)?.irys?.url,
     attributes: options.traits,
-    category: checkFileType(main_file),
+    category: checkCategory(main_file),
   };
 
   const metadata_blob = new Blob([JSON.stringify(offchain_metadata)], {

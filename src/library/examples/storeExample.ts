@@ -71,8 +71,8 @@ async function createStoreTest(options: StoreInitOptions) {
 
 async function createCollectionTest(options: StoreInitOptions) {
   const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
-  const collectionDetails = { __kind: "V1", size: 0 }; //se tiene que enviar esto
-  const supply = 0; //debe ser 0 para las collections
+  const collectionDetails = { __kind: "V1", size: 0 };
+  const supply = 0; //Must be 0 for collections
   const creator = new Creator({
     address: payer.publicKey,
     verified: false,
@@ -158,7 +158,7 @@ async function createSingleTest(
       uri: "",
       uriType: 1,
       sellerFeeBasisPoints: 500,
-      collection: new PublicKey(collectionAccount), //hardcoded collection niic
+      collection: new PublicKey(collectionAccount),
       creators: [creator],
       toJSON: function (): ShortMetadataArgsJSON {
         throw new Error("Function not implemented.");
@@ -171,10 +171,17 @@ async function createSingleTest(
     const imageBuffer = fs2.readFileSync(
       path.join(process.cwd(), "assets", "3land_rebrand.gif")
     ).buffer;
+
+    if (!imageBuffer || imageBuffer.byteLength === 0) {
+      throw new Error("Failed to read main image file");
+    }
     const coverBuffer = fs2.readFileSync(
-      path.join(process.cwd(), "assets", "3land_rebrand.gif")
+      path.join(process.cwd(), "assets", "ds.jpeg")
     ).buffer;
 
+    if (!coverBuffer || coverBuffer.byteLength === 0) {
+      throw new Error("Failed to read cover file");
+    }
     const options = {
       symbol: "SDK",
       metadata: {
@@ -186,12 +193,13 @@ async function createSingleTest(
               return imageBuffer;
             },
             type: "image/gif",
+            // name: "phone.glb",
           },
           cover: {
             arrayBuffer() {
               return coverBuffer;
             },
-            type: "image/gif",
+            type: "image/jpeg",
           },
         },
       },
@@ -231,7 +239,7 @@ async function createSingleTest(
       100,
       metadata,
       saleConfig,
-      66884218555312, // Math.floor(Math.random() * 100),
+      Math.floor(Math.random() * 100), //66884218555312,
       [1, 0, 0],
       [1, 0],
       0,
@@ -317,16 +325,20 @@ async function main() {
     // const storeResult = await createStoreTest(options);
     // console.log("Store created. Transaction ID:", storeResult.transactionId);
     // Create Collection
-    const collection = await createCollectionTest(options);
-    console.log("collection mint: ", collection);
+    // const collection = await createCollectionTest(options);
+    // console.log("collection mint: ", collection);
     // Create single edition
-    // const storeAccount = "P1c4bboejX24NbY3vMw8EncKVmvcGEryznWLs4PGp9j"; //current store created for testing
-    // const collectionAccount = "2rQq34FJG1613i7H8cDfxuGCtEjJmFAUNbAPJqK699oD";
-    // const singleEditionResult = await createSingleTest(options, storeAccount, collectionAccount);
-    // console.log(
-    //   "Single edition created. Transaction ID:",
-    //   singleEditionResult.transactionId
-    // );
+    const storeAccount = "P1c4bboejX24NbY3vMw8EncKVmvcGEryznWLs4PGp9j"; //current store created for testing
+    const collectionAccount = "2rQq34FJG1613i7H8cDfxuGCtEjJmFAUNbAPJqK699oD";
+    const singleEditionResult = await createSingleTest(
+      options,
+      storeAccount,
+      collectionAccount
+    );
+    console.log(
+      "Single edition created. Transaction ID:",
+      singleEditionResult.transactionId
+    );
     // Buy single edition
     // const itemCreator = "kon4KawBAv91adTeyvJZqMpprkq1WRm2YyKHpBngwj6";
     // const itemAccount = "7BhKXmc5obiwn5hhrUhErVBrAT7TErYcTpRYE8ggfjKV"; //current item created for testing
