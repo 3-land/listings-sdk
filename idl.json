@@ -1763,6 +1763,12 @@
           "isOptional": true
         },
         {
+          "name": "poolVault",
+          "isMut": true,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
           "name": "holderAccount",
           "isMut": false,
           "isSigner": false

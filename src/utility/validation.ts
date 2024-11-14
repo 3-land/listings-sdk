@@ -143,12 +143,11 @@ export function validateBuySingleArgs(
   burnProgress: PublicKey,
   owner: PublicKey,
   distributionBumps: number[],
-  storeAccount: PublicKey,
   globalStoreAccount: PublicKey,
-  collectionAddress: PublicKey,
-  creator: PublicKey,
-  identifier: number,
-  extraAccounts: any[]
+  extraAccounts: any[],
+  collectionAddress?: PublicKey,
+  storeAccount?: PublicKey,
+  creator?: PublicKey
 ) {
   if (!payer || !payer.publicKey) {
     throw new ValidationError("Invalid payer");
@@ -178,30 +177,40 @@ export function validateBuySingleArgs(
     }
   });
 
-  if (!PublicKey.isOnCurve(storeAccount)) {
+  if (!storeAccount) {
+    throw new ValidationError("Store account missing");
+  }
+
+  if (PublicKey.isOnCurve(storeAccount)) {
     throw new ValidationError("Invalid store account public key");
   }
 
-  if (!PublicKey.isOnCurve(globalStoreAccount)) {
+  if (PublicKey.isOnCurve(globalStoreAccount)) {
     throw new ValidationError("Invalid global store account public key");
+  }
+
+  if (!collectionAddress) {
+    throw new ValidationError("Collection address missing");
   }
 
   if (!PublicKey.isOnCurve(collectionAddress)) {
     throw new ValidationError("Invalid collection address public key");
   }
 
+  if (!creator) {
+    throw new ValidationError("Creator public key missing");
+  }
+
   if (!PublicKey.isOnCurve(creator)) {
     throw new ValidationError("Invalid creator public key");
   }
-
-  validateIdentifier(identifier);
 
   if (!Array.isArray(extraAccounts)) {
     throw new ValidationError("Extra accounts must be an array");
   }
 
   extraAccounts.forEach((account, index) => {
-    if (!account.pubkey || !PublicKey.isOnCurve(account.pubkey)) {
+    if (!account.pubkey || PublicKey.isOnCurve(account.pubkey)) {
       throw new ValidationError(
         `Invalid public key in extra accounts at index ${index}`
       );

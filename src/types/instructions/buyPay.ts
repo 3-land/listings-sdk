@@ -17,6 +17,7 @@ export interface BuyPayAccounts {
   itemAccount: PublicKey;
   packAccount: PublicKey;
   burnDeposit: PublicKey;
+  poolVault: PublicKey;
   holderAccount: PublicKey;
   /** CHECK */
   owner: PublicKey;
@@ -40,6 +41,7 @@ export function buyPay(
     { pubkey: accounts.itemAccount, isSigner: false, isWritable: false },
     { pubkey: accounts.packAccount, isSigner: false, isWritable: false },
     { pubkey: accounts.burnDeposit, isSigner: false, isWritable: true },
+    { pubkey: accounts.poolVault, isSigner: false, isWritable: true },
     { pubkey: accounts.holderAccount, isSigner: false, isWritable: false },
     { pubkey: accounts.owner, isSigner: false, isWritable: false },
     { pubkey: accounts.payer, isSigner: true, isWritable: true },

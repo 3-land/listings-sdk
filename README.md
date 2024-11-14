@@ -2,6 +2,28 @@
 
 A Node.js SDK for interacting with 3Land's Solana programs. This SDK provides a simple and intuitive way to integrate with 3Land's smart contracts on the Solana blockchain.
 
+## Table of Contents
+
+1. [Prerequisites](#prerequisites)
+2. [Installation](#installation)
+3. [Network Configuration](#network-configuration)
+   - [Basic Network Selection](#basic-network-selection)
+   - [Custom Configuration](#custom-configuration)
+   - [Environment Setup](#environment-specific-setup)
+4. [Wallet Setup](#wallet-setup)
+   - [Devnet Setup](#devnet-wallet-setup)
+   - [Mainnet Setup](#mainnet-wallet-setup)
+5. [Usage](#usage)
+   - [Creating a Store](#creating-a-store)
+   - [Creating a Collection](#creating-a-collection)
+   - [Creating a Single Edition NFT](#creating-a-single-edition-nft)
+   - [Buying an NFT](#buying-an-nft)
+6. [Features](#features)
+7. [Error Handling](#error-handling)
+8. [Contributing](#contributing)
+9. [Support](#support)
+10. [License](#license)
+
 ## Prerequisites
 
 Before using this SDK, ensure you have the following installed:
@@ -12,7 +34,17 @@ Before using this SDK, ensure you have the following installed:
 
 ## Installation
 
-Run this command to install all the packages needed for the SDK:
+Clone the repo
+
+```bash
+git clone https://github.com/biccsdev/3land_sdk.git
+# TODO: add to npm
+# npm install @3land/solana-sdk
+# or
+# yarn add @3land/solana-sdk
+```
+
+Run this command to install all the packages needed for the sdk
 
 ```bash
 npm install
@@ -20,46 +52,81 @@ npm install
 yarn add
 ```
 
-## Initial Setup
+## Network Configuration
 
-### 1. Create a Solana Wallet
-
-First, you'll need to create a Solana wallet using the Solana CLI:
-
-```bash
-# Install Solana CLI if you haven't already
-sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
-
-# Create a new keypair
-solana-keygen new --outfile ~/.config/solana/devnet-wallet.json
-
-# Set the wallet as default
-solana config set --keypair ~/.config/solana/devnet-wallet.json
-
-# Switch to devnet for testing
-solana config set --url https://api.devnet.solana.com
-
-# Check your configuration
-solana config get
-
-# Check your current balance
-solana balance
-
-# Request an airdrop (you can request up to 2 SOL per request)
-solana airdrop 2
-
-# Verify the airdrop was successful
-solana balance
-```
-
-### 2. Configure SDK
-
-Create a new instance of the Store class with your Solana endpoint:
+### Basic Network Selection
 
 ```typescript
-import { Store } from "./path-to-sdk/Store";
+import { Store, NetworkType } from "@3land/solana-sdk";
 
-const store = new Store("https://api.devnet.solana.com"); // Use appropriate endpoint
+// For Devnet (default)
+const devnetStore = new Store();
+
+// For Mainnet
+const mainnetStore = new Store({
+  network: NetworkType.MAINNET,
+});
+```
+
+### Custom Configuration
+
+```typescript
+// Using custom RPC endpoint
+const store = new Store({
+  network: NetworkType.MAINNET,
+  customEndpoint: "https://your-custom-rpc.com",
+});
+
+// Using custom configuration
+const storeWithCustomConfig = new Store({
+  network: NetworkType.MAINNET,
+  customConfig: {
+    programId: "your_custom_program_id",
+    // other config options...
+  },
+});
+```
+
+### Environment-Specific Setup
+
+```typescript
+import dotenv from "dotenv";
+dotenv.config();
+
+const store = new Store({
+  network: (process.env.SOLANA_NETWORK as NetworkType) || NetworkType.DEVNET,
+  customEndpoint: process.env.SOLANA_RPC_ENDPOINT,
+  customConfig: {
+    programId: process.env.PROGRAM_ID,
+  },
+});
+```
+
+Example `.env` file:
+
+```env
+SOLANA_NETWORK=mainnet-beta
+SOLANA_RPC_ENDPOINT=https://your-custom-rpc.com
+PROGRAM_ID=your_program_id
+```
+
+## Wallet Setup
+
+### Devnet Wallet Setup
+
+```bash
+solana-keygen new --outfile ~/.config/solana/devnet-wallet.json
+solana config set --url https://api.devnet.solana.com
+solana config set --keypair ~/.config/solana/devnet-wallet.json
+solana airdrop 2
+```
+
+### Mainnet Wallet Setup
+
+```bash
+solana-keygen new --outfile ~/.config/solana/mainnet-wallet.json
+solana config set --url https://api.mainnet-beta.solana.com
+solana config set --keypair ~/.config/solana/mainnet-wallet.json
 ```
 
 ## Usage
@@ -67,7 +134,7 @@ const store = new Store("https://api.devnet.solana.com"); // Use appropriate end
 ### Creating a Store
 
 ```typescript
-import { StoreConfig, FeeType } from "./types/types";
+import { StoreConfig, FeeType } from "@3land/solana-sdk";
 import { BN } from "bn.js";
 
 try {
@@ -248,64 +315,24 @@ try {
 ## Features
 
 - **Store Management**
-
   - Create and configure NFT stores
   - Set custom fee structures
-
 - **Collection Management**
-
   - Create NFT collections
   - Configure collection metadata
-  - Set collection-wide properties
-
 - **NFT Operations**
-
   - Mint single edition NFTs
   - Configure NFT metadata
   - Set pricing and sale rules
   - Handle NFT purchases
-
 - **Built-in Validations**
-
   - Input parameter validation
   - Transaction error handling
   - Comprehensive error messages
-
 - **Decentralized Storage**
   - Integrated with Irys for metadata storage
-  - Support for various file types ( jpeg, png, glb, mp3, mp4 )
+  - Support for various file types (jpeg, png, glb, mp3, mp4)
   - Automatic URI generation
-
-## Error Handling
-
-The SDK includes comprehensive error validation and handling:
-
-### Validation Rules
-
-- **Store Creation**
-
-  - Store name must be 32 characters or less
-  - Fee percentage must be between 0 and 100
-  - Valid public keys required for trust and payer
-
-- **Collection Creation**
-
-  - Symbol must be 10 characters or less
-  - Name must be 32 characters or less
-  - Creator shares must sum to 100
-  - Valid image files required
-
-- **Single Edition Creation**
-
-  - Valid metadata structure
-  - Proper sale configuration
-  - Valid collection reference
-  - Non-negative supply values
-
-- **Purchase Operations**
-  - Valid account public keys
-  - Proper distribution parameters
-  - Valid identifier values
 
 ### Error Types
 
@@ -334,10 +361,10 @@ try {
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## Support
 
 For support, please create an issue in the GitHub repository or contact the 3Land team directly.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

@@ -54,13 +54,14 @@ const tokenMetadataProgram = TOKEN_METADATA_PROGRAM_ID;
 const compressionProgram = SPL_ACCOUNT_COMPRESSION_PROGRAM_ID;
 
 let connection: Connection;
-connection = getConnection(SOLANA_ENDPOINT);
+// connection = getConnection(SOLANA_ENDPOINT);
 
 export async function buySingleEditionInstruction(
   paymentAccount: PublicKey,
   itemAccount: PublicKey,
   packAccount: PublicKey,
   burnDeposit: PublicKey,
+  poolVault: PublicKey,
   holderAccount: PublicKey,
   owner: PublicKey,
   payer: PublicKey,
@@ -71,10 +72,12 @@ export async function buySingleEditionInstruction(
   identifier: number,
   extraAccounts: any[],
   creator: PublicKey,
-  collectionAddress: PublicKey
+  collectionAddress: PublicKey,
+  connectionInstance: Connection
 ): Promise<TransactionInstruction[]> {
   const systemProgram = SystemProgram.programId;
-
+  connection = connectionInstance;
+  const endpoint = connection.rpcEndpoint.toLocaleLowerCase();
   const pay = buyPay(
     { distributionBumps },
     {
@@ -82,6 +85,7 @@ export async function buySingleEditionInstruction(
       itemAccount,
       packAccount,
       burnDeposit,
+      poolVault,
       holderAccount,
       owner,
       payer,
@@ -101,6 +105,8 @@ export async function buySingleEditionInstruction(
   const useGlobal = false;
   const merkle = useGlobal
     ? merkleOptions?.merkleTree
+    : endpoint.includes("mainnet")
+    ? toPublicKey(merkleOptions?.mainnet?.merkleTree)
     : toPublicKey(merkleOptions?.devnet?.merkleTree);
 
   const [treeAuthority, _bump] = PublicKey.findProgramAddressSync(
@@ -158,12 +164,12 @@ export async function buySingleEditionInstruction(
   }
 
   if (!data.itemBump) {
-    const storedata = await connection.getAccountInfo(itemAccount);
-    if (!storedata) {
-      throw new Error("-- No Store data item bump");
-    }
-    const tipo = "Single";
-    const tipofn = "itemAccountPDA";
+    // const storedata = await connection.getAccountInfo(itemAccount);
+    // if (!storedata) {
+    //   throw new Error("-- No Store data item bump");
+    // }
+    // const tipo = "Single";
+    // const tipofn = "itemAccountPDA";
     const identifierdt = new BN(identifier);
     const [_, itemBump] = await itemAccountPDA({
       creator: itemCreator,

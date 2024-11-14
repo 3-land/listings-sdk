@@ -5,34 +5,20 @@ import {
   sendAndConfirmTransaction,
   Signer,
   SystemProgram,
-  sendAndConfirmRawTransaction,
-  SYSVAR_INSTRUCTIONS_PUBKEY,
-  TransactionInstruction,
-  TransactionMessage,
-  VersionedTransaction,
-  AddressLookupTableProgram,
-  AddressLookupTableAccount,
   clusterApiUrl as clusterApiUrl2,
   Keypair,
 } from "@solana/web3.js";
 import {
-  createUpdateMetadataAccountInstruction,
-  createUpdateMetadataAccountV2Instruction,
   createCreateMasterEditionV3Instruction,
   createCreateMetadataAccountV3Instruction,
-  //DataV2,
-  createMintNewEditionFromMasterEditionViaTokenInstruction,
   PROGRAM_ID as metaPROGRAM_ID,
 } from "@metaplex-foundation/mpl-token-metadata";
 
 import {
   MintLayout,
-  getAssociatedTokenAddress,
   createAssociatedTokenAccountInstruction,
   createMintToInstruction,
   createInitializeMintInstruction,
-  createBurnInstruction,
-  getAccount,
 } from "@solana/spl-token";
 import { getConnection } from "../utility/Connection";
 import { createStoreInstruction } from "./instructions/store/createStore";
@@ -44,7 +30,6 @@ import {
   SaleConfig,
   ShortMetadataArgs,
   ShortMetadataArgsJSON,
-  TokenMetadataFields,
 } from "../types/types";
 import {
   holderPDA,
@@ -66,21 +51,16 @@ import { devnetHolder } from "../utility/Holders";
 import BN from "bn.js";
 import { uploadFilesIrysInstruction } from "./instructions/store/uploadFilesIryis";
 import {
+  DEVNET_PROGRAM_ID,
   PROGRAM_CNFT,
   PROGRAM_ID,
-  TOKEN_METADATA_PROGRAM_ID,
   TOKEN_PROGRAM_ID,
 } from "../types/programId";
 
 import { registerCreator } from "../types/instructions/registerCreator";
 import { init as Irys } from "./Irys/irys";
 import { createApproveCollectionAuthorityInstruction } from "@metaplex-foundation/mpl-token-metadata";
-import {
-  createCollection,
-  CreateCollectionArgs,
-  registerCollector,
-} from "../types/instructions";
-import * as types from "../types/types";
+import { registerCollector } from "../types/instructions";
 import {
   validateBuySingleArgs,
   validateCollectionArgs,
@@ -91,20 +71,51 @@ import {
   validateSupply,
   ValidationError,
 } from "../utility/validation";
+import { NetworkType, NetworkConfig, NETWORK_CONFIGS } from "../utility/config";
+import { Single } from "../types/accounts";
+
+export interface StoreOptions {
+  network?: NetworkType;
+  customEndpoint?: string;
+  customConfig?: Partial<NetworkConfig>;
+}
+
+const extraAccount = [
+  {
+    pubkey: new PublicKey("GyPCu89S63P9NcCQAtuSJesiefhhgpGWrNVJs4bF2cSK"), //global store
+    isSigner: false,
+    isWritable: true,
+  },
+];
 
 export class Store {
   private connection: Connection;
+  private networkConfig: NetworkConfig;
 
-  constructor(endpoint: string) {
-    this.connection = getConnection(endpoint);
+  constructor(options: StoreOptions = {}) {
+    const {
+      network = NetworkType.DEVNET,
+      customEndpoint,
+      customConfig,
+    } = options;
+
+    const baseConfig = NETWORK_CONFIGS[network];
+
+    this.networkConfig = {
+      ...baseConfig,
+      ...customConfig,
+      endpoint: customEndpoint || baseConfig.endpoint,
+    };
+
+    this.connection = getConnection(this.networkConfig.endpoint);
   }
 
   async createStore(
     payer: Signer,
     name: string,
     storeConfig: StoreConfig,
-    storeId: number,
-    creator: PublicKey
+    creator?: PublicKey,
+    storeId?: number
   ): Promise<string> {
     if (!payer || !payer.publicKey) {
       throw new ValidationError("Invalid payer");
@@ -115,6 +126,9 @@ export class Store {
         "Store name is required and must be <= 32 characters"
       );
     }
+
+    storeId = Math.floor(Math.random() * 10000);
+    creator = payer.publicKey;
 
     validateStoreConfig(storeConfig);
     validateIdentifier(storeId);
@@ -152,10 +166,10 @@ export class Store {
   async createCollection(
     payer: Signer,
     collectionDetails: any,
-    supply: number,
     metadata: any,
-    mutable: Boolean,
-    irysData: any
+    irysData: any,
+    mutable: Boolean = false,
+    supply: number = 0
   ) {
     try {
       if (!payer || !payer.publicKey) {
@@ -176,8 +190,10 @@ export class Store {
       let signers = [payer];
 
       if (metadata.uri.length !== 0) throw new Error("-- URI must be empty --");
+
       const irys = await Irys(payer.publicKey.toBase58(), {});
       const uuid = "random_uuid_per_upload_session";
+
       const { instruction, signerIrys, metadataUrl } =
         await uploadFilesIrysInstruction(irysData.options, irys, uuid);
       instructions.push(instruction);
@@ -298,15 +314,16 @@ export class Store {
     supply: number,
     metadata: ShortMetadataArgs,
     saleConfig: SaleConfig,
-    identifier: number,
     category: number[],
     superCategory: number[],
     eventCategory: number,
     hashTraits: number,
-    creator: PublicKey,
     collection: PublicKey,
     irysData: any
   ): Promise<string> {
+    const identifier = Math.floor(Math.random() * 1000000);
+    const creator = payer.publicKey;
+
     if (!payer || !payer.publicKey) {
       throw new ValidationError("Invalid payer");
     }
@@ -458,30 +475,44 @@ export class Store {
 
   async buySingleEdition(
     payer: Signer,
-    packAccount: PublicKey,
-    burnProgress: PublicKey,
-    owner: PublicKey,
     distributionBumps: number[],
-    storeAccount: PublicKey,
-    globalStoreAccount: PublicKey,
-    collectionAddress: PublicKey,
-    creator: PublicKey,
-    identifier: number,
-    extraAccounts: any[]
+    itemAddress: PublicKey,
+    extraAccounts: any[] = extraAccount,
+    globalStoreAccount: PublicKey = DEVNET_PROGRAM_ID,
+    packAccount: PublicKey = PROGRAM_CNFT,
+    burnProgress: PublicKey = PROGRAM_CNFT,
+    poolVault: PublicKey = PROGRAM_CNFT
   ): Promise<string> {
     try {
+      const owner = payer.publicKey;
+      //const storedata = await this.connection.getAccountInfo(itemAddress);
+      const single = await Single.fetch(
+        this.connection,
+        itemAddress,
+        PROGRAM_ID
+      );
+      const identifier = parseInt(single?.identifier?.toString() || "none");
+      const creator = single?.creator;
+      const storeAccount = single?.holder;
+      const collectionAddress = single?.item?.metadata?.collection;
+
+      validateIdentifier(identifier);
+
+      if (!creator) throw new Error("Missing creator...");
+      if (!storeAccount) throw new Error("Missing creator...");
+      if (!collectionAddress) throw new Error("Missing collection...");
+
       validateBuySingleArgs(
         payer,
         packAccount,
         burnProgress,
         owner,
         distributionBumps,
-        storeAccount,
         globalStoreAccount,
-        collectionAddress,
-        creator,
-        identifier,
-        extraAccounts
+        extraAccounts,
+        collectionAddress.key,
+        storeAccount,
+        creator
       );
 
       const [itemAccount] = await itemAccountPDA({
@@ -503,6 +534,7 @@ export class Store {
         itemAccount,
         packAccount,
         burnProgress,
+        poolVault,
         holderAccount,
         owner,
         payer.publicKey,
@@ -513,7 +545,8 @@ export class Store {
         identifier,
         extraAccounts,
         creator,
-        collectionAddress
+        collectionAddress.key,
+        this.connection
       );
       instructions.push(...instruction);
 
