@@ -146,12 +146,11 @@ try {
     rules: [],
   };
 
+  // Creator and storeId are optional, will default to payer.publicKey and random number
   const createStoreTxId = await store.createStore(
     walletKeypair,
     "My 3Land Store",
-    storeConfig,
-    Math.floor(Math.random() * 100), // Random store ID
-    payer.publicKey
+    storeConfig
   );
 
   console.log("Store created successfully:", createStoreTxId);
@@ -184,6 +183,10 @@ try {
     uses: null,
   };
 
+  / Prepare your image files
+  const imageBuffer = fs.readFileSync("path/to/image.gif").buffer;
+  const coverBuffer = fs.readFileSync("path/to/cover.jpeg").buffer;
+
   const collectionOptions = {
     symbol: "SDK",
     metadata: {
@@ -212,15 +215,12 @@ try {
   const collectionTx = await store.createCollection(
     walletKeypair,
     { __kind: "V1", size: 0 },
-    0, // Supply must be 0 for collections
     metadata,
-    false, // Mutable flag
     {
-      address: payer.publicKey,
-      payer: payer.publicKey,
-      signer: walletKeypair,
-      options: collectionOptions,
-    }
+      options: collectionOptions
+    },
+    false, // Mutable flag (optional)
+    0 // Supply (optional)
   );
 
   console.log("Collection created successfully:", collectionTx);
@@ -261,17 +261,12 @@ try {
     100, // Supply
     metadata,
     saleConfig,
-    Math.floor(Math.random() * 100), // Random identifier
     [1, 0, 0], // Category
     [1, 0], // Super Category
     0, // Event Category
     12345, // Hash Traits
-    payer.publicKey,
     collectionPublicKey,
     {
-      address: payer.publicKey,
-      payer: payer.publicKey,
-      signer: walletKeypair,
       options: nftOptions,
     }
   );
@@ -286,24 +281,11 @@ try {
 
 ```typescript
 try {
+  // Most parameters are optional and have default values
   const buyTx = await store.buySingleEdition(
     walletKeypair,
-    packAccount,
-    burnProgress,
-    owner.publicKey,
     [0, 0, 0, 0, 0, 0], // Distribution bumps
-    storeAccount,
-    globalStoreAccount,
-    collectionAddress,
-    creator.publicKey,
-    identifier,
-    [
-      {
-        pubkey: globalStoreAccount,
-        isSigner: false,
-        isWritable: true,
-      },
-    ]
+    itemAddress // The NFT's item account address
   );
 
   console.log("Purchase successful:", buyTx);
