@@ -1,4 +1,5 @@
 import { PublicKey } from "@solana/web3.js";
+import { FileData } from "../library/instructions/store/uploadFilesIryis";
 
 export function bytesToU32(slice: any) {
   let result = 0;
@@ -89,3 +90,102 @@ export const checkCategory = (file: any) => {
     ? "vr"
     : null;
 };
+
+export async function normalizeFileData(fileData: any): Promise<FileData> {
+  try {
+    const buffer = await (fileData.arrayBuffer instanceof Function
+      ? fileData.arrayBuffer()
+      : Promise.resolve(fileData.arrayBuffer));
+
+    const type = fileData.type || getMimeTypeFromBuffer(buffer);
+
+    return {
+      arrayBuffer: () => buffer,
+      type,
+      size: buffer.byteLength,
+      name: fileData.name,
+    };
+  } catch (error) {
+    throw new Error(`Failed to normalize file data: ${error}`);
+  }
+}
+
+function getMimeTypeFromBuffer(buffer: ArrayBuffer): string {
+  const arr = new Uint8Array(buffer).subarray(0, 12);
+  const header = Array.from(arr)
+    .map((byte) => byte.toString(16))
+    .join("");
+
+  if (header.startsWith("89504e47")) return "image/png";
+  if (header.startsWith("474946")) return "image/gif";
+  if (header.startsWith("ffd8ff")) return "image/jpeg";
+  if (header.startsWith("52494646") && header.includes("57454250"))
+    return "image/webp";
+  if (header.startsWith("494433") || header.startsWith("fffb"))
+    return "audio/mp3";
+  if (
+    header.startsWith("000000") &&
+    (header.includes("66747970") || header.includes("6d6f6f76"))
+  )
+    return "video/mp4";
+  if (header.startsWith("676c5446")) return "model/gltf-binary";
+
+  return "application/octet-stream";
+}
+
+export function getFileType(file: any): string | null {
+  if (!file) return null;
+
+  const type = file.type?.toLowerCase() || "";
+  const name = (file.name || "").toLowerCase();
+
+  if (type.includes("video/webp")) return "video/webp";
+  if (type.includes("image/webp")) return "image/webp";
+  if (type.includes("jpeg") || type.includes("jpg")) return "image/jpeg";
+  if (type.includes("gif")) return "image/gif";
+  if (type.includes("png")) return "image/png";
+  if (type.includes("mp3") || type.includes("audio/mp3")) return "audio/mp3";
+  if (type.includes("mp4")) return "video/mp4";
+  if (type.includes("glb") || name.endsWith(".glb")) return "model/gltf-binary";
+
+  return type || null;
+}
+
+export function validateFileType(type: string): void {
+  const allowedTypes = [
+    "image/png",
+    "image/jpeg",
+    "image/gif",
+    "image/webp",
+    "video/mp4",
+    "audio/mp3",
+    "model/gltf-binary",
+    "application/octet-stream",
+  ];
+
+  if (!allowedTypes.includes(type)) {
+    throw new Error(`Unsupported file type: ${type}`);
+  }
+}
+
+export function getFileCategory(file: any): string | null {
+  if (!file) return null;
+
+  const type = (file.type || "").toLowerCase();
+  const name = (file.name || "").toLowerCase();
+
+  if (type.includes("image")) return "image";
+  if (type.includes("audio")) return "audio";
+  if (type.includes("video")) return "video";
+  if (type.includes("model") || name.endsWith(".glb")) return "vr";
+
+  return null;
+}
+
+export function isAnimatable(type: string): boolean {
+  return (
+    type?.includes("video/") ||
+    type?.includes("audio/") ||
+    type === "model/gltf-binary"
+  );
+}

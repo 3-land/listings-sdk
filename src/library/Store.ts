@@ -250,9 +250,13 @@ export class Store {
         updateAuthority,
       };
 
+      const metadataObj = {...metadata, uri: metadataUrl}
+
+      console.log('metatadaobj: ', metadataObj)
+
       const create_args = {
         createMetadataAccountArgsV3: {
-          data: metadata,
+          data: metadataObj,
           isMutable: mutable === false ? false : true,
           collectionDetails,
         },
@@ -393,6 +397,7 @@ export class Store {
         instructions.push(approveInstruction);
         // signers.push(new_authority)
       }
+      console.log('metadataurl: ', metadataUrl)
       const meta: ShortMetadataArgs = {
         name: metadata.name,
         uri: metadataUrl ? metadataUrl.split(".net/")[1] : "",
@@ -407,6 +412,7 @@ export class Store {
           throw new Error("Function not implemented.");
         },
       };
+      console.log("meta: ", meta)
 
       const instructionSing = createSingleEditionInstruction(
         storeAccount,

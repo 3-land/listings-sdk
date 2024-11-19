@@ -17,6 +17,7 @@ import { Wallet } from "@project-serum/anchor";
 import * as fs2 from "fs";
 import { PROGRAM_CNFT, SOLANA_ENDPOINT } from "../../types/programId";
 import path from "path";
+import { arrayBuffer } from "stream/consumers";
 
 interface StoreInitOptions {
   walletPath: string;
@@ -76,27 +77,27 @@ async function createCollectionTest(options: StoreInitOptions) {
   });
 
   const metadata = {
-    symbol: "club", //max 10 chars
-    name: "cb", //max 32 chars
+    symbol: "NiiC!", //max 10 chars
+    name: "New Internet!", //max 32 chars
     uri: "",
-    sellerFeeBasisPoints: new BN(0),
+    sellerFeeBasisPoints: new BN(5),
     creators: [creator],
     collection: null,
     uses: null,
   };
 
   const imageBuffer = fs2.readFileSync(
-    path.join(process.cwd(), "assets", "3land_rebrand.gif")
+    path.join(process.cwd(), "assets", "niicl.gif")
   ).buffer;
   const coverBuffer = fs2.readFileSync(
-    path.join(process.cwd(), "assets", "ds.jpeg")
+    path.join(process.cwd(), "assets", "3land_rebrand.gif")
   ).buffer;
 
   const optionsCollection = {
-    symbol: "SDK",
+    symbol: metadata.symbol,
     metadata: {
       name: metadata.name,
-      description: "Some description",
+      description: "a cool collection",
       files: {
         file: {
           arrayBuffer() {
@@ -108,12 +109,12 @@ async function createCollectionTest(options: StoreInitOptions) {
           arrayBuffer() {
             return coverBuffer;
           },
-          type: "image/jpeg",
+          type: "image/gif",
         },
       },
     },
     creators: metadata.creators,
-    traits: [{ color: "green" }, { size: "big" }],
+    traits: [{ status: "CEO" }, { type: "club" }],
     sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
   };
 
@@ -147,7 +148,7 @@ async function createSingleTest(
     });
 
     const metadata: ShortMetadataArgs = {
-      name: "cool nft",
+      name: "chainBattle",
       uri: "",
       uriType: 1,
       sellerFeeBasisPoints: 500,
@@ -161,43 +162,72 @@ async function createSingleTest(
       },
     };
 
-    const imageBuffer = fs2.readFileSync(
-      path.join(process.cwd(), "assets", "3land_rebrand.gif")
-    ).buffer;
+    /*
+      For MP4
+      const videoBuffer = await fs2.promises.readFile(
+        path.join(process.cwd(), "assets", "video.mp4")
+      );
+
+      For MP3
+      const audioBuffer = await fs2.promises.readFile(
+        path.join(process.cwd(), "assets", "audio.mp3")
+      );
+
+      For WebP
+      const webpBuffer = await fs2.promises.readFile(
+        path.join(process.cwd(), "assets", "image.webp")
+      );
+
+      For GLB
+      const glbBuffer = await fs2.promises.readFile(
+        path.join(process.cwd(), "assets", "model.glb")
+);
+    */
+
+    // const imageBuffer = fs2.readFileSync(
+    //   path.join(process.cwd(), "assets", "battle_sol.gif")
+    // ).buffer;
+
+    const imageBuffer = await fs2.promises.readFile(
+      path.join(process.cwd(), "assets", "phone.glb")
+    );
 
     if (!imageBuffer || imageBuffer.byteLength === 0) {
       throw new Error("Failed to read main image file");
     }
-    const coverBuffer = fs2.readFileSync(
-      path.join(process.cwd(), "assets", "ds.jpeg")
-    ).buffer;
+    // const coverBuffer = await fs2.promises.readFile(
+    //   path.join(process.cwd(), "assets", "og.png")
+    // );
 
-    if (!coverBuffer || coverBuffer.byteLength === 0) {
+    const coverBuffer = await fs2.promises.readFile(
+      path.join(process.cwd(), "assets", "testvid.mp4")
+    );
+
+    if (!coverBuffer) {
       throw new Error("Failed to read cover file");
     }
     const options = {
-      symbol: "c00l",
+      symbol: "chain",
       metadata: {
         name: metadata.name,
-        description: "a cool jpeg",
+        description: "solana vs ethereum",
         files: {
           file: {
-            arrayBuffer() {
-              return imageBuffer;
-            },
-            type: "image/gif",
-            // name: "phone.glb",
+            arrayBuffer: () => imageBuffer,
+            // type: "audio/mp3",
+            name: "phone.glb",
+            size: imageBuffer.length,
           },
           cover: {
-            arrayBuffer() {
-              return coverBuffer;
-            },
-            type: "image/jpeg",
+            arrayBuffer: () => coverBuffer,
+            type: "video/mp4",
+            name: "testvid.mp4",
+            size: coverBuffer.length,
           },
         },
       },
       creators: metadata.creators,
-      traits: [{ color: "green" }, { size: "big" }],
+      traits: [{ region: "Kanto" }, { game: "emerald" }],
       sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
     };
 
@@ -285,7 +315,7 @@ function handleError(error: unknown) {
 
 async function main() {
   const options: StoreInitOptions = {
-    walletPath: "", //route to keypair.json generated from the solana cli
+    walletPath: "/home/biccsdev/3land/packs_sdk/wallet/my-keypair.json", //route to keypair.json generated from the solana cli
   };
 
   try {
@@ -296,24 +326,24 @@ async function main() {
     //const collection = await createCollectionTest(options);
     //console.log("collection mint: ", collection);
     // Create single edition
-    // const storeAccount = "3MwBR619SgJ35ek7vDLxxE5QvBaNq1fmmEZSXKW2X3Lf"; //"P1c4bboejX24NbY3vMw8EncKVmvcGEryznWLs4PGp9j"; //current store created for testing
-    // const collectionAccount = "3sZYHkhGpckPgApfGp5cv3wL2SusoXQ8sBXyvLTUZRz4"; //"2rQq34FJG1613i7H8cDfxuGCtEjJmFAUNbAPJqK699oD";
-    // const singleEditionResult = await createSingleTest(
-    //   options,
-    //   storeAccount,
-    //   collectionAccount
-    // );
-    // console.log(
-    //   "Single edition created. Transaction ID:",
-    //   singleEditionResult.transactionId
-    // );
-    // Buy single edition
-    const itemAccount = "8iUHPXuZWQdSGTV9X8hPdUgxSLfdXX7YjZYMck2TALBc"; //"7BhKXmc5obiwn5hhrUhErVBrAT7TErYcTpRYE8ggfjKV"; //current item created for testing
-    const buyResult = await buySingleTest(options, itemAccount);
-    console.log(
-      "Single edition purchased. Transaction ID:",
-      buyResult.transactionId
+    const storeAccount = "3MwBR619SgJ35ek7vDLxxE5QvBaNq1fmmEZSXKW2X3Lf"; //"P1c4bboejX24NbY3vMw8EncKVmvcGEryznWLs4PGp9j"; //current store created for testing
+    const collectionAccount = "4S1c3YMTstfvKKJkD6fJCTxjCdgQLWVd5xDdNZeHo58q"; //"2rQq34FJG1613i7H8cDfxuGCtEjJmFAUNbAPJqK699oD";
+    const singleEditionResult = await createSingleTest(
+      options,
+      storeAccount,
+      collectionAccount
     );
+    console.log(
+      "Single edition created. Transaction ID:",
+      singleEditionResult.transactionId
+    );
+    // Buy single edition
+    // const itemAccount = "8iUHPXuZWQdSGTV9X8hPdUgxSLfdXX7YjZYMck2TALBc"; //"7BhKXmc5obiwn5hhrUhErVBrAT7TErYcTpRYE8ggfjKV"; //current item created for testing
+    // const buyResult = await buySingleTest(options, itemAccount);
+    // console.log(
+    //   "Single edition purchased. Transaction ID:",
+    //   buyResult.transactionId
+    // );
   } catch (error) {
     handleError(error);
   }
