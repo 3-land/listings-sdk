@@ -315,7 +315,7 @@ function handleError(error: unknown) {
 
 async function main() {
   const options: StoreInitOptions = {
-    walletPath: "/home/biccsdev/3land/packs_sdk/wallet/my-keypair.json", //route to keypair.json generated from the solana cli
+    walletPath: "", //route to keypair.json generated from the solana cli
   };
 
   try {
