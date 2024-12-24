@@ -18,27 +18,63 @@ import * as fs2 from "fs";
 import { PROGRAM_CNFT, SOLANA_ENDPOINT } from "../../types/programId";
 import path from "path";
 import { arrayBuffer } from "stream/consumers";
+import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
 
 interface StoreInitOptions {
-  walletPath: string;
+  // Make walletPath optional
+  walletPath?: string;
+  // Add privateKey option - can be array of numbers, Uint8Array, or base58 string
+  privateKey?: number[] | Uint8Array | string;
+}
+interface CreateStoreParams {
+  storeName: string;
+  storeFee: number;
 }
 
 function initializeSDKAndWallet(options: StoreInitOptions) {
   const sdk = new Store();
-  const secretKey = JSON.parse(fs2.readFileSync(options.walletPath, "utf-8"));
-  const walletKeypair = Keypair.fromSecretKey(Uint8Array.from(secretKey));
-  const payer = new Wallet(walletKeypair);
+  let walletKeypair: Keypair;
 
+  if (options.privateKey) {
+    if (typeof options.privateKey === "string") {
+      // Decode base58 string to Uint8Array
+      try {
+        const decoded = bs58.decode(options.privateKey);
+        walletKeypair = Keypair.fromSecretKey(decoded);
+      } catch (error) {
+        throw new Error(`Invalid base58 private key: ${error}`);
+      }
+    } else if (Array.isArray(options.privateKey)) {
+      // Handle array of numbers
+      walletKeypair = Keypair.fromSecretKey(
+        Uint8Array.from(options.privateKey)
+      );
+    } else {
+      // Handle Uint8Array directly
+      walletKeypair = Keypair.fromSecretKey(options.privateKey);
+    }
+  } else if (options.walletPath) {
+    // Existing file-based initialization
+    const secretKey = JSON.parse(fs2.readFileSync(options.walletPath, "utf-8"));
+    walletKeypair = Keypair.fromSecretKey(Uint8Array.from(secretKey));
+  } else {
+    throw new Error("Either walletPath or privateKey must be provided");
+  }
+
+  const payer = new Wallet(walletKeypair);
   return { sdk, walletKeypair, payer };
 }
 
-async function createStoreTest(options: StoreInitOptions) {
+async function createStoreTest(
+  options: StoreInitOptions,
+  storeSetup: CreateStoreParams
+) {
   const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
 
   try {
     const storeConfig: StoreConfig = {
       fee: new BN(1000000),
-      feePercentage: 5,
+      feePercentage: storeSetup.storeFee,
       feeType: new FeeType.AllMints(),
       trust: payer.publicKey,
       rules: [],
@@ -52,7 +88,7 @@ async function createStoreTest(options: StoreInitOptions) {
 
     const createStoreTxId = await sdk.createStore(
       walletKeypair,
-      "ultimate store",
+      storeSetup.storeName,
       storeConfig
     );
 
@@ -66,7 +102,16 @@ async function createStoreTest(options: StoreInitOptions) {
   }
 }
 
-async function createCollectionTest(options: StoreInitOptions) {
+interface CreateCollectionOptions {
+  collectionSymbol: string;
+  collectionName: string;
+  collectionDescription: string;
+}
+
+async function createCollectionTest(
+  options: StoreInitOptions,
+  collectionOpts: CreateCollectionOptions
+) {
   const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
 
   const collectionDetails = { __kind: "V1", size: 0 };
@@ -77,8 +122,8 @@ async function createCollectionTest(options: StoreInitOptions) {
   });
 
   const metadata = {
-    symbol: "NiiC!", //max 10 chars
-    name: "New Internet!", //max 32 chars
+    symbol: collectionOpts.collectionSymbol, //max 10 chars
+    name: collectionOpts.collectionName, //max 32 chars
     uri: "",
     sellerFeeBasisPoints: new BN(5),
     creators: [creator],
@@ -87,7 +132,7 @@ async function createCollectionTest(options: StoreInitOptions) {
   };
 
   const imageBuffer = fs2.readFileSync(
-    path.join(process.cwd(), "assets", "niicl.gif")
+    path.join(process.cwd(), "assets", "ds.jpeg")
   ).buffer;
   const coverBuffer = fs2.readFileSync(
     path.join(process.cwd(), "assets", "3land_rebrand.gif")
@@ -97,7 +142,7 @@ async function createCollectionTest(options: StoreInitOptions) {
     symbol: metadata.symbol,
     metadata: {
       name: metadata.name,
-      description: "a cool collection",
+      description: collectionOpts.collectionDescription,
       files: {
         file: {
           arrayBuffer() {
@@ -114,7 +159,7 @@ async function createCollectionTest(options: StoreInitOptions) {
       },
     },
     creators: metadata.creators,
-    traits: [{ status: "CEO" }, { type: "club" }],
+    traits: [],
     sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
   };
 
@@ -128,15 +173,26 @@ async function createCollectionTest(options: StoreInitOptions) {
       }
     );
     console.log("create collection tx: ", collectionTx);
+    return collectionTx;
   } catch (error) {
     handleError(error);
   }
 }
 
+interface CreateSingleOptions {
+  itemName: string;
+  sellerFee: number;
+  itemSymbol: string;
+  itemDescription: string;
+  traits: any;
+  price: number;
+}
+
 async function createSingleTest(
   options: StoreInitOptions,
   storeAccount: string,
-  collectionAccount: string
+  collectionAccount: string,
+  createOptions: CreateSingleOptions
 ) {
   const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
 
@@ -148,10 +204,10 @@ async function createSingleTest(
     });
 
     const metadata: ShortMetadataArgs = {
-      name: "chainBattle",
+      name: createOptions.itemName,
       uri: "",
       uriType: 1,
-      sellerFeeBasisPoints: 500,
+      sellerFeeBasisPoints: createOptions.sellerFee,
       collection: new PublicKey(collectionAccount),
       creators: [creator],
       toJSON: function (): ShortMetadataArgsJSON {
@@ -184,57 +240,50 @@ async function createSingleTest(
 );
     */
 
-    // const imageBuffer = fs2.readFileSync(
-    //   path.join(process.cwd(), "assets", "battle_sol.gif")
-    // ).buffer;
-
     const imageBuffer = await fs2.promises.readFile(
-      path.join(process.cwd(), "assets", "phone.glb")
+      path.join(process.cwd(), "assets", "og.png")
     );
 
     if (!imageBuffer || imageBuffer.byteLength === 0) {
       throw new Error("Failed to read main image file");
     }
-    // const coverBuffer = await fs2.promises.readFile(
-    //   path.join(process.cwd(), "assets", "og.png")
-    // );
 
     const coverBuffer = await fs2.promises.readFile(
-      path.join(process.cwd(), "assets", "testvid.mp4")
+      path.join(process.cwd(), "assets", "niicl.gif")
     );
 
     if (!coverBuffer) {
       throw new Error("Failed to read cover file");
     }
     const options = {
-      symbol: "chain",
+      symbol: createOptions.itemSymbol,
       metadata: {
         name: metadata.name,
-        description: "solana vs ethereum",
+        description: createOptions.itemDescription,
         files: {
           file: {
             arrayBuffer: () => imageBuffer,
-            // type: "audio/mp3",
-            name: "phone.glb",
+            type: "image/png",
+            name: "og.png",
             size: imageBuffer.length,
           },
           cover: {
             arrayBuffer: () => coverBuffer,
-            type: "video/mp4",
-            name: "testvid.mp4",
+            type: "image/gif",
+            name: "niicl.gif",
             size: coverBuffer.length,
           },
         },
       },
       creators: metadata.creators,
-      traits: [{ region: "Kanto" }, { game: "emerald" }],
+      traits: createOptions.traits,
       sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
     };
 
     const saleConfig: SaleConfig = {
       prices: [
         {
-          amount: new BN(1000000),
+          amount: new BN(createOptions.price),
           priceType: new CurrencyType.Native(),
           toJSON: function (): PriceJSON {
             throw new Error("Function not implemented.");
@@ -318,20 +367,54 @@ async function main() {
     walletPath: "", //route to keypair.json generated from the solana cli
   };
 
+  const optionsWithBase58: StoreInitOptions = {
+    privateKey:
+      "2ixmpz6W9aAE7HDqCJYy1tsqQcAHhkuP54jTPGnTyqvYHJearwT16DzmkkaQLARB9TshZvoS3WE5dQg183wryVCC",
+  };
+
+  const storeSetup: CreateStoreParams = {
+    storeName: "Super cool store",
+    storeFee: 5,
+  };
+
+  const collectionOpts: CreateCollectionOptions = {
+    collectionName: "Super awesome Collection",
+    collectionSymbol: "SAC",
+    collectionDescription: "This is a collection for the cool guys",
+  };
+
+  const createItemOptions: CreateSingleOptions = {
+    itemName: "supercoolitem5",
+    sellerFee: 500,
+    itemSymbol: "SCI5",
+    itemDescription: "This is the coolest thing ever frfr",
+    traits: [
+      { trait_type: "type", value: "cool" },
+      { trait_type: "creator", value: "me" },
+    ],
+    price: 1000000, //1000000 == 0.001 sol
+  };
+
   try {
     // Create store
-    //const storeResult = await createStoreTest(options);
+    //const storeResult = await createStoreTest(optionsWithBase58, storeSetup);
     //console.log("Store created. Transaction ID:", storeResult.transactionId);
+    const landStoreMainnet = "AmQNs2kgw4LvS9sm6yE9JJ4Hs3JpVu65eyx9pxMG2xA";
+    const landStoreDevnet = "GyPCu89S63P9NcCQAtuSJesiefhhgpGWrNVJs4bF2cSK";
     // Create Collection
-    //const collection = await createCollectionTest(options);
-    //console.log("collection mint: ", collection);
+    // const collection = await createCollectionTest(
+    //   optionsWithBase58,
+    //   collectionOpts
+    // );
+    // console.log("collection mint: ", collection);
     // Create single edition
-    const storeAccount = "3MwBR619SgJ35ek7vDLxxE5QvBaNq1fmmEZSXKW2X3Lf"; //"P1c4bboejX24NbY3vMw8EncKVmvcGEryznWLs4PGp9j"; //current store created for testing
-    const collectionAccount = "4S1c3YMTstfvKKJkD6fJCTxjCdgQLWVd5xDdNZeHo58q"; //"2rQq34FJG1613i7H8cDfxuGCtEjJmFAUNbAPJqK699oD";
+    // const storeAccount = "3MwBR619SgJ35ek7vDLxxE5QvBaNq1fmmEZSXKW2X3Lf"; //"P1c4bboejX24NbY3vMw8EncKVmvcGEryznWLs4PGp9j"; //current store created for testing
+    const collectionAccount = "Fpm8XgXEuNxxjmqUQuqEFkGusiSsKM6astUGPs5U9x6v"; //"2rQq34FJG1613i7H8cDfxuGCtEjJmFAUNbAPJqK699oD";
     const singleEditionResult = await createSingleTest(
-      options,
-      storeAccount,
-      collectionAccount
+      optionsWithBase58,
+      landStoreDevnet,
+      collectionAccount,
+      createItemOptions
     );
     console.log(
       "Single edition created. Transaction ID:",
