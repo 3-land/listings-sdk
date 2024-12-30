@@ -18,8 +18,7 @@ async function main() {
   //   };
 
   const optionsWithBase58: StoreInitOptions = {
-    privateKey:
-      "2ixmpz6W9aAE7HDqCJYy1tsqQcAHhkuP54jTPGnTyqvYHJearwT16DzmkkaQLARB9TshZvoS3WE5dQg183wryVCC",
+    privateKey: "", //your private key
   };
 
   const storeSetup: CreateStoreParams = {
