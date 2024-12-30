@@ -38,10 +38,8 @@ Clone the repo
 
 ```bash
 git clone https://github.com/biccsdev/3land_sdk.git
-# TODO: add to npm
-# npm install @3land/solana-sdk
 # or
-# yarn add @3land/solana-sdk
+npm install 3land_sdk
 ```
 
 Run this command to install all the packages needed for the sdk

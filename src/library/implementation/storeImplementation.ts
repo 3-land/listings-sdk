@@ -97,7 +97,7 @@ async function createStoreImp(
   }
 }
 
-async function createCollectionTest(
+async function createCollectionImp(
   options: StoreInitOptions,
   collectionOpts: CreateCollectionOptions
 ) {
@@ -382,4 +382,10 @@ function handleError(error: unknown) {
   }
 }
 
-export { createStoreImp, createSingleImp, buySingleImp, handleError };
+export {
+  createStoreImp,
+  createCollectionImp,
+  createSingleImp,
+  buySingleImp,
+  handleError,
+};
