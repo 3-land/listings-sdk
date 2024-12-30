@@ -31,7 +31,8 @@ export async function uploadFilesIrysInstruction(
   let main_file: any = false;
   let cover_file: any = false;
   try {
-    if (options.metadata.files.file) {
+    console.log("FILEE: ", options.metadata.files.file.url);
+    if (options.metadata.files.file && !options.metadata.files.file.url) {
       const normalizedMainFile = await normalizeFileData(
         options.metadata.files.file
       );
@@ -39,7 +40,7 @@ export async function uploadFilesIrysInstruction(
       main_file = await irys?.bundle(normalizedMainFile, false);
     }
 
-    if (options.metadata.files.cover) {
+    if (options.metadata.files.cover && !options.metadata.files.cover.url) {
       const normalizedCoverFile = await normalizeFileData(
         options.metadata.files.cover
       );
@@ -58,20 +59,28 @@ export async function uploadFilesIrysInstruction(
             type: getFileType(main_file),
             uri: main_file?.irys?.url,
           },
+          options.metadata.files.file.url && {
+            uri: options.metadata.files.file.url,
+          },
           cover_file && {
             type: getFileType(cover_file),
             uri: cover_file?.irys?.url,
           },
+          options?.metadata?.files?.cover?.url && {
+            uri: options.metadata.files.cover.url,
+          },
         ].filter(Boolean),
         creators: options.creators,
       },
-      image: (main_file || cover_file)?.irys?.url,
+      image: (main_file || cover_file)?.irys?.url || options.metadata.files.file.url,
       attributes: options.traits,
-      category: getFileCategory(main_file),
+      category: main_file ? getFileCategory(main_file) : 'image',
       animation_url: isAnimatable(main_file?.type)
         ? main_file?.irys?.url
         : undefined,
     };
+
+    console.log('offchain_metadata: ', offchain_metadata) 
 
     const metadata_blob = new Blob([JSON.stringify(offchain_metadata)], {
       type: "application/json",

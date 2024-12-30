@@ -25,8 +25,6 @@ import {
 import { bytesToU32, cyrb53 } from "../../../utility/utils";
 import { BN } from "bn.js";
 import { ExtraParameter } from "../../../types/types";
-import { getConnection } from "../../../utility/Connection";
-import { SOLANA_ENDPOINT } from "../../examples/storeExample";
 import { BorshCoder } from "@project-serum/anchor";
 import { idl } from "./idl";
 export let lutAccount = toPublicKey(
@@ -54,7 +52,6 @@ const tokenMetadataProgram = TOKEN_METADATA_PROGRAM_ID;
 const compressionProgram = SPL_ACCOUNT_COMPRESSION_PROGRAM_ID;
 
 let connection: Connection;
-// connection = getConnection(SOLANA_ENDPOINT);
 
 export async function buySingleEditionInstruction(
   paymentAccount: PublicKey,

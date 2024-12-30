@@ -95,6 +95,7 @@ export class Store {
   constructor(options: StoreOptions = {}) {
     const {
       network = NetworkType.DEVNET,
+      // network = NetworkType.MAINNET,
       customEndpoint,
       customConfig,
     } = options;
@@ -250,9 +251,9 @@ export class Store {
         updateAuthority,
       };
 
-      const metadataObj = {...metadata, uri: metadataUrl}
+      const metadataObj = { ...metadata, uri: metadataUrl };
 
-      console.log('metatadaobj: ', metadataObj)
+      console.log("metatadaobj: ", metadataObj);
 
       const create_args = {
         createMetadataAccountArgsV3: {
@@ -397,7 +398,7 @@ export class Store {
         instructions.push(approveInstruction);
         // signers.push(new_authority)
       }
-      console.log('metadataurl: ', metadataUrl)
+      console.log("metadataurl: ", metadataUrl);
       const meta: ShortMetadataArgs = {
         name: metadata.name,
         uri: metadataUrl ? metadataUrl.split(".net/")[1] : "",
@@ -412,7 +413,7 @@ export class Store {
           throw new Error("Function not implemented.");
         },
       };
-      console.log("meta: ", meta)
+      console.log("meta: ", meta);
 
       const instructionSing = createSingleEditionInstruction(
         storeAccount,

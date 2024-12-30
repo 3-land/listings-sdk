@@ -19,17 +19,12 @@ import { PROGRAM_CNFT, SOLANA_ENDPOINT } from "../../types/programId";
 import path from "path";
 import { arrayBuffer } from "stream/consumers";
 import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
-
-interface StoreInitOptions {
-  // Make walletPath optional
-  walletPath?: string;
-  // Add privateKey option - can be array of numbers, Uint8Array, or base58 string
-  privateKey?: number[] | Uint8Array | string;
-}
-interface CreateStoreParams {
-  storeName: string;
-  storeFee: number;
-}
+import {
+  CreateCollectionOptions,
+  CreateSingleOptions,
+  CreateStoreParams,
+  StoreInitOptions,
+} from "../../types/implementation/implementationTypes";
 
 function initializeSDKAndWallet(options: StoreInitOptions) {
   const sdk = new Store();
@@ -65,7 +60,7 @@ function initializeSDKAndWallet(options: StoreInitOptions) {
   return { sdk, walletKeypair, payer };
 }
 
-async function createStoreTest(
+async function createStoreImp(
   options: StoreInitOptions,
   storeSetup: CreateStoreParams
 ) {
@@ -100,12 +95,6 @@ async function createStoreTest(
     handleError(error);
     throw error;
   }
-}
-
-interface CreateCollectionOptions {
-  collectionSymbol: string;
-  collectionName: string;
-  collectionDescription: string;
 }
 
 async function createCollectionTest(
@@ -179,16 +168,7 @@ async function createCollectionTest(
   }
 }
 
-interface CreateSingleOptions {
-  itemName: string;
-  sellerFee: number;
-  itemSymbol: string;
-  itemDescription: string;
-  traits: any;
-  price: number;
-}
-
-async function createSingleTest(
+async function createSingleImp(
   options: StoreInitOptions,
   storeAccount: string,
   collectionAccount: string,
@@ -239,46 +219,86 @@ async function createSingleTest(
         path.join(process.cwd(), "assets", "model.glb")
 );
     */
+    let options;
+    if (createOptions.mainImageUrl) {
+      // Define the type for metadata files
+      interface MetadataFiles {
+        file: {
+          url: string;
+        };
+        cover?: {
+          url: string;
+        };
+      }
 
-    const imageBuffer = await fs2.promises.readFile(
-      path.join(process.cwd(), "assets", "og.png")
-    );
+      // Create base metadata files object
+      let baseMetadataFiles: MetadataFiles = {
+        file: {
+          url: createOptions.mainImageUrl,
+        },
+      };
 
-    if (!imageBuffer || imageBuffer.byteLength === 0) {
-      throw new Error("Failed to read main image file");
-    }
+      // Add cover if present
+      if (createOptions.coverImageUrl) {
+        baseMetadataFiles.cover = {
+          url: createOptions.coverImageUrl,
+        };
+      }
 
-    const coverBuffer = await fs2.promises.readFile(
-      path.join(process.cwd(), "assets", "niicl.gif")
-    );
+      options = {
+        symbol: createOptions.itemSymbol,
+        metadata: {
+          name: metadata.name,
+          description: createOptions.itemDescription,
+          files: baseMetadataFiles,
+        },
+        creators: metadata.creators,
+        traits: createOptions.traits,
+        sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
+      };
+    } else {
+      const imageBuffer = await fs2.promises.readFile(
+        path.join(process.cwd(), "assets", "og.png")
+      );
 
-    if (!coverBuffer) {
-      throw new Error("Failed to read cover file");
-    }
-    const options = {
-      symbol: createOptions.itemSymbol,
-      metadata: {
-        name: metadata.name,
-        description: createOptions.itemDescription,
-        files: {
-          file: {
-            arrayBuffer: () => imageBuffer,
-            type: "image/png",
-            name: "og.png",
-            size: imageBuffer.length,
-          },
-          cover: {
-            arrayBuffer: () => coverBuffer,
-            type: "image/gif",
-            name: "niicl.gif",
-            size: coverBuffer.length,
+      if (!imageBuffer || imageBuffer.byteLength === 0) {
+        throw new Error("Failed to read main image file");
+      }
+
+      const coverBuffer = await fs2.promises.readFile(
+        path.join(process.cwd(), "assets", "niicl.gif")
+      );
+
+      if (!coverBuffer) {
+        throw new Error("Failed to read cover file");
+      }
+      options = {
+        symbol: createOptions.itemSymbol,
+        metadata: {
+          name: metadata.name,
+          description: createOptions.itemDescription,
+          files: {
+            file: {
+              arrayBuffer: () => imageBuffer,
+              type: "image/png",
+              name: "og.png",
+              size: imageBuffer.length,
+            },
+            cover: {
+              arrayBuffer: () => coverBuffer,
+              type: "image/gif",
+              name: "niicl.gif",
+              size: coverBuffer.length,
+            },
           },
         },
-      },
-      creators: metadata.creators,
-      traits: createOptions.traits,
-      sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
-    };
+        creators: metadata.creators,
+        traits: createOptions.traits,
+        sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
+      };
+    }
+
+    console.log("cover options: ", options);
 
     const saleConfig: SaleConfig = {
       prices: [
@@ -331,7 +351,7 @@ async function createSingleTest(
   }
 }
 
-async function buySingleTest(options: StoreInitOptions, item: string) {
+async function buySingleImp(options: StoreInitOptions, item: string) {
   const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
 
   try {
@@ -362,76 +382,4 @@ function handleError(error: unknown) {
   }
 }
 
-async function main() {
-  const options: StoreInitOptions = {
-    walletPath: "", //route to keypair.json generated from the solana cli
-  };
-
-  const optionsWithBase58: StoreInitOptions = {
-    privateKey:
-      "2ixmpz6W9aAE7HDqCJYy1tsqQcAHhkuP54jTPGnTyqvYHJearwT16DzmkkaQLARB9TshZvoS3WE5dQg183wryVCC",
-  };
-
-  const storeSetup: CreateStoreParams = {
-    storeName: "Super cool store",
-    storeFee: 5,
-  };
-
-  const collectionOpts: CreateCollectionOptions = {
-    collectionName: "Super awesome Collection",
-    collectionSymbol: "SAC",
-    collectionDescription: "This is a collection for the cool guys",
-  };
-
-  const createItemOptions: CreateSingleOptions = {
-    itemName: "supercoolitem5",
-    sellerFee: 500,
-    itemSymbol: "SCI5",
-    itemDescription: "This is the coolest thing ever frfr",
-    traits: [
-      { trait_type: "type", value: "cool" },
-      { trait_type: "creator", value: "me" },
-    ],
-    price: 1000000, //1000000 == 0.001 sol
-  };
-
-  try {
-    // Create store
-    //const storeResult = await createStoreTest(optionsWithBase58, storeSetup);
-    //console.log("Store created. Transaction ID:", storeResult.transactionId);
-    const landStoreMainnet = "AmQNs2kgw4LvS9sm6yE9JJ4Hs3JpVu65eyx9pxMG2xA";
-    const landStoreDevnet = "GyPCu89S63P9NcCQAtuSJesiefhhgpGWrNVJs4bF2cSK";
-    // Create Collection
-    // const collection = await createCollectionTest(
-    //   optionsWithBase58,
-    //   collectionOpts
-    // );
-    // console.log("collection mint: ", collection);
-    // Create single edition
-    // const storeAccount = "3MwBR619SgJ35ek7vDLxxE5QvBaNq1fmmEZSXKW2X3Lf"; //"P1c4bboejX24NbY3vMw8EncKVmvcGEryznWLs4PGp9j"; //current store created for testing
-    const collectionAccount = "Fpm8XgXEuNxxjmqUQuqEFkGusiSsKM6astUGPs5U9x6v"; //"2rQq34FJG1613i7H8cDfxuGCtEjJmFAUNbAPJqK699oD";
-    const singleEditionResult = await createSingleTest(
-      optionsWithBase58,
-      landStoreDevnet,
-      collectionAccount,
-      createItemOptions
-    );
-    console.log(
-      "Single edition created. Transaction ID:",
-      singleEditionResult.transactionId
-    );
-    // Buy single edition
-    // const itemAccount = "8iUHPXuZWQdSGTV9X8hPdUgxSLfdXX7YjZYMck2TALBc"; //"7BhKXmc5obiwn5hhrUhErVBrAT7TErYcTpRYE8ggfjKV"; //current item created for testing
-    // const buyResult = await buySingleTest(options, itemAccount);
-    // console.log(
-    //   "Single edition purchased. Transaction ID:",
-    //   buyResult.transactionId
-    // );
-  } catch (error) {
-    handleError(error);
-  }
-}
-
-main();
-
-export { createStoreTest, createSingleTest, buySingleTest, SOLANA_ENDPOINT };
+export { createStoreImp, createSingleImp, buySingleImp, handleError };

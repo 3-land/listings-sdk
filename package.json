@@ -5,7 +5,7 @@
   "main": "./src/library/examples/storeExample.ts",
   "type": "module",
   "scripts": {
-    "test": "npx tsx ./src/library/examples/storeExample.ts"
+    "test": "npx tsx ./src/index.ts"
   },
   "author": "biccs",
   "license": "ISC",
