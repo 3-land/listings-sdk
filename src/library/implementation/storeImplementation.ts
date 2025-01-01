@@ -165,6 +165,7 @@ async function createCollectionImp(
     return collectionTx;
   } catch (error) {
     handleError(error);
+    return { success: false, error: error };
   }
 }
 

@@ -55,7 +55,7 @@ async function main() {
     const landStoreMainnet = "AmQNs2kgw4LvS9sm6yE9JJ4Hs3JpVu65eyx9pxMG2xA";
     const landStoreDevnet = "GyPCu89S63P9NcCQAtuSJesiefhhgpGWrNVJs4bF2cSK";
     // Create Collection
-    // const collection = await createCollectionTest(
+    // const collection = await createCollectionImp(
     //   optionsWithBase58,
     //   collectionOpts
     // );

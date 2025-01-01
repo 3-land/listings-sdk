@@ -181,6 +181,7 @@ export async function buySingleEditionInstruction(
   if (!data?.post) data.post = [];
 
   const coder = new BorshCoder(idl);
+
   const storedata = await connection.getAccountInfo(toPublicKey(storeAccount));
   if (!storedata) {
     throw new Error("no store data in print single");

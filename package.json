@@ -3,7 +3,6 @@
   "version": "1.0.1",
   "description": "sdk for interacting with 3land's solana program",
   "main": "./src/library/implementation/storeImplementation.ts",
-  "type": "module",
   "scripts": {
     "test": "npx tsx ./src/index.ts"
   },
