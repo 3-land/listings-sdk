@@ -29,3 +29,4 @@ export declare class Nft {
 export declare function fromDecoded(obj: any): types.DepositFormatKind;
 export declare function fromJSON(obj: types.DepositFormatJSON): types.DepositFormatKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=DepositFormat.d.ts.map

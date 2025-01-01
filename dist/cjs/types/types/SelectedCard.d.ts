@@ -24,3 +24,4 @@ export declare class SelectedCard {
         edition: number;
     };
 }
+//# sourceMappingURL=SelectedCard.d.ts.map

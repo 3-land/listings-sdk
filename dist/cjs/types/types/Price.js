@@ -68,3 +68,4 @@ class Price {
     }
 }
 exports.Price = Price;
+//# sourceMappingURL=Price.js.map

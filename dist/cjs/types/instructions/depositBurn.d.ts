@@ -19,3 +19,4 @@ export interface DepositBurnAccounts {
 }
 export declare const layout: any;
 export declare function depositBurn(args: DepositBurnArgs, accounts: DepositBurnAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=depositBurn.d.ts.map

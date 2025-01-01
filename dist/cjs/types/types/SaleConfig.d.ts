@@ -205,3 +205,4 @@ export declare class SaleConfig {
         };
     };
 }
+//# sourceMappingURL=SaleConfig.d.ts.map

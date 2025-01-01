@@ -132,3 +132,4 @@ export declare class Deposit {
         proofSize: number;
     };
 }
+//# sourceMappingURL=Deposit.d.ts.map

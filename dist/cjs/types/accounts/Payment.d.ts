@@ -20,3 +20,4 @@ export declare class Payment {
     toJSON(): PaymentJSON;
     static fromJSON(obj: PaymentJSON): Payment;
 }
+//# sourceMappingURL=Payment.d.ts.map

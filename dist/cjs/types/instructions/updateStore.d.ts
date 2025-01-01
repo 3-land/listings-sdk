@@ -12,3 +12,4 @@ export interface UpdateStoreAccounts {
 }
 export declare const layout: any;
 export declare function updateStore(args: UpdateStoreArgs, accounts: UpdateStoreAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=updateStore.d.ts.map

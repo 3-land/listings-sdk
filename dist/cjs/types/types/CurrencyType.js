@@ -217,3 +217,4 @@ function layout(property) {
     }
     return ret;
 }
+//# sourceMappingURL=CurrencyType.js.map

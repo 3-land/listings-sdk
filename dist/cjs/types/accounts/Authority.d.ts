@@ -13,3 +13,4 @@ export declare class Authority {
     toJSON(): AuthorityJSON;
     static fromJSON(obj: AuthorityJSON): Authority;
 }
+//# sourceMappingURL=Authority.d.ts.map

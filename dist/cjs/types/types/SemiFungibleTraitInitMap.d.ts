@@ -30,3 +30,4 @@ export declare class SemiFungibleTraitInitMap {
         index: number;
     };
 }
+//# sourceMappingURL=SemiFungibleTraitInitMap.d.ts.map

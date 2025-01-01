@@ -105,3 +105,4 @@ export declare class StoreConfig {
         })[];
     };
 }
+//# sourceMappingURL=StoreConfig.d.ts.map

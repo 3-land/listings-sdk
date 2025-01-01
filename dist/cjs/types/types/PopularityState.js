@@ -567,3 +567,4 @@ function layout(property) {
     }
     return ret;
 }
+//# sourceMappingURL=PopularityState.js.map

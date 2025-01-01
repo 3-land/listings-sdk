@@ -29,3 +29,4 @@ export declare class CoolDownToOpen {
 export declare function fromDecoded(obj: any): types.PackRuleKind;
 export declare function fromJSON(obj: types.PackRuleJSON): types.PackRuleKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=PackRule.d.ts.map

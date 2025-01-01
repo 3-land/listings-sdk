@@ -29,3 +29,4 @@ export declare class Tracked {
 export declare function fromDecoded(obj: any): types.TrackRegistryKind;
 export declare function fromJSON(obj: types.TrackRegistryJSON): types.TrackRegistryKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=TrackRegistry.d.ts.map

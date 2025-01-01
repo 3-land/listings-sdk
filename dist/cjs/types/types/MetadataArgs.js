@@ -37,11 +37,11 @@ class MetadataArgs {
         this.editionNonce = fields.editionNonce;
         this.tokenStandard = fields.tokenStandard;
         this.collection =
-            (fields.collection && new types.Collection(Object.assign({}, fields.collection))) ||
+            (fields.collection && new types.Collection({ ...fields.collection })) ||
                 null;
-        this.uses = (fields.uses && new types.Uses(Object.assign({}, fields.uses))) || null;
+        this.uses = (fields.uses && new types.Uses({ ...fields.uses })) || null;
         this.tokenProgramVersion = fields.tokenProgramVersion;
-        this.creators = fields.creators.map((item) => new types.Creator(Object.assign({}, item)));
+        this.creators = fields.creators.map((item) => new types.Creator({ ...item }));
     }
     static layout(property) {
         return borsh.struct([
@@ -136,3 +136,4 @@ class MetadataArgs {
     }
 }
 exports.MetadataArgs = MetadataArgs;
+//# sourceMappingURL=MetadataArgs.js.map

@@ -262,3 +262,4 @@ var MetadataArgs_1 = require("./MetadataArgs");
 Object.defineProperty(exports, "MetadataArgs", { enumerable: true, get: function () { return MetadataArgs_1.MetadataArgs; } });
 var ShortMetadataArgs_1 = require("./ShortMetadataArgs");
 Object.defineProperty(exports, "ShortMetadataArgs", { enumerable: true, get: function () { return ShortMetadataArgs_1.ShortMetadataArgs; } });
+//# sourceMappingURL=index.js.map

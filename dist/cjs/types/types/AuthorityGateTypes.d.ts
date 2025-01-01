@@ -29,3 +29,4 @@ export declare class BiometricsGate {
 export declare function fromDecoded(obj: any): types.AuthorityGateTypesKind;
 export declare function fromJSON(obj: types.AuthorityGateTypesJSON): types.AuthorityGateTypesKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=AuthorityGateTypes.d.ts.map

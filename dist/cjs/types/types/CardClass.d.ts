@@ -16,3 +16,4 @@ export declare class Normal {
 export declare function fromDecoded(obj: any): types.CardClassKind;
 export declare function fromJSON(obj: types.CardClassJSON): types.CardClassKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=CardClass.d.ts.map

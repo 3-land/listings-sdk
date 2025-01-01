@@ -61,3 +61,4 @@ export declare class FakeDeposit {
         };
     };
 }
+//# sourceMappingURL=FakeDeposit.d.ts.map

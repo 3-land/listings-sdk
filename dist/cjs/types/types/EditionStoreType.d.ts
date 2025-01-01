@@ -42,3 +42,4 @@ export declare class Url {
 export declare function fromDecoded(obj: any): types.EditionStoreTypeKind;
 export declare function fromJSON(obj: types.EditionStoreTypeJSON): types.EditionStoreTypeKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=EditionStoreType.d.ts.map

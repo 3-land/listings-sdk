@@ -9,3 +9,4 @@ function getConnection(endpoint) {
 function createKeypairFromSecretKey(secretKey) {
     return web3_js_1.Keypair.fromSecretKey(secretKey);
 }
+//# sourceMappingURL=Connection.js.map

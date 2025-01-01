@@ -29,3 +29,4 @@ export declare class Pack {
 export declare function fromDecoded(obj: any): types.ItemClassKind;
 export declare function fromJSON(obj: types.ItemClassJSON): types.ItemClassKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=ItemClass.d.ts.map

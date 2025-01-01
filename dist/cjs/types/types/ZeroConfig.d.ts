@@ -34,3 +34,4 @@ export declare class ZeroConfig {
         supplyChunkBytes: number;
     };
 }
+//# sourceMappingURL=ZeroConfig.d.ts.map

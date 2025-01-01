@@ -9,3 +9,4 @@ export interface AdjustDepositBurnAccounts {
     systemProgram: PublicKey;
 }
 export declare function adjustDepositBurn(accounts: AdjustDepositBurnAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=adjustDepositBurn.d.ts.map

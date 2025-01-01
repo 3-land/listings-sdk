@@ -25,3 +25,4 @@ export declare class CollectTrack {
         spent: BN;
     };
 }
+//# sourceMappingURL=CollectTrack.d.ts.map

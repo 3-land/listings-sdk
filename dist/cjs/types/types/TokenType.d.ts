@@ -29,3 +29,4 @@ export declare class OnlyUp {
 export declare function fromDecoded(obj: any): types.TokenTypeKind;
 export declare function fromJSON(obj: types.TokenTypeJSON): types.TokenTypeKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=TokenType.d.ts.map

@@ -85,3 +85,4 @@ export declare class BondingLinear {
 export declare function fromDecoded(obj: any): types.PriceRuleKind;
 export declare function fromJSON(obj: types.PriceRuleJSON): types.PriceRuleKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=PriceRule.d.ts.map

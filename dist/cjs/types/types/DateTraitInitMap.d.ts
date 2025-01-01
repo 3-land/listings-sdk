@@ -30,3 +30,4 @@ export declare class DateTraitInitMap {
         index: number;
     };
 }
+//# sourceMappingURL=DateTraitInitMap.d.ts.map

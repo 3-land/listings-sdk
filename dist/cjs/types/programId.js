@@ -17,3 +17,4 @@ exports.SPL_NOOP_PROGRAM_ID = (0, PdaManager_1.toPublicKey)("noopb9bkMVfRPU8Asbp
 exports.PROGRAM_CLAIMZ = (0, PdaManager_1.toPublicKey)("52zRX47uXYzpYDmW4PVQTnxjrNhYaCsVEauXm8xF9ARq");
 exports.SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID = (0, PdaManager_1.toPublicKey)("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL");
 exports.SOLANA_ENDPOINT = "https://api.devnet.solana.com";
+//# sourceMappingURL=programId.js.map

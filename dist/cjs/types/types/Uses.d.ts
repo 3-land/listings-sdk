@@ -42,3 +42,4 @@ export declare class Uses {
         total: BN;
     };
 }
+//# sourceMappingURL=Uses.d.ts.map

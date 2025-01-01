@@ -25,3 +25,4 @@ export declare class FakeTraitValue {
         state: number;
     };
 }
+//# sourceMappingURL=FakeTraitValue.d.ts.map

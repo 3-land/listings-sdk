@@ -26,3 +26,4 @@ export interface OpenPackAccounts {
 }
 export declare const layout: any;
 export declare function openPack(args: OpenPackArgs, accounts: OpenPackAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=openPack.d.ts.map

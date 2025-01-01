@@ -58,3 +58,4 @@ class AllowedCurrencyArgs {
     }
 }
 exports.AllowedCurrencyArgs = AllowedCurrencyArgs;
+//# sourceMappingURL=AllowedCurrencyArgs.js.map

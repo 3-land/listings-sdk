@@ -1,9 +1,12 @@
 {
   "name": "3land_sdk",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "sdk for interacting with 3land's solana program",
   "main": "./src/library/implementation/storeImplementation.ts",
   "scripts": {
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc --module ESNext --outDir dist",
+    "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
     "test": "npx tsx ./src/index.ts"
   },
   "author": "biccs",

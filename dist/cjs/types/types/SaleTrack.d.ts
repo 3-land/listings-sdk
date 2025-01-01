@@ -35,3 +35,4 @@ export declare class SaleTrack {
         collectors: BN;
     };
 }
+//# sourceMappingURL=SaleTrack.d.ts.map

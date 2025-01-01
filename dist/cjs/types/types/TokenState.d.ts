@@ -29,3 +29,4 @@ export declare class Active {
 export declare function fromDecoded(obj: any): types.TokenStateKind;
 export declare function fromJSON(obj: types.TokenStateJSON): types.TokenStateKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=TokenState.d.ts.map

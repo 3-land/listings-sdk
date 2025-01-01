@@ -30,3 +30,4 @@ export declare class TraitValue {
         supply: BN;
     };
 }
+//# sourceMappingURL=TraitValue.d.ts.map

@@ -125,3 +125,4 @@ function layout(property) {
     }
     return ret;
 }
+//# sourceMappingURL=EditionStoreType.js.map

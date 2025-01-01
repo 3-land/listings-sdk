@@ -74,3 +74,4 @@ export declare const init: (address: string, options: {
     rpc?: string;
 }) => Promise<IrysHelper | null>;
 export {};
+//# sourceMappingURL=irys.d.ts.map

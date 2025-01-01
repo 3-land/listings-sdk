@@ -18,3 +18,4 @@ export interface UpdateSingleAccounts {
 }
 export declare const layout: any;
 export declare function updateSingle(args: UpdateSingleArgs, accounts: UpdateSingleAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=updateSingle.d.ts.map

@@ -27,3 +27,4 @@ export interface DonateUserAccounts {
 }
 export declare const layout: any;
 export declare function donateUser(args: DonateUserArgs, accounts: DonateUserAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=donateUser.d.ts.map

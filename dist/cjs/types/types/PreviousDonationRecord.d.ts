@@ -40,3 +40,4 @@ export declare class PreviousDonationRecord {
         message: string;
     };
 }
+//# sourceMappingURL=PreviousDonationRecord.d.ts.map

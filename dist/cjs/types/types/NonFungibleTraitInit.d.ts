@@ -25,3 +25,4 @@ export declare class NonFungibleTraitInit {
         values: BN[];
     };
 }
+//# sourceMappingURL=NonFungibleTraitInit.d.ts.map

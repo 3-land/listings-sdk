@@ -24,3 +24,4 @@ export declare class EncryptedPayload {
         arweave: string;
     };
 }
+//# sourceMappingURL=EncryptedPayload.d.ts.map

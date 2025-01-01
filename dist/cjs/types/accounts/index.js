@@ -67,3 +67,4 @@ var ThreeId_1 = require("./ThreeId");
 Object.defineProperty(exports, "ThreeId", { enumerable: true, get: function () { return ThreeId_1.ThreeId; } });
 var StoresHolder_1 = require("./StoresHolder");
 Object.defineProperty(exports, "StoresHolder", { enumerable: true, get: function () { return StoresHolder_1.StoresHolder; } });
+//# sourceMappingURL=index.js.map

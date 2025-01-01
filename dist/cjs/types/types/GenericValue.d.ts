@@ -70,3 +70,4 @@ export declare class EightBytes {
 export declare function fromDecoded(obj: any): types.GenericValueKind;
 export declare function fromJSON(obj: types.GenericValueJSON): types.GenericValueKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=GenericValue.d.ts.map

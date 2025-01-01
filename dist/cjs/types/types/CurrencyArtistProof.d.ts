@@ -35,3 +35,4 @@ export declare class CurrencyArtistProof {
         artistVerifier: BN;
     };
 }
+//# sourceMappingURL=CurrencyArtistProof.d.ts.map

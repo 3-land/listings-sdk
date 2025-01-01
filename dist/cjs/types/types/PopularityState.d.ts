@@ -263,3 +263,4 @@ export declare class Banned {
 export declare function fromDecoded(obj: any): types.PopularityStateKind;
 export declare function fromJSON(obj: types.PopularityStateJSON): types.PopularityStateKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=PopularityState.d.ts.map

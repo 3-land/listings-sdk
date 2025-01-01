@@ -64,3 +64,4 @@ class ShortCreator {
     }
 }
 exports.ShortCreator = ShortCreator;
+//# sourceMappingURL=ShortCreator.js.map

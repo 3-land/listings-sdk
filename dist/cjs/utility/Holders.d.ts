@@ -6,3 +6,4 @@ export declare const mainnetHolder: {
     creator: string;
     slot: number;
 };
+//# sourceMappingURL=Holders.d.ts.map

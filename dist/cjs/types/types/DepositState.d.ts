@@ -29,3 +29,4 @@ export declare class Burning {
 export declare function fromDecoded(obj: any): types.DepositStateKind;
 export declare function fromJSON(obj: types.DepositStateJSON): types.DepositStateKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=DepositState.d.ts.map

@@ -29,3 +29,4 @@ export declare class Three {
 export declare function fromDecoded(obj: any): types.DepositSubtypeKind;
 export declare function fromJSON(obj: types.DepositSubtypeJSON): types.DepositSubtypeKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=DepositSubtype.d.ts.map

@@ -28,7 +28,7 @@ const types = __importStar(require("../types")); // eslint-disable-line @typescr
 const borsh = __importStar(require("@coral-xyz/borsh"));
 class SaleConfig {
     constructor(fields) {
-        this.prices = fields.prices.map((item) => new types.Price(Object.assign({}, item)));
+        this.prices = fields.prices.map((item) => new types.Price({ ...item }));
         this.priceType = fields.priceType;
         this.rules = fields.rules;
         this.sendToVault = fields.sendToVault;
@@ -85,3 +85,4 @@ class SaleConfig {
     }
 }
 exports.SaleConfig = SaleConfig;
+//# sourceMappingURL=SaleConfig.js.map

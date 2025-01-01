@@ -12,3 +12,4 @@ export interface DeletePackAccounts {
     systemProgram: PublicKey;
 }
 export declare function deletePack(accounts: DeletePackAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=deletePack.d.ts.map

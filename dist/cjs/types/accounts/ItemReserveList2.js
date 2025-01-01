@@ -22,24 +22,25 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ItemReserveList2 = void 0;
 const borsh = __importStar(require("@coral-xyz/borsh")); // eslint-disable-line @typescript-eslint/no-unused-vars
 const programId_1 = require("../programId");
 class ItemReserveList2 {
     constructor(fields) { }
-    static fetch(c_1, address_1) {
-        return __awaiter(this, arguments, void 0, function* (c, address, programId = programId_1.PROGRAM_ID) {
-            const info = yield c.getAccountInfo(address);
+    static async fetch(c, address, programId = programId_1.PROGRAM_ID) {
+        const info = await c.getAccountInfo(address);
+        if (info === null) {
+            return null;
+        }
+        if (!info.owner.equals(programId)) {
+            throw new Error("account doesn't belong to this program");
+        }
+        return this.decode(info.data);
+    }
+    static async fetchMultiple(c, addresses, programId = programId_1.PROGRAM_ID) {
+        const infos = await c.getMultipleAccountsInfo(addresses);
+        return infos.map((info) => {
             if (info === null) {
                 return null;
             }
@@ -47,20 +48,6 @@ class ItemReserveList2 {
                 throw new Error("account doesn't belong to this program");
             }
             return this.decode(info.data);
-        });
-    }
-    static fetchMultiple(c_1, addresses_1) {
-        return __awaiter(this, arguments, void 0, function* (c, addresses, programId = programId_1.PROGRAM_ID) {
-            const infos = yield c.getMultipleAccountsInfo(addresses);
-            return infos.map((info) => {
-                if (info === null) {
-                    return null;
-                }
-                if (!info.owner.equals(programId)) {
-                    throw new Error("account doesn't belong to this program");
-                }
-                return this.decode(info.data);
-            });
         });
     }
     static decode(data) {
@@ -82,3 +69,4 @@ ItemReserveList2.discriminator = Buffer.from([
     228, 108, 231, 95, 72, 92, 29, 53,
 ]);
 ItemReserveList2.layout = borsh.struct([]);
+//# sourceMappingURL=ItemReserveList2.js.map

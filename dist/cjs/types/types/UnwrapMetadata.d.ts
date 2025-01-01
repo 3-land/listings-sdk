@@ -77,3 +77,4 @@ export declare class UnwrapMetadata {
         bumps: number[];
     };
 }
+//# sourceMappingURL=UnwrapMetadata.d.ts.map

@@ -42,3 +42,4 @@ export declare class CreatorRegistry {
     toJSON(): CreatorRegistryJSON;
     static fromJSON(obj: CreatorRegistryJSON): CreatorRegistry;
 }
+//# sourceMappingURL=CreatorRegistry.d.ts.map

@@ -21,3 +21,4 @@ export interface CreateSingleOptions {
     mainImageUrl?: string;
     coverImageUrl?: string;
 }
+//# sourceMappingURL=implementationTypes.d.ts.map

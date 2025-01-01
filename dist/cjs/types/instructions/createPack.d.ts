@@ -22,3 +22,4 @@ export interface CreatePackAccounts {
 }
 export declare const layout: any;
 export declare function createPack(args: CreatePackArgs, accounts: CreatePackAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=createPack.d.ts.map

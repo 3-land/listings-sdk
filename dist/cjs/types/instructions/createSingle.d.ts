@@ -22,3 +22,4 @@ export interface CreateSingleAccounts {
 }
 export declare const layout: any;
 export declare function createSingle(args: CreateSingleArgs, accounts: CreateSingleAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=createSingle.d.ts.map

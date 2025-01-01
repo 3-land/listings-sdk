@@ -67,3 +67,4 @@ class NonFungibleTraitInit {
     }
 }
 exports.NonFungibleTraitInit = NonFungibleTraitInit;
+//# sourceMappingURL=NonFungibleTraitInit.js.map

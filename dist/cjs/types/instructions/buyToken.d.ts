@@ -18,3 +18,4 @@ export interface BuyTokenAccounts {
 }
 export declare const layout: any;
 export declare function buyToken(args: BuyTokenArgs, accounts: BuyTokenAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=buyToken.d.ts.map

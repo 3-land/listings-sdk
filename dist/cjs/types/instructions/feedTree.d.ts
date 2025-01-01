@@ -18,3 +18,4 @@ export interface FeedTreeAccounts {
 }
 export declare const layout: any;
 export declare function feedTree(args: FeedTreeArgs, accounts: FeedTreeAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=feedTree.d.ts.map

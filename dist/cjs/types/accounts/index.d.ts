@@ -64,3 +64,4 @@ export { ThreeId } from "./ThreeId";
 export type { ThreeIdFields, ThreeIdJSON } from "./ThreeId";
 export { StoresHolder } from "./StoresHolder";
 export type { StoresHolderFields, StoresHolderJSON } from "./StoresHolder";
+//# sourceMappingURL=index.d.ts.map

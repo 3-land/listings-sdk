@@ -42,3 +42,4 @@ export declare class Single {
 export declare function fromDecoded(obj: any): types.UseMethodKind;
 export declare function fromJSON(obj: types.UseMethodJSON): types.UseMethodKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=UseMethod.d.ts.map

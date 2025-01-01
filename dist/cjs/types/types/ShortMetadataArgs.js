@@ -34,7 +34,7 @@ class ShortMetadataArgs {
         this.uriType = fields.uriType;
         this.sellerFeeBasisPoints = fields.sellerFeeBasisPoints;
         this.collection = fields.collection;
-        this.creators = fields.creators.map((item) => new types.ShortCreator(Object.assign({}, item)));
+        this.creators = fields.creators.map((item) => new types.ShortCreator({ ...item }));
     }
     static layout(property) {
         return borsh.struct([
@@ -92,3 +92,4 @@ class ShortMetadataArgs {
     }
 }
 exports.ShortMetadataArgs = ShortMetadataArgs;
+//# sourceMappingURL=ShortMetadataArgs.js.map

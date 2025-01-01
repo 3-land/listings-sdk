@@ -30,3 +30,4 @@ export declare class StoresHolder {
     toJSON(): StoresHolderJSON;
     static fromJSON(obj: StoresHolderJSON): StoresHolder;
 }
+//# sourceMappingURL=StoresHolder.d.ts.map

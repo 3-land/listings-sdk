@@ -68,3 +68,4 @@ class CoolTimePerAmountArgs {
     }
 }
 exports.CoolTimePerAmountArgs = CoolTimePerAmountArgs;
+//# sourceMappingURL=CoolTimePerAmountArgs.js.map

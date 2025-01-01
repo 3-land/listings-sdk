@@ -52,3 +52,4 @@ export declare class BurnCount {
         }[];
     };
 }
+//# sourceMappingURL=BurnCount.d.ts.map

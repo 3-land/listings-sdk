@@ -25,3 +25,4 @@ export interface CreateTokenLauncherAccounts {
 }
 export declare const layout: any;
 export declare function createTokenLauncher(args: CreateTokenLauncherArgs, accounts: CreateTokenLauncherAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=createTokenLauncher.d.ts.map

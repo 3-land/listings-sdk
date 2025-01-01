@@ -6,3 +6,4 @@ export interface CloseRegisterTraitsAccounts {
     systemProgram: PublicKey;
 }
 export declare function closeRegisterTraits(accounts: CloseRegisterTraitsAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=closeRegisterTraits.d.ts.map

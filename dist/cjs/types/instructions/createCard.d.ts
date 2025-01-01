@@ -16,3 +16,4 @@ export interface CreateCardAccounts {
 }
 export declare const layout: any;
 export declare function createCard(args: CreateCardArgs, accounts: CreateCardAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=createCard.d.ts.map

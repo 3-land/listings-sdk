@@ -26,3 +26,4 @@ export declare class CurrencyArtistProof {
     toJSON(): CurrencyArtistProofJSON;
     static fromJSON(obj: CurrencyArtistProofJSON): CurrencyArtistProof;
 }
+//# sourceMappingURL=CurrencyArtistProof.d.ts.map

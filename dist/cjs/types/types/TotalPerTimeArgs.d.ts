@@ -34,3 +34,4 @@ export declare class TotalPerTimeArgs {
         lastTimeReset: number;
     };
 }
+//# sourceMappingURL=TotalPerTimeArgs.d.ts.map

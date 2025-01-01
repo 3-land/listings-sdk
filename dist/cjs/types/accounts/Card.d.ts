@@ -54,3 +54,4 @@ export declare class Card {
     toJSON(): CardJSON;
     static fromJSON(obj: CardJSON): Card;
 }
+//# sourceMappingURL=Card.d.ts.map

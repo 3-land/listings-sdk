@@ -28,7 +28,7 @@ const types = __importStar(require("../types")); // eslint-disable-line @typescr
 const borsh = __importStar(require("@coral-xyz/borsh"));
 class RecoverDeposit {
     constructor(fields) {
-        this.cnft = (fields.cnft && new types.CnftData(Object.assign({}, fields.cnft))) || null;
+        this.cnft = (fields.cnft && new types.CnftData({ ...fields.cnft })) || null;
     }
     static layout(property) {
         return borsh.struct([borsh.option(types.CnftData.layout(), "cnft")], property);
@@ -59,3 +59,4 @@ class RecoverDeposit {
     }
 }
 exports.RecoverDeposit = RecoverDeposit;
+//# sourceMappingURL=RecoverDeposit.js.map

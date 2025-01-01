@@ -39,3 +39,4 @@ export declare class CollectorRegistry {
     toJSON(): CollectorRegistryJSON;
     static fromJSON(obj: CollectorRegistryJSON): CollectorRegistry;
 }
+//# sourceMappingURL=CollectorRegistry.d.ts.map

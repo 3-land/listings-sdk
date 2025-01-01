@@ -20,3 +20,4 @@ export declare class SecureHolder {
     toJSON(): SecureHolderJSON;
     static fromJSON(obj: SecureHolderJSON): SecureHolder;
 }
+//# sourceMappingURL=SecureHolder.d.ts.map

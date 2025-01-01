@@ -42,3 +42,4 @@ export declare class Unassigned {
 export declare function fromDecoded(obj: any): types.PackStateKind;
 export declare function fromJSON(obj: types.PackStateJSON): types.PackStateKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=PackState.d.ts.map

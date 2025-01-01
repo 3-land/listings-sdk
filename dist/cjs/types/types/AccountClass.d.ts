@@ -367,3 +367,4 @@ export declare class TokenManagerV1 {
 export declare function fromDecoded(obj: any): types.AccountClassKind;
 export declare function fromJSON(obj: types.AccountClassJSON): types.AccountClassKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=AccountClass.d.ts.map

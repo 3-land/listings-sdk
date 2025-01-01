@@ -68,3 +68,4 @@ export declare class Hours {
 export declare function fromDecoded(obj: any): types.UnlocksAfterKind;
 export declare function fromJSON(obj: types.UnlocksAfterJSON): types.UnlocksAfterKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=UnlocksAfter.d.ts.map

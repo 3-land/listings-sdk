@@ -74,3 +74,4 @@ export declare class AllowedCurrency {
 export declare function fromDecoded(obj: any): types.StoreRuleKind;
 export declare function fromJSON(obj: types.StoreRuleJSON): types.StoreRuleKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=StoreRule.d.ts.map

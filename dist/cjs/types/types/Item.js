@@ -28,7 +28,7 @@ const types = __importStar(require("../types")); // eslint-disable-line @typescr
 const borsh = __importStar(require("@coral-xyz/borsh"));
 class Item {
     constructor(fields) {
-        this.metadata = new types.MetadataArgs(Object.assign({}, fields.metadata));
+        this.metadata = new types.MetadataArgs({ ...fields.metadata });
     }
     static layout(property) {
         return borsh.struct([types.MetadataArgs.layout("metadata")], property);
@@ -59,3 +59,4 @@ class Item {
     }
 }
 exports.Item = Item;
+//# sourceMappingURL=Item.js.map

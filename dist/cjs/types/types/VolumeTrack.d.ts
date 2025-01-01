@@ -25,3 +25,4 @@ export declare class VolumeTrack {
         pieces: BN;
     };
 }
+//# sourceMappingURL=VolumeTrack.d.ts.map

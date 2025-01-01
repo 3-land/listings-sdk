@@ -14,3 +14,4 @@ export interface RegisterCollectorAccounts {
 }
 export declare const layout: any;
 export declare function registerCollector(args: RegisterCollectorArgs, accounts: RegisterCollectorAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=registerCollector.d.ts.map

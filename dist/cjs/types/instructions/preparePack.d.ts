@@ -14,3 +14,4 @@ export interface PreparePackAccounts {
 }
 export declare const layout: any;
 export declare function preparePack(args: PreparePackArgs, accounts: PreparePackAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=preparePack.d.ts.map

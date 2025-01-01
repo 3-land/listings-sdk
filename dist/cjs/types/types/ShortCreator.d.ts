@@ -25,3 +25,4 @@ export declare class ShortCreator {
         share: number;
     };
 }
+//# sourceMappingURL=ShortCreator.d.ts.map

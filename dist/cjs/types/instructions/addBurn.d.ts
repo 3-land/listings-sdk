@@ -17,3 +17,4 @@ export interface AddBurnAccounts {
 }
 export declare const layout: any;
 export declare function addBurn(args: AddBurnArgs, accounts: AddBurnAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=addBurn.d.ts.map

@@ -19,3 +19,4 @@ export declare class AllowedCurrencyArgs {
         id: number;
     };
 }
+//# sourceMappingURL=AllowedCurrencyArgs.d.ts.map

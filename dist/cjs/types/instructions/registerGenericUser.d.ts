@@ -29,3 +29,4 @@ export interface RegisterGenericUserAccounts {
 }
 export declare const layout: any;
 export declare function registerGenericUser(args: RegisterGenericUserArgs, accounts: RegisterGenericUserAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=registerGenericUser.d.ts.map

@@ -5,3 +5,4 @@ export interface WithdrawFromStoreAccounts {
     systemProgram: PublicKey;
 }
 export declare function withdrawFromStore(accounts: WithdrawFromStoreAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=withdrawFromStore.d.ts.map

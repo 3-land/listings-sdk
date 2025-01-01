@@ -20,3 +20,4 @@ export declare class PackTraits {
     toJSON(): PackTraitsJSON;
     static fromJSON(obj: PackTraitsJSON): PackTraits;
 }
+//# sourceMappingURL=PackTraits.d.ts.map

@@ -64,3 +64,4 @@ class GenericStore {
     }
 }
 exports.GenericStore = GenericStore;
+//# sourceMappingURL=GenericStore.js.map

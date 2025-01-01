@@ -55,3 +55,4 @@ export declare class LocksInVault {
 export declare function fromDecoded(obj: any): types.SaleTypeKind;
 export declare function fromJSON(obj: types.SaleTypeJSON): types.SaleTypeKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=SaleType.d.ts.map

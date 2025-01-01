@@ -57,3 +57,4 @@ export declare class TightCardMetadata {
         uploader: PublicKey | null;
     };
 }
+//# sourceMappingURL=TightCardMetadata.d.ts.map

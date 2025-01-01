@@ -29,3 +29,4 @@ export declare class Token2022 {
 export declare function fromDecoded(obj: any): types.TokenProgramVersionKind;
 export declare function fromJSON(obj: types.TokenProgramVersionJSON): types.TokenProgramVersionKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=TokenProgramVersion.d.ts.map

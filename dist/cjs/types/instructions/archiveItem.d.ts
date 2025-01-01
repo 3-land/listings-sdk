@@ -19,3 +19,4 @@ export interface ArchiveItemAccounts {
 }
 export declare const layout: any;
 export declare function archiveItem(args: ArchiveItemArgs, accounts: ArchiveItemAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=archiveItem.d.ts.map

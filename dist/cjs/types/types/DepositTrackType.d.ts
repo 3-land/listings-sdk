@@ -42,3 +42,4 @@ export declare class Collection {
 export declare function fromDecoded(obj: any): types.DepositTrackTypeKind;
 export declare function fromJSON(obj: types.DepositTrackTypeJSON): types.DepositTrackTypeKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=DepositTrackType.d.ts.map

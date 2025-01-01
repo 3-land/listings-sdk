@@ -33,7 +33,7 @@ class VerifyCollectionMetadata {
         this.uri = fields.uri;
         this.royalty = fields.royalty;
         this.collection = fields.collection;
-        this.creators = fields.creators.map((item) => new types.Creator(Object.assign({}, item)));
+        this.creators = fields.creators.map((item) => new types.Creator({ ...item }));
     }
     static layout(property) {
         return borsh.struct([
@@ -91,3 +91,4 @@ class VerifyCollectionMetadata {
     }
 }
 exports.VerifyCollectionMetadata = VerifyCollectionMetadata;
+//# sourceMappingURL=VerifyCollectionMetadata.js.map

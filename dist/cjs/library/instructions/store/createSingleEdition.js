@@ -28,3 +28,4 @@ function createSingleEditionInstruction(storeAccount, itemAccount, creatorAuthor
         systemProgram: web3_js_1.PublicKey.default,
     }, programId_1.PROGRAM_ID);
 }
+//# sourceMappingURL=createSingleEdition.js.map

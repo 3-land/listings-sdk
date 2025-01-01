@@ -48,3 +48,4 @@ class Earnings {
     }
 }
 exports.Earnings = Earnings;
+//# sourceMappingURL=Earnings.js.map

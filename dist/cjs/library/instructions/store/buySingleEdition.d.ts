@@ -14,3 +14,4 @@ export declare let merkleOptions: {
     };
 };
 export declare function buySingleEditionInstruction(paymentAccount: PublicKey, itemAccount: PublicKey, packAccount: PublicKey, burnDeposit: PublicKey, poolVault: PublicKey, holderAccount: PublicKey, owner: PublicKey, payer: PublicKey, distributionBumps: number[], data: any, storeAccount: PublicKey, globalStoreAccount: PublicKey, identifier: number, extraAccounts: any[], creator: PublicKey, collectionAddress: PublicKey, connectionInstance: Connection): Promise<TransactionInstruction[]>;
+//# sourceMappingURL=buySingleEdition.d.ts.map

@@ -6,3 +6,4 @@ export interface PrepareTraitsAccounts {
     systemProgram: PublicKey;
 }
 export declare function prepareTraits(accounts: PrepareTraitsAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=prepareTraits.d.ts.map

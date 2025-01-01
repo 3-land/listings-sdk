@@ -7,3 +7,4 @@ export interface PrepareCreatorAccounts {
     systemProgram: PublicKey;
 }
 export declare function prepareCreator(accounts: PrepareCreatorAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=prepareCreator.d.ts.map

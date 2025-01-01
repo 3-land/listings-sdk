@@ -34,3 +34,4 @@ export declare class CnftData {
         index: number;
     };
 }
+//# sourceMappingURL=CnftData.d.ts.map

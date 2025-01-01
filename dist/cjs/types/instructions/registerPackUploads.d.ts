@@ -11,3 +11,4 @@ export interface RegisterPackUploadsAccounts {
 }
 export declare const layout: any;
 export declare function registerPackUploads(args: RegisterPackUploadsArgs, accounts: RegisterPackUploadsAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=registerPackUploads.d.ts.map

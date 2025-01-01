@@ -66,3 +66,4 @@ export declare class ItemTrack {
         created: BN;
     };
 }
+//# sourceMappingURL=ItemTrack.d.ts.map

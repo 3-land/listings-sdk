@@ -12,3 +12,4 @@ export interface InitializeAccounts {
 }
 export declare const layout: any;
 export declare function initialize(args: InitializeArgs, accounts: InitializeAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=initialize.d.ts.map

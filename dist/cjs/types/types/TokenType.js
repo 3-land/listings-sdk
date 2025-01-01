@@ -99,3 +99,4 @@ function layout(property) {
     }
     return ret;
 }
+//# sourceMappingURL=TokenType.js.map

@@ -13,3 +13,4 @@ export declare class ItemReserveList2 {
     toJSON(): ItemReserveList2JSON;
     static fromJSON(obj: ItemReserveList2JSON): ItemReserveList2;
 }
+//# sourceMappingURL=ItemReserveList2.d.ts.map

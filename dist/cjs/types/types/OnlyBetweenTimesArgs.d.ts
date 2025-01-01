@@ -41,3 +41,4 @@ export declare class OnlyBetweenTimesArgs {
         };
     };
 }
+//# sourceMappingURL=OnlyBetweenTimesArgs.d.ts.map

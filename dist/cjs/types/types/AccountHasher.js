@@ -29,7 +29,7 @@ const types = __importStar(require("../types")); // eslint-disable-line @typescr
 const borsh = __importStar(require("@coral-xyz/borsh"));
 class AccountHasher {
     constructor(fields) {
-        this.seeds = fields.seeds.map((item) => new types.Seed(Object.assign({}, item)));
+        this.seeds = fields.seeds.map((item) => new types.Seed({ ...item }));
         this.insertAt = fields.insertAt;
         this.program = fields.program;
         this.bump = fields.bump;
@@ -80,3 +80,4 @@ class AccountHasher {
     }
 }
 exports.AccountHasher = AccountHasher;
+//# sourceMappingURL=AccountHasher.js.map

@@ -20,3 +20,4 @@ export interface UnwrapAndDestroyAccounts {
 }
 export declare const layout: any;
 export declare function unwrapAndDestroy(args: UnwrapAndDestroyArgs, accounts: UnwrapAndDestroyAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=unwrapAndDestroy.d.ts.map

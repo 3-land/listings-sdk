@@ -42,3 +42,4 @@ export declare class BetweenHoursNegate {
 export declare function fromDecoded(obj: any): types.TimeRangeTypeKind;
 export declare function fromJSON(obj: types.TimeRangeTypeJSON): types.TimeRangeTypeKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=TimeRangeType.d.ts.map

@@ -432,3 +432,4 @@ export declare class Deprecated extends Error {
     constructor(logs?: string[] | undefined);
 }
 export declare function fromCode(code: number, logs?: string[]): AnchorError | null;
+//# sourceMappingURL=anchor.d.ts.map

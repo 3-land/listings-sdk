@@ -54,3 +54,4 @@ export declare class ThreeId {
     toJSON(): ThreeIdJSON;
     static fromJSON(obj: ThreeIdJSON): ThreeId;
 }
+//# sourceMappingURL=ThreeId.d.ts.map

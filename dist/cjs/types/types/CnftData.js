@@ -78,3 +78,4 @@ class CnftData {
     }
 }
 exports.CnftData = CnftData;
+//# sourceMappingURL=CnftData.js.map

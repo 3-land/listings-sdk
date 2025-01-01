@@ -48,3 +48,4 @@ export declare class ZeroOpenHolder {
     toJSON(): ZeroOpenHolderJSON;
     static fromJSON(obj: ZeroOpenHolderJSON): ZeroOpenHolder;
 }
+//# sourceMappingURL=ZeroOpenHolder.d.ts.map

@@ -60,3 +60,4 @@ export declare class ArchiveDeposit {
     toJSON(): ArchiveDepositJSON;
     static fromJSON(obj: ArchiveDepositJSON): ArchiveDeposit;
 }
+//# sourceMappingURL=ArchiveDeposit.d.ts.map

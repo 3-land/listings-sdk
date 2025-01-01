@@ -22,3 +22,4 @@ export interface CreateZeroCardAccounts {
 }
 export declare const layout: any;
 export declare function createZeroCard(args: CreateZeroCardArgs, accounts: CreateZeroCardAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=createZeroCard.d.ts.map

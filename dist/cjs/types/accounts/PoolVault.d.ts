@@ -51,3 +51,4 @@ export declare class PoolVault {
     toJSON(): PoolVaultJSON;
     static fromJSON(obj: PoolVaultJSON): PoolVault;
 }
+//# sourceMappingURL=PoolVault.d.ts.map

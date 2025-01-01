@@ -24,3 +24,4 @@ export declare class SelectedZeroCard {
         edition: number;
     };
 }
+//# sourceMappingURL=SelectedZeroCard.d.ts.map

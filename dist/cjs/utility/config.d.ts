@@ -9,3 +9,4 @@ export interface NetworkConfig {
     metadataProgramId: string;
 }
 export declare const NETWORK_CONFIGS: Record<NetworkType, NetworkConfig>;
+//# sourceMappingURL=config.d.ts.map

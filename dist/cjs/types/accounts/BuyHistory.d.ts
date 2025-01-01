@@ -29,3 +29,4 @@ export declare class BuyHistory {
     toJSON(): BuyHistoryJSON;
     static fromJSON(obj: BuyHistoryJSON): BuyHistory;
 }
+//# sourceMappingURL=BuyHistory.d.ts.map

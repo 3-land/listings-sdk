@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -46,7 +37,7 @@ function holderAccountPDA({ creator, slot }) {
 function storePDA({ storeId, creator, holder }) {
     holder = (0, exports.toPublicKey)(holder);
     creator = (0, exports.toPublicKey)(creator);
-    if (!(storeId === null || storeId === void 0 ? void 0 : storeId.toNumber))
+    if (!storeId?.toNumber)
         storeId = new bn_js_1.default(storeId);
     return web3_js_1.PublicKey.findProgramAddress([
         Buffer.from("store"),
@@ -86,26 +77,26 @@ const toPublicKey = (key) => {
     return result;
 };
 exports.toPublicKey = toPublicKey;
-const getMetadataPDA = (mint) => __awaiter(void 0, void 0, void 0, function* () {
-    const [publicKey] = yield web3_js_1.PublicKey.findProgramAddress([
+const getMetadataPDA = async (mint) => {
+    const [publicKey] = await web3_js_1.PublicKey.findProgramAddress([
         Buffer.from("metadata"),
         programId_1.TOKEN_METADATA_PROGRAM_ID.toBuffer(),
         mint.toBuffer(),
     ], programId_1.TOKEN_METADATA_PROGRAM_ID //PROGRAM_ID
     );
     return publicKey;
-});
+};
 exports.getMetadataPDA = getMetadataPDA;
-const getEditionPDA = (mint, full) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield web3_js_1.PublicKey.findProgramAddress([
+const getEditionPDA = async (mint, full) => {
+    return await web3_js_1.PublicKey.findProgramAddress([
         Buffer.from(exports.METADATA_PREFIX),
         (0, exports.toPublicKey)(programId_1.TOKEN_METADATA_PROGRAM_ID).toBuffer(),
         mint.toBuffer(),
         Buffer.from("edition"),
     ], (0, exports.toPublicKey)(programId_1.TOKEN_METADATA_PROGRAM_ID));
-});
+};
 exports.getEditionPDA = getEditionPDA;
-const collectionAuthorityRecord = (_a) => __awaiter(void 0, [_a], void 0, function* ({ mint, new_authority, }) {
+const collectionAuthorityRecord = async ({ mint, new_authority, }) => {
     mint = (0, exports.toPublicKey)(mint);
     new_authority = (0, exports.toPublicKey)(new_authority);
     return web3_js_1.PublicKey.findProgramAddress([
@@ -115,7 +106,7 @@ const collectionAuthorityRecord = (_a) => __awaiter(void 0, [_a], void 0, functi
         Buffer.from("collection_authority"),
         new_authority.toBuffer(),
     ], programId_1.TOKEN_METADATA_PROGRAM_ID);
-});
+};
 exports.collectionAuthorityRecord = collectionAuthorityRecord;
 const creatorRegistryPDA = ({ user, currency, store }) => {
     user = (0, exports.toPublicKey)(user);
@@ -129,13 +120,13 @@ const creatorRegistryPDA = ({ user, currency, store }) => {
     ], (0, exports.toPublicKey)(programId_1.PROGRAM_ID));
 };
 exports.creatorRegistryPDA = creatorRegistryPDA;
-const userActivityPDA = (_a) => __awaiter(void 0, [_a], void 0, function* ({ user, store }) {
+const userActivityPDA = async ({ user, store }) => {
     user = (0, exports.toPublicKey)(user);
     store = (0, exports.toPublicKey)(store);
     return web3_js_1.PublicKey.findProgramAddress([Buffer.from("user_activity_tracking"), user.toBytes(), store.toBytes()], (0, exports.toPublicKey)(programId_1.PROGRAM_ID));
-});
+};
 exports.userActivityPDA = userActivityPDA;
-const collectorArtistRegistryPDA = (_a) => __awaiter(void 0, [_a], void 0, function* ({ user, artist, currency, store, }) {
+const collectorArtistRegistryPDA = async ({ user, artist, currency, store, }) => {
     user = (0, exports.toPublicKey)(user);
     currency = (0, exports.toPublicKey)(currency);
     artist = (0, exports.toPublicKey)(artist);
@@ -147,7 +138,7 @@ const collectorArtistRegistryPDA = (_a) => __awaiter(void 0, [_a], void 0, funct
         artist.toBytes(),
         store.toBytes(),
     ], (0, exports.toPublicKey)(programId_1.PROGRAM_ID));
-});
+};
 exports.collectorArtistRegistryPDA = collectorArtistRegistryPDA;
 const collectorGlobalRegistryPDA = ({ user, currency, store }) => {
     user = (0, exports.toPublicKey)(user);
@@ -172,12 +163,13 @@ const treeAuthority = ({ tree }) => {
     return web3_js_1.PublicKey.findProgramAddressSync([tree.toBuffer()], (0, exports.toPublicKey)(programId_1.BUBBLEGUM_PROGRAM_ID));
 };
 exports.treeAuthority = treeAuthority;
-const getATAPDA = (_a) => __awaiter(void 0, [_a], void 0, function* ({ owner, mint }) {
-    const [publicKey] = yield web3_js_1.PublicKey.findProgramAddress([
+const getATAPDA = async ({ owner, mint }) => {
+    const [publicKey] = await web3_js_1.PublicKey.findProgramAddress([
         (0, exports.toPublicKey)(owner).toBuffer(),
         programId_1.TOKEN_PROGRAM_ID.toBuffer(),
         (0, exports.toPublicKey)(mint).toBuffer(),
     ], programId_1.SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID);
     return publicKey;
-});
+};
 exports.getATAPDA = getATAPDA;
+//# sourceMappingURL=PdaManager.js.map

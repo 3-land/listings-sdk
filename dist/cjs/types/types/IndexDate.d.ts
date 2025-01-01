@@ -39,3 +39,4 @@ export declare class IndexDate {
         minRelative: number;
     };
 }
+//# sourceMappingURL=IndexDate.d.ts.map

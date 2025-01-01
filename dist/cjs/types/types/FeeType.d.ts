@@ -42,3 +42,4 @@ export declare class SkipBurnMints {
 export declare function fromDecoded(obj: any): types.FeeTypeKind;
 export declare function fromJSON(obj: types.FeeTypeJSON): types.FeeTypeKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=FeeType.d.ts.map

@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkCategory = exports.checkFileType = exports.validateSolAddress = exports.nowS = exports.sleep = exports.cyrb53 = void 0;
 exports.bytesToU32 = bytesToU32;
@@ -76,57 +67,53 @@ const validateSolAddress = (address) => {
 };
 exports.validateSolAddress = validateSolAddress;
 const checkFileType = (file) => {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
-    return ((_a = file === null || file === void 0 ? void 0 : file.type) === null || _a === void 0 ? void 0 : _a.includes("video/webp"))
+    return file?.type?.includes("video/webp")
         ? "video/webp"
-        : ((_b = file === null || file === void 0 ? void 0 : file.type) === null || _b === void 0 ? void 0 : _b.includes("image/webp"))
+        : file?.type?.includes("image/webp")
             ? "image/webp"
-            : ((_c = file === null || file === void 0 ? void 0 : file.type) === null || _c === void 0 ? void 0 : _c.includes("jpeg")) || ((_d = file === null || file === void 0 ? void 0 : file.type) === null || _d === void 0 ? void 0 : _d.includes("jpg"))
+            : file?.type?.includes("jpeg") || file?.type?.includes("jpg")
                 ? "image/jpeg"
-                : ((_e = file === null || file === void 0 ? void 0 : file.type) === null || _e === void 0 ? void 0 : _e.includes("gif"))
+                : file?.type?.includes("gif")
                     ? "image/gif"
-                    : ((_f = file === null || file === void 0 ? void 0 : file.type) === null || _f === void 0 ? void 0 : _f.includes("png"))
+                    : file?.type?.includes("png")
                         ? "image/png"
-                        : ((_g = file === null || file === void 0 ? void 0 : file.type) === null || _g === void 0 ? void 0 : _g.includes("audio"))
+                        : file?.type?.includes("audio")
                             ? "audio"
-                            : ((_h = file === null || file === void 0 ? void 0 : file.type) === null || _h === void 0 ? void 0 : _h.includes("mp4"))
+                            : file?.type?.includes("mp4")
                                 ? "video/mp4"
-                                : ((_j = file === null || file === void 0 ? void 0 : file.name) === null || _j === void 0 ? void 0 : _j.includes("glb")) || ((_k = file === null || file === void 0 ? void 0 : file.type) === null || _k === void 0 ? void 0 : _k.includes("model"))
+                                : file?.name?.includes("glb") || file?.type?.includes("model")
                                     ? "model/gltf-binary"
                                     : null;
 };
 exports.checkFileType = checkFileType;
 const checkCategory = (file) => {
-    var _a, _b, _c, _d, _e;
-    return ((_a = file === null || file === void 0 ? void 0 : file.type) === null || _a === void 0 ? void 0 : _a.includes("image"))
+    return file?.type?.includes("image")
         ? "image"
-        : ((_b = file === null || file === void 0 ? void 0 : file.type) === null || _b === void 0 ? void 0 : _b.includes("audio"))
+        : file?.type?.includes("audio")
             ? "audio"
-            : ((_c = file === null || file === void 0 ? void 0 : file.type) === null || _c === void 0 ? void 0 : _c.includes("video"))
+            : file?.type?.includes("video")
                 ? "video"
-                : ((_d = file === null || file === void 0 ? void 0 : file.name) === null || _d === void 0 ? void 0 : _d.includes("glb")) || ((_e = file === null || file === void 0 ? void 0 : file.type) === null || _e === void 0 ? void 0 : _e.includes("model"))
+                : file?.name?.includes("glb") || file?.type?.includes("model")
                     ? "vr"
                     : null;
 };
 exports.checkCategory = checkCategory;
-function normalizeFileData(fileData) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const buffer = yield (fileData.arrayBuffer instanceof Function
-                ? fileData.arrayBuffer()
-                : Promise.resolve(fileData.arrayBuffer));
-            const type = fileData.type || getMimeTypeFromBuffer(buffer);
-            return {
-                arrayBuffer: () => buffer,
-                type,
-                size: buffer.byteLength,
-                name: fileData.name,
-            };
-        }
-        catch (error) {
-            throw new Error(`Failed to normalize file data: ${error}`);
-        }
-    });
+async function normalizeFileData(fileData) {
+    try {
+        const buffer = await (fileData.arrayBuffer instanceof Function
+            ? fileData.arrayBuffer()
+            : Promise.resolve(fileData.arrayBuffer));
+        const type = fileData.type || getMimeTypeFromBuffer(buffer);
+        return {
+            arrayBuffer: () => buffer,
+            type,
+            size: buffer.byteLength,
+            name: fileData.name,
+        };
+    }
+    catch (error) {
+        throw new Error(`Failed to normalize file data: ${error}`);
+    }
 }
 function getMimeTypeFromBuffer(buffer) {
     const arr = new Uint8Array(buffer).subarray(0, 12);
@@ -151,10 +138,9 @@ function getMimeTypeFromBuffer(buffer) {
     return "application/octet-stream";
 }
 function getFileType(file) {
-    var _a;
     if (!file)
         return null;
-    const type = ((_a = file.type) === null || _a === void 0 ? void 0 : _a.toLowerCase()) || "";
+    const type = file.type?.toLowerCase() || "";
     const name = (file.name || "").toLowerCase();
     if (type.includes("video/webp"))
         return "video/webp";
@@ -205,7 +191,8 @@ function getFileCategory(file) {
     return null;
 }
 function isAnimatable(type) {
-    return ((type === null || type === void 0 ? void 0 : type.includes("video/")) ||
-        (type === null || type === void 0 ? void 0 : type.includes("audio/")) ||
+    return (type?.includes("video/") ||
+        type?.includes("audio/") ||
         type === "model/gltf-binary");
 }
+//# sourceMappingURL=utils.js.map

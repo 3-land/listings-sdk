@@ -51,3 +51,4 @@ export declare class FakeBurnCount {
         };
     };
 }
+//# sourceMappingURL=FakeBurnCount.d.ts.map

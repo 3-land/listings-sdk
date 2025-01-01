@@ -39,3 +39,4 @@ export declare class PackReceipt {
     toJSON(): PackReceiptJSON;
     static fromJSON(obj: PackReceiptJSON): PackReceipt;
 }
+//# sourceMappingURL=PackReceipt.d.ts.map

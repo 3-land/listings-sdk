@@ -58,3 +58,4 @@ class TimedPerWalletArgs {
     }
 }
 exports.TimedPerWalletArgs = TimedPerWalletArgs;
+//# sourceMappingURL=TimedPerWalletArgs.js.map

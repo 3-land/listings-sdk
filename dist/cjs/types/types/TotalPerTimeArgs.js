@@ -78,3 +78,4 @@ class TotalPerTimeArgs {
     }
 }
 exports.TotalPerTimeArgs = TotalPerTimeArgs;
+//# sourceMappingURL=TotalPerTimeArgs.js.map

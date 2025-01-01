@@ -29,3 +29,4 @@ export declare class TokenMetadata {
         arweave: string;
     };
 }
+//# sourceMappingURL=TokenMetadata.d.ts.map

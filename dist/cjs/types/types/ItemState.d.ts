@@ -120,3 +120,4 @@ export declare class Flagged {
 export declare function fromDecoded(obj: any): types.ItemStateKind;
 export declare function fromJSON(obj: types.ItemStateJSON): types.ItemStateKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=ItemState.d.ts.map

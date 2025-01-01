@@ -12,3 +12,4 @@ export interface FeedTraitsAccounts {
 }
 export declare const layout: any;
 export declare function feedTraits(args: FeedTraitsArgs, accounts: FeedTraitsAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=feedTraits.d.ts.map

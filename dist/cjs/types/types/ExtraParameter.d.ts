@@ -42,3 +42,4 @@ export declare class Revealer {
 export declare function fromDecoded(obj: any): types.ExtraParameterKind;
 export declare function fromJSON(obj: types.ExtraParameterJSON): types.ExtraParameterKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=ExtraParameter.d.ts.map

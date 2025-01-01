@@ -36,3 +36,4 @@ export declare class WrappedSource {
         track: number;
     };
 }
+//# sourceMappingURL=WrappedSource.d.ts.map

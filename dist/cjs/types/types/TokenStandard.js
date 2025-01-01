@@ -151,3 +151,4 @@ function layout(property) {
     }
     return ret;
 }
+//# sourceMappingURL=TokenStandard.js.map

@@ -30,7 +30,7 @@ const borsh = __importStar(require("@coral-xyz/borsh"));
 class FakeVolumeTrack {
     constructor(fields) {
         this.key = fields.key;
-        this.track = new types.VolumeTrack(Object.assign({}, fields.track));
+        this.track = new types.VolumeTrack({ ...fields.track });
     }
     static layout(property) {
         return borsh.struct([borsh.publicKey("key"), types.VolumeTrack.layout("track")], property);
@@ -65,3 +65,4 @@ class FakeVolumeTrack {
     }
 }
 exports.FakeVolumeTrack = FakeVolumeTrack;
+//# sourceMappingURL=FakeVolumeTrack.js.map

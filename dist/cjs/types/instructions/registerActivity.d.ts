@@ -11,3 +11,4 @@ export interface RegisterActivityAccounts {
 }
 export declare const layout: any;
 export declare function registerActivity(args: RegisterActivityArgs, accounts: RegisterActivityAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=registerActivity.d.ts.map

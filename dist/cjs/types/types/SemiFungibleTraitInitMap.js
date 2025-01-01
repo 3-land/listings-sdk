@@ -72,3 +72,4 @@ class SemiFungibleTraitInitMap {
     }
 }
 exports.SemiFungibleTraitInitMap = SemiFungibleTraitInitMap;
+//# sourceMappingURL=SemiFungibleTraitInitMap.js.map

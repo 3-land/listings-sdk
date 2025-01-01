@@ -14,3 +14,4 @@ export interface CloseDepositBurnAccounts {
 }
 export declare const layout: any;
 export declare function closeDepositBurn(args: CloseDepositBurnArgs, accounts: CloseDepositBurnAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=closeDepositBurn.d.ts.map

@@ -38,11 +38,11 @@ class ShortMetadata {
         this.name = fields.name;
         this.arweave = fields.arweave;
         this.traitPass =
-            (fields.traitPass && new types.TraitPass(Object.assign({}, fields.traitPass))) || null;
+            (fields.traitPass && new types.TraitPass({ ...fields.traitPass })) || null;
         this.royalty = fields.royalty;
         this.creators =
             (fields.creators &&
-                fields.creators.map((item) => new types.ShortCreator(Object.assign({}, item)))) ||
+                fields.creators.map((item) => new types.ShortCreator({ ...item }))) ||
                 null;
     }
     static layout(property) {
@@ -118,3 +118,4 @@ class ShortMetadata {
     }
 }
 exports.ShortMetadata = ShortMetadata;
+//# sourceMappingURL=ShortMetadata.js.map

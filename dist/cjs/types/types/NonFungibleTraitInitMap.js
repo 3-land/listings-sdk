@@ -33,7 +33,7 @@ const borsh = __importStar(require("@coral-xyz/borsh"));
 class NonFungibleTraitInitMap {
     constructor(fields) {
         this.hash = fields.hash;
-        this.values = fields.values.map((item) => new types.FakeTraitValue(Object.assign({}, item)));
+        this.values = fields.values.map((item) => new types.FakeTraitValue({ ...item }));
         this.index = fields.index;
     }
     static layout(property) {
@@ -77,3 +77,4 @@ class NonFungibleTraitInitMap {
     }
 }
 exports.NonFungibleTraitInitMap = NonFungibleTraitInitMap;
+//# sourceMappingURL=NonFungibleTraitInitMap.js.map

@@ -110,3 +110,4 @@ export declare class NonFungible {
 export declare function fromDecoded(obj: any): types.TraitTypeKind;
 export declare function fromJSON(obj: types.TraitTypeJSON): types.TraitTypeKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=TraitType.d.ts.map

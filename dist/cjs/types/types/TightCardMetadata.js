@@ -38,7 +38,7 @@ class TightCardMetadata {
         this.arweave = fields.arweave;
         this.royalty = fields.royalty;
         this.chunkSize = fields.chunkSize;
-        this.creators = fields.creators.map((item) => new types.ShortCreator(Object.assign({}, item)));
+        this.creators = fields.creators.map((item) => new types.ShortCreator({ ...item }));
         this.uploader = fields.uploader;
     }
     static layout(property) {
@@ -102,3 +102,4 @@ class TightCardMetadata {
     }
 }
 exports.TightCardMetadata = TightCardMetadata;
+//# sourceMappingURL=TightCardMetadata.js.map

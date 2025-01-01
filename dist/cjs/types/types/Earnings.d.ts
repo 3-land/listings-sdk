@@ -12,3 +12,4 @@ export declare class Earnings {
     static fromJSON(obj: EarningsJSON): Earnings;
     toEncodable(): {};
 }
+//# sourceMappingURL=Earnings.d.ts.map

@@ -67,3 +67,4 @@ class MemeVaultProof {
     }
 }
 exports.MemeVaultProof = MemeVaultProof;
+//# sourceMappingURL=MemeVaultProof.js.map

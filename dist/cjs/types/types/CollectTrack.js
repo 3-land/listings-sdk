@@ -67,3 +67,4 @@ class CollectTrack {
     }
 }
 exports.CollectTrack = CollectTrack;
+//# sourceMappingURL=CollectTrack.js.map

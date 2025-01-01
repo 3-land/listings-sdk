@@ -71,3 +71,4 @@ function layout(property) {
     }
     return ret;
 }
+//# sourceMappingURL=GeneralStore.js.map

@@ -72,3 +72,4 @@ class CompactCnftData {
     }
 }
 exports.CompactCnftData = CompactCnftData;
+//# sourceMappingURL=CompactCnftData.js.map

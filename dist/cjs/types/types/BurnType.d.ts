@@ -42,3 +42,4 @@ export declare class Progressed {
 export declare function fromDecoded(obj: any): types.BurnTypeKind;
 export declare function fromJSON(obj: types.BurnTypeJSON): types.BurnTypeKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=BurnType.d.ts.map

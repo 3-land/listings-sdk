@@ -82,3 +82,4 @@ class CurrencyArtistProof {
     }
 }
 exports.CurrencyArtistProof = CurrencyArtistProof;
+//# sourceMappingURL=CurrencyArtistProof.js.map

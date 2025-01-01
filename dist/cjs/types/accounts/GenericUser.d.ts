@@ -51,3 +51,4 @@ export declare class GenericUser {
     toJSON(): GenericUserJSON;
     static fromJSON(obj: GenericUserJSON): GenericUser;
 }
+//# sourceMappingURL=GenericUser.d.ts.map

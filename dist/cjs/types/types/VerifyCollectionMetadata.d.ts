@@ -53,3 +53,4 @@ export declare class VerifyCollectionMetadata {
         }[];
     };
 }
+//# sourceMappingURL=VerifyCollectionMetadata.d.ts.map

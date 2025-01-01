@@ -25,3 +25,4 @@ export declare class DateTraitInit {
         date: number;
     };
 }
+//# sourceMappingURL=DateTraitInit.d.ts.map

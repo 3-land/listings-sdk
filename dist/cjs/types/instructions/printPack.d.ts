@@ -35,3 +35,4 @@ export interface PrintPackAccounts {
 }
 export declare const layout: any;
 export declare function printPack(args: PrintPackArgs, accounts: PrintPackAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=printPack.d.ts.map

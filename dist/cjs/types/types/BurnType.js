@@ -125,3 +125,4 @@ function layout(property) {
     }
     return ret;
 }
+//# sourceMappingURL=BurnType.js.map

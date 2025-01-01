@@ -19,3 +19,4 @@ export declare class ListingPerWalletArgs {
         amount: number;
     };
 }
+//# sourceMappingURL=ListingPerWalletArgs.d.ts.map

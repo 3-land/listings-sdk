@@ -120,3 +120,4 @@ export declare class Pack {
     toJSON(): PackJSON;
     static fromJSON(obj: PackJSON): Pack;
 }
+//# sourceMappingURL=Pack.d.ts.map

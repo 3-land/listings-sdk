@@ -33,7 +33,7 @@ const borsh = __importStar(require("@coral-xyz/borsh"));
 class FakeDeposit {
     constructor(fields) {
         this.key = fields.key;
-        this.track = new types.BurnCount(Object.assign({}, fields.track));
+        this.track = new types.BurnCount({ ...fields.track });
     }
     static layout(property) {
         return borsh.struct([borsh.u64("key"), types.BurnCount.layout("track")], property);
@@ -68,3 +68,4 @@ class FakeDeposit {
     }
 }
 exports.FakeDeposit = FakeDeposit;
+//# sourceMappingURL=FakeDeposit.js.map

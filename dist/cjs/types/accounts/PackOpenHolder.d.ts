@@ -35,3 +35,4 @@ export declare class PackOpenHolder {
     toJSON(): PackOpenHolderJSON;
     static fromJSON(obj: PackOpenHolderJSON): PackOpenHolder;
 }
+//# sourceMappingURL=PackOpenHolder.d.ts.map

@@ -20,3 +20,4 @@ export declare class CreatorGateArgs {
         key: PublicKey;
     };
 }
+//# sourceMappingURL=CreatorGateArgs.d.ts.map

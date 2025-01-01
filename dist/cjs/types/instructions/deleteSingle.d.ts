@@ -10,3 +10,4 @@ export interface DeleteSingleAccounts {
     systemProgram: PublicKey;
 }
 export declare function deleteSingle(accounts: DeleteSingleAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=deleteSingle.d.ts.map

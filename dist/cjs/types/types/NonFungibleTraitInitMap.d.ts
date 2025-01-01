@@ -36,3 +36,4 @@ export declare class NonFungibleTraitInitMap {
         index: number;
     };
 }
+//# sourceMappingURL=NonFungibleTraitInitMap.d.ts.map

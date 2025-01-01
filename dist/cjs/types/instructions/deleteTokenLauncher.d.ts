@@ -9,3 +9,4 @@ export interface DeleteTokenLauncherAccounts {
     systemProgram: PublicKey;
 }
 export declare function deleteTokenLauncher(accounts: DeleteTokenLauncherAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=deleteTokenLauncher.d.ts.map

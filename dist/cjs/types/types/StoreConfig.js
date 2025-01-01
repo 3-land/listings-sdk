@@ -90,3 +90,4 @@ class StoreConfig {
     }
 }
 exports.StoreConfig = StoreConfig;
+//# sourceMappingURL=StoreConfig.js.map

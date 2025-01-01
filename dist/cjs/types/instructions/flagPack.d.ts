@@ -13,3 +13,4 @@ export interface FlagPackAccounts {
 }
 export declare const layout: any;
 export declare function flagPack(args: FlagPackArgs, accounts: FlagPackAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=flagPack.d.ts.map

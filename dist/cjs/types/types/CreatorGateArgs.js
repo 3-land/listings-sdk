@@ -59,3 +59,4 @@ class CreatorGateArgs {
     }
 }
 exports.CreatorGateArgs = CreatorGateArgs;
+//# sourceMappingURL=CreatorGateArgs.js.map

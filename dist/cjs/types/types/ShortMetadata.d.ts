@@ -96,3 +96,4 @@ export declare class ShortMetadata {
         }[] | null;
     };
 }
+//# sourceMappingURL=ShortMetadata.d.ts.map

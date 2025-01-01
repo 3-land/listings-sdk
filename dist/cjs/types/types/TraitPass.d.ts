@@ -50,3 +50,4 @@ export declare class TraitPass {
         })[];
     };
 }
+//# sourceMappingURL=TraitPass.d.ts.map

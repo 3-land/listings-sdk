@@ -83,3 +83,4 @@ class Deposit {
     }
 }
 exports.Deposit = Deposit;
+//# sourceMappingURL=Deposit.js.map

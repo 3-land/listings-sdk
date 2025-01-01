@@ -24,3 +24,4 @@ export declare class TotalPerTimeWalletArgs {
         time: number;
     };
 }
+//# sourceMappingURL=TotalPerTimeWalletArgs.d.ts.map

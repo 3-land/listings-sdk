@@ -19,3 +19,4 @@ export declare class LutVault {
     toJSON(): LutVaultJSON;
     static fromJSON(obj: LutVaultJSON): LutVault;
 }
+//# sourceMappingURL=LutVault.d.ts.map

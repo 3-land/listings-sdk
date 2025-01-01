@@ -29,3 +29,4 @@ export declare class Pending {
 export declare function fromDecoded(obj: any): types.BurnStateKind;
 export declare function fromJSON(obj: types.BurnStateJSON): types.BurnStateKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=BurnState.d.ts.map

@@ -29,3 +29,4 @@ export declare class CompactCnftData {
         index: number;
     };
 }
+//# sourceMappingURL=CompactCnftData.d.ts.map

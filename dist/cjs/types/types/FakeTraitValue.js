@@ -67,3 +67,4 @@ class FakeTraitValue {
     }
 }
 exports.FakeTraitValue = FakeTraitValue;
+//# sourceMappingURL=FakeTraitValue.js.map

@@ -19,3 +19,4 @@ export declare class BurnProgress {
     toJSON(): BurnProgressJSON;
     static fromJSON(obj: BurnProgressJSON): BurnProgress;
 }
+//# sourceMappingURL=BurnProgress.d.ts.map

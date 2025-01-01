@@ -16,3 +16,4 @@ export declare class None {
 export declare function fromDecoded(obj: any): types.FilterTypeKind;
 export declare function fromJSON(obj: types.FilterTypeJSON): types.FilterTypeKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=FilterType.d.ts.map

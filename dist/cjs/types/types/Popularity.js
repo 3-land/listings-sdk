@@ -77,3 +77,4 @@ class Popularity {
     }
 }
 exports.Popularity = Popularity;
+//# sourceMappingURL=Popularity.js.map

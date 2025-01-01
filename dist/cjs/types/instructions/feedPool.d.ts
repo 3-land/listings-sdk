@@ -18,3 +18,4 @@ export interface FeedPoolAccounts {
 }
 export declare const layout: any;
 export declare function feedPool(args: FeedPoolArgs, accounts: FeedPoolAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=feedPool.d.ts.map

@@ -16,3 +16,4 @@ export declare class None {
 export declare function fromDecoded(obj: any): types.GeneralStoreKind;
 export declare function fromJSON(obj: types.GeneralStoreJSON): types.GeneralStoreKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=GeneralStore.d.ts.map

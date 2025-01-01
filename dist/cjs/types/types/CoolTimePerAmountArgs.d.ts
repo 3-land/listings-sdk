@@ -29,3 +29,4 @@ export declare class CoolTimePerAmountArgs {
         time: number;
     };
 }
+//# sourceMappingURL=CoolTimePerAmountArgs.d.ts.map

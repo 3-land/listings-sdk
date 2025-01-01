@@ -20,3 +20,4 @@ export interface UpdatePackAccounts {
 }
 export declare const layout: any;
 export declare function updatePack(args: UpdatePackArgs, accounts: UpdatePackAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=updatePack.d.ts.map

@@ -59,3 +59,4 @@ class TraitPass {
     }
 }
 exports.TraitPass = TraitPass;
+//# sourceMappingURL=TraitPass.js.map

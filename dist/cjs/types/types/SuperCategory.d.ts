@@ -24,3 +24,4 @@ export declare class SuperCategory {
         cat2: number;
     };
 }
+//# sourceMappingURL=SuperCategory.d.ts.map

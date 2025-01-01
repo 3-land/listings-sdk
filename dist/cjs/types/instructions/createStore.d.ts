@@ -13,3 +13,4 @@ export interface CreateStoreAccounts {
 }
 export declare const layout: any;
 export declare function createStore(args: CreateStoreArgs, accounts: CreateStoreAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=createStore.d.ts.map

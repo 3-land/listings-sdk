@@ -48,3 +48,4 @@ export declare class GlobalFee {
         };
     };
 }
+//# sourceMappingURL=GlobalFee.d.ts.map

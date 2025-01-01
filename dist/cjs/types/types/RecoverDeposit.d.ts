@@ -29,3 +29,4 @@ export declare class RecoverDeposit {
         } | null;
     };
 }
+//# sourceMappingURL=RecoverDeposit.d.ts.map

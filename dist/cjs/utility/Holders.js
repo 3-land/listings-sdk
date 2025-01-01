@@ -9,3 +9,4 @@ exports.mainnetHolder = {
     creator: "6xzPPWsWjV2bvAufWHJHdfNrNqgbeS46yVPPofEQuJPL",
     slot: 69,
 };
+//# sourceMappingURL=Holders.js.map

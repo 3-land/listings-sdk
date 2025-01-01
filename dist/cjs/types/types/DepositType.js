@@ -34,7 +34,7 @@ class Creator {
         this.discriminator = 0;
         this.kind = "Creator";
         this.value = {
-            creators: value.creators.map((item) => new types.Creator(Object.assign({}, item))),
+            creators: value.creators.map((item) => new types.Creator({ ...item })),
         };
     }
     toJSON() {
@@ -61,8 +61,8 @@ class PdaCreator {
         this.discriminator = 1;
         this.kind = "PdaCreator";
         this.value = {
-            creators: value.creators.map((item) => new types.Creator(Object.assign({}, item))),
-            hasher: new types.AccountHasher(Object.assign({}, value.hasher)),
+            creators: value.creators.map((item) => new types.Creator({ ...item })),
+            hasher: new types.AccountHasher({ ...value.hasher }),
         };
     }
     toJSON() {
@@ -91,7 +91,7 @@ class Collection {
         this.discriminator = 2;
         this.kind = "Collection";
         this.value = {
-            metadata: new types.VerifyCollectionMetadata(Object.assign({}, value.metadata)),
+            metadata: new types.VerifyCollectionMetadata({ ...value.metadata }),
             subtype: value.subtype,
         };
     }
@@ -181,3 +181,4 @@ function layout(property) {
     }
     return ret;
 }
+//# sourceMappingURL=DepositType.js.map

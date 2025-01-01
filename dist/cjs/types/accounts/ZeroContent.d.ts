@@ -16,3 +16,4 @@ export declare class ZeroContent {
     toJSON(): ZeroContentJSON;
     static fromJSON(obj: ZeroContentJSON): ZeroContent;
 }
+//# sourceMappingURL=ZeroContent.d.ts.map

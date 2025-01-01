@@ -108,3 +108,4 @@ export declare class None {
 export declare function fromDecoded(obj: any): types.CurrencyTypeKind;
 export declare function fromJSON(obj: types.CurrencyTypeJSON): types.CurrencyTypeKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=CurrencyType.d.ts.map

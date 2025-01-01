@@ -7619,3 +7619,4 @@ exports.idl = {
         address: "HgtiJuEcdN6bN6WyYpamL3QKpyMcF8g8FxutDQNB96J9",
     },
 };
+//# sourceMappingURL=idl.js.map

@@ -63,3 +63,4 @@ class FakeTraitPair {
     }
 }
 exports.FakeTraitPair = FakeTraitPair;
+//# sourceMappingURL=FakeTraitPair.js.map

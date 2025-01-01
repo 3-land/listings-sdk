@@ -29,3 +29,4 @@ export declare class Category {
         cat3: number;
     };
 }
+//# sourceMappingURL=Category.d.ts.map

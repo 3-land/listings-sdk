@@ -8,3 +8,4 @@ export interface DeleteCardAccounts {
     systemProgram: PublicKey;
 }
 export declare function deleteCard(accounts: DeleteCardAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=deleteCard.d.ts.map

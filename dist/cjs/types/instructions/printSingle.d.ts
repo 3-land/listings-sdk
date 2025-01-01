@@ -38,3 +38,4 @@ export interface PrintSingleAccounts {
 }
 export declare const layout: any;
 export declare function printSingle(args: PrintSingleArgs, accounts: PrintSingleAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=printSingle.d.ts.map

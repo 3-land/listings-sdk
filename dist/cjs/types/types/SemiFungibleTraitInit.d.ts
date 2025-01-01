@@ -25,3 +25,4 @@ export declare class SemiFungibleTraitInit {
         amount: BN;
     };
 }
+//# sourceMappingURL=SemiFungibleTraitInit.d.ts.map

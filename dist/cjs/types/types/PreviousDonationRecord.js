@@ -32,7 +32,7 @@ const types = __importStar(require("../types")); // eslint-disable-line @typescr
 const borsh = __importStar(require("@coral-xyz/borsh"));
 class PreviousDonationRecord {
     constructor(fields) {
-        this.cnft = new types.CnftData(Object.assign({}, fields.cnft));
+        this.cnft = new types.CnftData({ ...fields.cnft });
         this.amount = fields.amount;
         this.message = fields.message;
     }
@@ -77,3 +77,4 @@ class PreviousDonationRecord {
     }
 }
 exports.PreviousDonationRecord = PreviousDonationRecord;
+//# sourceMappingURL=PreviousDonationRecord.js.map

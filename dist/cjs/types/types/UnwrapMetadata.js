@@ -41,7 +41,7 @@ class UnwrapMetadata {
         this.leafIndex = fields.leafIndex;
         this.cardIndex = fields.cardIndex;
         this.royalty = fields.royalty;
-        this.creators = fields.creators.map((item) => new types.ShortCreator(Object.assign({}, item)));
+        this.creators = fields.creators.map((item) => new types.ShortCreator({ ...item }));
         this.bumps = fields.bumps;
     }
     static layout(property) {
@@ -125,3 +125,4 @@ class UnwrapMetadata {
     }
 }
 exports.UnwrapMetadata = UnwrapMetadata;
+//# sourceMappingURL=UnwrapMetadata.js.map

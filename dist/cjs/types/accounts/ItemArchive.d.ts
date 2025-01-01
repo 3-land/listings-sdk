@@ -66,3 +66,4 @@ export declare class ItemArchive {
     toJSON(): ItemArchiveJSON;
     static fromJSON(obj: ItemArchiveJSON): ItemArchive;
 }
+//# sourceMappingURL=ItemArchive.d.ts.map

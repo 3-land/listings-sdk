@@ -64,3 +64,4 @@ function recoverDepositBurn(args, accounts, programId = programId_1.PROGRAM_ID) 
     const ix = new web3_js_1.TransactionInstruction({ keys, programId, data });
     return ix;
 }
+//# sourceMappingURL=recoverDepositBurn.js.map

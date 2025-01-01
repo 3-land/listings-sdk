@@ -23,3 +23,4 @@ export declare class BurnDeposit {
     toJSON(): BurnDepositJSON;
     static fromJSON(obj: BurnDepositJSON): BurnDeposit;
 }
+//# sourceMappingURL=BurnDeposit.d.ts.map

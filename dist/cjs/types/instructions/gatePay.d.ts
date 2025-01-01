@@ -19,3 +19,4 @@ export interface GatePayAccounts {
 }
 export declare const layout: any;
 export declare function gatePay(args: GatePayArgs, accounts: GatePayAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=gatePay.d.ts.map

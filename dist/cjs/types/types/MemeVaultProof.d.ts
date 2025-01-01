@@ -25,3 +25,4 @@ export declare class MemeVaultProof {
         halfCurrencyHash: number;
     };
 }
+//# sourceMappingURL=MemeVaultProof.d.ts.map

@@ -11,3 +11,4 @@ export declare const SPL_NOOP_PROGRAM_ID: any;
 export declare const PROGRAM_CLAIMZ: any;
 export declare const SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID: any;
 export declare const SOLANA_ENDPOINT = "https://api.devnet.solana.com";
+//# sourceMappingURL=programId.d.ts.map

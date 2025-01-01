@@ -173,3 +173,4 @@ function layout(property) {
     }
     return ret;
 }
+//# sourceMappingURL=TraitInit.js.map

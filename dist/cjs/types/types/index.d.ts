@@ -330,3 +330,4 @@ export type TokenStandardJSON = TokenStandard.NonFungibleJSON | TokenStandard.Fu
 export { UseMethod };
 export type UseMethodKind = UseMethod.Burn | UseMethod.Multiple | UseMethod.Single;
 export type UseMethodJSON = UseMethod.BurnJSON | UseMethod.MultipleJSON | UseMethod.SingleJSON;
+//# sourceMappingURL=index.d.ts.map

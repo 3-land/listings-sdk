@@ -29,3 +29,4 @@ export declare class Public {
 export declare function fromDecoded(obj: any): types.PoolAccessKind;
 export declare function fromJSON(obj: types.PoolAccessJSON): types.PoolAccessKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=PoolAccess.d.ts.map

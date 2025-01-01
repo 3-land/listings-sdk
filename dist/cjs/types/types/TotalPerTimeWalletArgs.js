@@ -63,3 +63,4 @@ class TotalPerTimeWalletArgs {
     }
 }
 exports.TotalPerTimeWalletArgs = TotalPerTimeWalletArgs;
+//# sourceMappingURL=TotalPerTimeWalletArgs.js.map

@@ -16,3 +16,4 @@ export declare class CollectionBurn {
 export declare function fromDecoded(obj: any): types.BurnTypeBurnKind;
 export declare function fromJSON(obj: types.BurnTypeBurnJSON): types.BurnTypeBurnKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=BurnTypeBurn.d.ts.map

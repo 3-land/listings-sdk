@@ -29,3 +29,4 @@ export declare class PackBuyV1 {
 export declare function fromDecoded(obj: any): types.BuyHistoryClassKind;
 export declare function fromJSON(obj: types.BuyHistoryClassJSON): types.BuyHistoryClassKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=BuyHistoryClass.d.ts.map

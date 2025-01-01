@@ -7,3 +7,4 @@ export interface AssignPackDelegateAccounts {
     systemProgram: PublicKey;
 }
 export declare function assignPackDelegate(accounts: AssignPackDelegateAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=assignPackDelegate.d.ts.map

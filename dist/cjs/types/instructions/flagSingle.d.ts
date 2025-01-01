@@ -12,3 +12,4 @@ export interface FlagSingleAccounts {
 }
 export declare const layout: any;
 export declare function flagSingle(args: FlagSingleArgs, accounts: FlagSingleAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=flagSingle.d.ts.map

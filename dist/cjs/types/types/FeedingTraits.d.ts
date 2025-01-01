@@ -46,3 +46,4 @@ export declare class FeedingTraits {
         })[];
     };
 }
+//# sourceMappingURL=FeedingTraits.d.ts.map

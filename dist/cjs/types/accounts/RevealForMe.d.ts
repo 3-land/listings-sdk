@@ -35,3 +35,4 @@ export declare class RevealForMe {
     toJSON(): RevealForMeJSON;
     static fromJSON(obj: RevealForMeJSON): RevealForMe;
 }
+//# sourceMappingURL=RevealForMe.d.ts.map

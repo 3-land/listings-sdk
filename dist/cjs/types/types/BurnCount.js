@@ -28,7 +28,7 @@ const types = __importStar(require("../types")); // eslint-disable-line @typescr
 const borsh = __importStar(require("@coral-xyz/borsh"));
 class BurnCount {
     constructor(fields) {
-        this.list = fields.list.map((item) => new types.FakeBurnCount(Object.assign({}, item)));
+        this.list = fields.list.map((item) => new types.FakeBurnCount({ ...item }));
     }
     static layout(property) {
         return borsh.struct([borsh.vec(types.FakeBurnCount.layout(), "list")], property);
@@ -59,3 +59,4 @@ class BurnCount {
     }
 }
 exports.BurnCount = BurnCount;
+//# sourceMappingURL=BurnCount.js.map

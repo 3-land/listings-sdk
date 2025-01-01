@@ -42,3 +42,4 @@ export declare class GatePaymentV1 {
 export declare function fromDecoded(obj: any): types.PaymentClassKind;
 export declare function fromJSON(obj: types.PaymentClassJSON): types.PaymentClassKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=PaymentClass.d.ts.map

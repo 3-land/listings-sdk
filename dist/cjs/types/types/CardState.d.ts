@@ -94,3 +94,4 @@ export declare class NotReady {
 export declare function fromDecoded(obj: any): types.CardStateKind;
 export declare function fromJSON(obj: types.CardStateJSON): types.CardStateKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=CardState.d.ts.map

@@ -7,7 +7,7 @@ export declare const idl: {
             name: string;
             isMut: boolean;
             isSigner: boolean;
-            isOptional?: undefined;
+            isOptional?: never;
         } | {
             name: string;
             isMut: boolean;
@@ -29,7 +29,7 @@ export declare const idl: {
                     vec: {
                         defined: string;
                     };
-                    defined?: undefined;
+                    defined?: never;
                 };
             };
         } | {
@@ -37,7 +37,7 @@ export declare const idl: {
             type: {
                 option: {
                     defined: string;
-                    vec?: undefined;
+                    vec?: never;
                 };
             };
         })[];
@@ -47,7 +47,7 @@ export declare const idl: {
             name: string;
             isMut: boolean;
             isSigner: boolean;
-            isOptional?: undefined;
+            isOptional?: never;
         } | {
             name: string;
             isMut: boolean;
@@ -64,7 +64,7 @@ export declare const idl: {
             type: {
                 option: {
                     defined: string;
-                    array?: undefined;
+                    array?: never;
                 };
             };
         } | {
@@ -72,7 +72,7 @@ export declare const idl: {
             type: {
                 option: {
                     array: (string | number)[];
-                    defined?: undefined;
+                    defined?: never;
                 };
             };
         })[];
@@ -89,15 +89,15 @@ export declare const idl: {
                 vec: {
                     defined: string;
                 };
-                array?: undefined;
-                option?: undefined;
+                array?: never;
+                option?: never;
             };
         } | {
             name: string;
             type: {
                 array: (string | number)[];
-                vec?: undefined;
-                option?: undefined;
+                vec?: never;
+                option?: never;
             };
         } | {
             name: string;
@@ -105,8 +105,8 @@ export declare const idl: {
                 option: {
                     defined: string;
                 };
-                vec?: undefined;
-                array?: undefined;
+                vec?: never;
+                array?: never;
             };
         })[];
     } | {
@@ -115,20 +115,20 @@ export declare const idl: {
             name: string;
             isMut: boolean;
             isSigner: boolean;
-            isOptional?: undefined;
-            docs?: undefined;
+            isOptional?: never;
+            docs?: never;
         } | {
             name: string;
             isMut: boolean;
             isSigner: boolean;
             isOptional: boolean;
-            docs?: undefined;
+            docs?: never;
         } | {
             name: string;
             isMut: boolean;
             isSigner: boolean;
             docs: string[];
-            isOptional?: undefined;
+            isOptional?: never;
         } | {
             name: string;
             isMut: boolean;
@@ -143,13 +143,13 @@ export declare const idl: {
             name: string;
             type: {
                 array: (string | number)[];
-                defined?: undefined;
+                defined?: never;
             };
         } | {
             name: string;
             type: {
                 defined: string;
-                array?: undefined;
+                array?: never;
             };
         })[];
     } | {
@@ -172,19 +172,19 @@ export declare const idl: {
             isMut: boolean;
             isSigner: boolean;
             docs: string[];
-            isOptional?: undefined;
+            isOptional?: never;
         } | {
             name: string;
             isMut: boolean;
             isSigner: boolean;
-            docs?: undefined;
-            isOptional?: undefined;
+            docs?: never;
+            isOptional?: never;
         } | {
             name: string;
             isMut: boolean;
             isSigner: boolean;
             isOptional: boolean;
-            docs?: undefined;
+            docs?: never;
         })[];
         args: ({
             name: string;
@@ -192,7 +192,7 @@ export declare const idl: {
                 option: {
                     defined: string;
                 };
-                defined?: undefined;
+                defined?: never;
             };
         } | {
             name: string;
@@ -201,7 +201,7 @@ export declare const idl: {
             name: string;
             type: {
                 defined: string;
-                option?: undefined;
+                option?: never;
             };
         })[];
     })[];
@@ -213,17 +213,17 @@ export declare const idl: {
                 name: string;
                 type: {
                     defined: string;
-                    array?: undefined;
-                    option?: undefined;
-                    vec?: undefined;
+                    array?: never;
+                    option?: never;
+                    vec?: never;
                 };
             } | {
                 name: string;
                 type: {
                     array: (string | number)[];
-                    defined?: undefined;
-                    option?: undefined;
-                    vec?: undefined;
+                    defined?: never;
+                    option?: never;
+                    vec?: never;
                 };
             } | {
                 name: string;
@@ -234,9 +234,9 @@ export declare const idl: {
                     option: {
                         defined: string;
                     };
-                    defined?: undefined;
-                    array?: undefined;
-                    vec?: undefined;
+                    defined?: never;
+                    array?: never;
+                    vec?: never;
                 };
             } | {
                 name: string;
@@ -244,9 +244,9 @@ export declare const idl: {
                     vec: {
                         defined: string;
                     };
-                    defined?: undefined;
-                    array?: undefined;
-                    option?: undefined;
+                    defined?: never;
+                    array?: never;
+                    option?: never;
                 };
             })[];
         };
@@ -258,8 +258,8 @@ export declare const idl: {
                 name: string;
                 type: {
                     defined: string;
-                    array?: undefined;
-                    vec?: undefined;
+                    array?: never;
+                    vec?: never;
                 };
             } | {
                 name: string;
@@ -268,8 +268,8 @@ export declare const idl: {
                 name: string;
                 type: {
                     array: (string | number)[];
-                    defined?: undefined;
-                    vec?: undefined;
+                    defined?: never;
+                    vec?: never;
                 };
             } | {
                 name: string;
@@ -277,15 +277,15 @@ export declare const idl: {
                     vec: {
                         defined: string;
                     };
-                    defined?: undefined;
-                    array?: undefined;
+                    defined?: never;
+                    array?: never;
                 };
             } | {
                 name: string;
                 type: {
                     vec: string;
-                    defined?: undefined;
-                    array?: undefined;
+                    defined?: never;
+                    array?: never;
                 };
             })[];
         };
@@ -308,7 +308,7 @@ export declare const idl: {
                     };
                 })[];
             }[];
-            fields?: undefined;
+            fields?: never;
         };
     } | {
         name: string;
@@ -326,7 +326,7 @@ export declare const idl: {
                     };
                 })[];
             }[];
-            fields?: undefined;
+            fields?: never;
         };
     } | {
         name: string;
@@ -341,7 +341,7 @@ export declare const idl: {
                     vec: string;
                 };
             })[];
-            variants?: undefined;
+            variants?: never;
         };
     } | {
         name: string;
@@ -355,17 +355,17 @@ export declare const idl: {
                         vec: {
                             defined: string;
                         };
-                        defined?: undefined;
+                        defined?: never;
                     };
                 } | {
                     name: string;
                     type: {
                         defined: string;
-                        vec?: undefined;
+                        vec?: never;
                     };
                 })[];
             }[];
-            fields?: undefined;
+            fields?: never;
         };
     } | {
         name: string;
@@ -373,7 +373,7 @@ export declare const idl: {
             kind: string;
             variants: ({
                 name: string;
-                fields?: undefined;
+                fields?: never;
             } | {
                 name: string;
                 fields: {
@@ -381,7 +381,7 @@ export declare const idl: {
                     type: string;
                 }[];
             })[];
-            fields?: undefined;
+            fields?: never;
         };
     } | {
         name: string;
@@ -400,7 +400,7 @@ export declare const idl: {
                 type: {
                     option: {
                         defined: string;
-                        vec?: undefined;
+                        vec?: never;
                     };
                 };
             } | {
@@ -410,11 +410,11 @@ export declare const idl: {
                         vec: {
                             defined: string;
                         };
-                        defined?: undefined;
+                        defined?: never;
                     };
                 };
             })[];
-            variants?: undefined;
+            variants?: never;
         };
     } | {
         name: string;
@@ -427,8 +427,8 @@ export declare const idl: {
                 name: string;
                 type: {
                     option: string;
-                    vec?: undefined;
-                    array?: undefined;
+                    vec?: never;
+                    array?: never;
                 };
             } | {
                 name: string;
@@ -436,18 +436,18 @@ export declare const idl: {
                     vec: {
                         defined: string;
                     };
-                    option?: undefined;
-                    array?: undefined;
+                    option?: never;
+                    array?: never;
                 };
             } | {
                 name: string;
                 type: {
                     array: (string | number)[];
-                    option?: undefined;
-                    vec?: undefined;
+                    option?: never;
+                    vec?: never;
                 };
             })[];
-            variants?: undefined;
+            variants?: never;
         };
     } | {
         name: string;
@@ -460,14 +460,14 @@ export declare const idl: {
             } | {
                 name: string;
                 type: string;
-                docs?: undefined;
+                docs?: never;
             } | {
                 name: string;
                 docs: string[];
                 type: {
                     option: string;
-                    defined?: undefined;
-                    vec?: undefined;
+                    defined?: never;
+                    vec?: never;
                 };
             } | {
                 name: string;
@@ -476,32 +476,33 @@ export declare const idl: {
                     option: {
                         defined: string;
                     };
-                    defined?: undefined;
-                    vec?: undefined;
+                    defined?: never;
+                    vec?: never;
                 };
             } | {
                 name: string;
                 type: {
                     defined: string;
-                    option?: undefined;
-                    vec?: undefined;
+                    option?: never;
+                    vec?: never;
                 };
-                docs?: undefined;
+                docs?: never;
             } | {
                 name: string;
                 type: {
                     vec: {
                         defined: string;
                     };
-                    option?: undefined;
-                    defined?: undefined;
+                    option?: never;
+                    defined?: never;
                 };
-                docs?: undefined;
+                docs?: never;
             })[];
-            variants?: undefined;
+            variants?: never;
         };
     })[];
     metadata: {
         address: string;
     };
 };
+//# sourceMappingURL=idl.d.ts.map

@@ -30,3 +30,4 @@ export declare class Creator {
         share: number;
     };
 }
+//# sourceMappingURL=Creator.d.ts.map

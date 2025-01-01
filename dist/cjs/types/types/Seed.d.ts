@@ -19,3 +19,4 @@ export declare class Seed {
         seed: Buffer;
     };
 }
+//# sourceMappingURL=Seed.d.ts.map

@@ -22,15 +22,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -46,22 +37,32 @@ class ArchiveDeposit {
         this.class = fields.class;
         this.identifier = fields.identifier;
         this.creator = fields.creator;
-        this.dates = new types.IndexDates(Object.assign({}, fields.dates));
+        this.dates = new types.IndexDates({ ...fields.dates });
         this.holder = fields.holder;
-        this.category = new types.Category(Object.assign({}, fields.category));
-        this.superCategory = new types.SuperCategory(Object.assign({}, fields.superCategory));
+        this.category = new types.Category({ ...fields.category });
+        this.superCategory = new types.SuperCategory({ ...fields.superCategory });
         this.eventCategory = fields.eventCategory;
         this.hash = fields.hash;
         this.manager = fields.manager;
-        this.metadata = new types.MetadataArgs(Object.assign({}, fields.metadata));
+        this.metadata = new types.MetadataArgs({ ...fields.metadata });
         this.supply = fields.supply;
         this.trackType = fields.trackType;
         this.mainCurrencyHash = fields.mainCurrencyHash;
-        this.volume = fields.volume.map((item) => new types.FakeVolumeTrack(Object.assign({}, item)));
+        this.volume = fields.volume.map((item) => new types.FakeVolumeTrack({ ...item }));
     }
-    static fetch(c_1, address_1) {
-        return __awaiter(this, arguments, void 0, function* (c, address, programId = programId_1.PROGRAM_ID) {
-            const info = yield c.getAccountInfo(address);
+    static async fetch(c, address, programId = programId_1.PROGRAM_ID) {
+        const info = await c.getAccountInfo(address);
+        if (info === null) {
+            return null;
+        }
+        if (!info.owner.equals(programId)) {
+            throw new Error("account doesn't belong to this program");
+        }
+        return this.decode(info.data);
+    }
+    static async fetchMultiple(c, addresses, programId = programId_1.PROGRAM_ID) {
+        const infos = await c.getMultipleAccountsInfo(addresses);
+        return infos.map((info) => {
             if (info === null) {
                 return null;
             }
@@ -69,20 +70,6 @@ class ArchiveDeposit {
                 throw new Error("account doesn't belong to this program");
             }
             return this.decode(info.data);
-        });
-    }
-    static fetchMultiple(c_1, addresses_1) {
-        return __awaiter(this, arguments, void 0, function* (c, addresses, programId = programId_1.PROGRAM_ID) {
-            const infos = yield c.getMultipleAccountsInfo(addresses);
-            return infos.map((info) => {
-                if (info === null) {
-                    return null;
-                }
-                if (!info.owner.equals(programId)) {
-                    throw new Error("account doesn't belong to this program");
-                }
-                return this.decode(info.data);
-            });
         });
     }
     static decode(data) {
@@ -168,3 +155,4 @@ ArchiveDeposit.layout = borsh.struct([
     borsh.u64("mainCurrencyHash"),
     borsh.vec(types.FakeVolumeTrack.layout(), "volume"),
 ]);
+//# sourceMappingURL=ArchiveDeposit.js.map

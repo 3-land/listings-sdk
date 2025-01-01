@@ -25,3 +25,4 @@ export declare class Collection {
         key: PublicKey;
     };
 }
+//# sourceMappingURL=Collection.d.ts.map

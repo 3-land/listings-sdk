@@ -37,3 +37,4 @@ export interface ClaimZeroCardAccounts {
 }
 export declare const layout: any;
 export declare function claimZeroCard(args: ClaimZeroCardArgs, accounts: ClaimZeroCardAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=claimZeroCard.d.ts.map

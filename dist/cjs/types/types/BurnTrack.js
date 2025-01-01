@@ -64,3 +64,4 @@ class BurnTrack {
     }
 }
 exports.BurnTrack = BurnTrack;
+//# sourceMappingURL=BurnTrack.js.map

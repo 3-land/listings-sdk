@@ -55,3 +55,4 @@ export declare class FlaggedPirate {
 export declare function fromDecoded(obj: any): types.GlobalStateKind;
 export declare function fromJSON(obj: types.GlobalStateJSON): types.GlobalStateKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=GlobalState.d.ts.map

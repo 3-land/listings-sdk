@@ -66,3 +66,4 @@ export declare class TokenManager {
     toJSON(): TokenManagerJSON;
     static fromJSON(obj: TokenManagerJSON): TokenManager;
 }
+//# sourceMappingURL=TokenManager.d.ts.map

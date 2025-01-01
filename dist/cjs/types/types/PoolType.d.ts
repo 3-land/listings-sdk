@@ -29,3 +29,4 @@ export declare class Token {
 export declare function fromDecoded(obj: any): types.PoolTypeKind;
 export declare function fromJSON(obj: types.PoolTypeJSON): types.PoolTypeKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=PoolType.d.ts.map

@@ -72,3 +72,4 @@ class TraitValue {
     }
 }
 exports.TraitValue = TraitValue;
+//# sourceMappingURL=TraitValue.js.map

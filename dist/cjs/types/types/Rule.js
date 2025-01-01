@@ -88,7 +88,7 @@ class WrappedSource {
         this.discriminator = 2;
         this.kind = "WrappedSource";
         this.value = {
-            rule: new types.WrappedSource(Object.assign({}, value.rule)),
+            rule: new types.WrappedSource({ ...value.rule }),
         };
     }
     toJSON() {
@@ -165,3 +165,4 @@ function layout(property) {
     }
     return ret;
 }
+//# sourceMappingURL=Rule.js.map

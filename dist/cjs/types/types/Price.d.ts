@@ -58,3 +58,4 @@ export declare class Price {
         };
     };
 }
+//# sourceMappingURL=Price.d.ts.map

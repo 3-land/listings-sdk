@@ -59,3 +59,4 @@ class FeedingTraits {
     }
 }
 exports.FeedingTraits = FeedingTraits;
+//# sourceMappingURL=FeedingTraits.js.map

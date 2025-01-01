@@ -64,3 +64,4 @@ function fromTxError(err, programId = programId_1.PROGRAM_ID) {
     }
     return fromCode(errorCode, err.logs);
 }
+//# sourceMappingURL=index.js.map

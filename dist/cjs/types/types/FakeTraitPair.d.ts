@@ -24,3 +24,4 @@ export declare class FakeTraitPair {
         value: string;
     };
 }
+//# sourceMappingURL=FakeTraitPair.d.ts.map

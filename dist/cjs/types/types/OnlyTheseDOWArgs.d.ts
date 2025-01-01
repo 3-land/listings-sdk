@@ -19,3 +19,4 @@ export declare class OnlyTheseDOWArgs {
         days: number;
     };
 }
+//# sourceMappingURL=OnlyTheseDOWArgs.d.ts.map

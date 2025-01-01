@@ -42,3 +42,4 @@ export declare class Claimed {
 export declare function fromDecoded(obj: any): types.PackOpenHolderStateKind;
 export declare function fromJSON(obj: types.PackOpenHolderStateJSON): types.PackOpenHolderStateKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=PackOpenHolderState.d.ts.map

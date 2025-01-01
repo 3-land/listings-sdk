@@ -82,3 +82,4 @@ class SaleTrack {
     }
 }
 exports.SaleTrack = SaleTrack;
+//# sourceMappingURL=SaleTrack.js.map

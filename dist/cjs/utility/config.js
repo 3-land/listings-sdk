@@ -21,3 +21,4 @@ exports.NETWORK_CONFIGS = {
         metadataProgramId: programId_1.TOKEN_METADATA_PROGRAM_ID,
     },
 };
+//# sourceMappingURL=config.js.map

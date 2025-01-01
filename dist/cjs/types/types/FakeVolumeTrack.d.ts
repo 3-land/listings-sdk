@@ -32,3 +32,4 @@ export declare class FakeVolumeTrack {
         };
     };
 }
+//# sourceMappingURL=FakeVolumeTrack.d.ts.map

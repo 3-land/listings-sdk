@@ -46,3 +46,4 @@ export declare class GenericStore {
         };
     };
 }
+//# sourceMappingURL=GenericStore.d.ts.map

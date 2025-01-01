@@ -108,7 +108,7 @@ class NonFungible {
         this.kind = "NonFungible";
         this.value = {
             hash: value.hash,
-            values: value.values.map((item) => new types.TraitValue(Object.assign({}, item))),
+            values: value.values.map((item) => new types.TraitValue({ ...item })),
         };
     }
     toJSON() {
@@ -204,3 +204,4 @@ function layout(property) {
     }
     return ret;
 }
+//# sourceMappingURL=TraitType.js.map

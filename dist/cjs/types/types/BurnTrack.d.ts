@@ -28,3 +28,4 @@ export declare class BurnTrack {
         };
     };
 }
+//# sourceMappingURL=BurnTrack.d.ts.map

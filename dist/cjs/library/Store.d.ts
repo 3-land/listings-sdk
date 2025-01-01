@@ -16,3 +16,4 @@ export declare class Store {
     buySingleEdition(payer: Signer, distributionBumps: number[], itemAddress: PublicKey, extraAccounts?: any[], globalStoreAccount?: PublicKey, packAccount?: PublicKey, burnProgress?: PublicKey, poolVault?: PublicKey): Promise<string>;
 }
 export { StoreConfig, MetadataArgs, SaleConfig };
+//# sourceMappingURL=Store.d.ts.map

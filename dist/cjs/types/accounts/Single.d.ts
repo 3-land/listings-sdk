@@ -96,3 +96,4 @@ export declare class Single {
     toJSON(): SingleJSON;
     static fromJSON(obj: SingleJSON): Single;
 }
+//# sourceMappingURL=Single.d.ts.map

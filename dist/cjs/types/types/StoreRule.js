@@ -34,7 +34,7 @@ class ListingPerWallet {
         this.discriminator = 0;
         this.kind = "ListingPerWallet";
         this.value = {
-            config: new types.ListingPerWalletArgs(Object.assign({}, value.config)),
+            config: new types.ListingPerWalletArgs({ ...value.config }),
         };
     }
     toJSON() {
@@ -126,3 +126,4 @@ function layout(property) {
     }
     return ret;
 }
+//# sourceMappingURL=StoreRule.js.map

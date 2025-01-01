@@ -99,3 +99,4 @@ function layout(property) {
     }
     return ret;
 }
+//# sourceMappingURL=PoolType.js.map

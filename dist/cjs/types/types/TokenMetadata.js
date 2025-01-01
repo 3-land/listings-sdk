@@ -68,3 +68,4 @@ class TokenMetadata {
     }
 }
 exports.TokenMetadata = TokenMetadata;
+//# sourceMappingURL=TokenMetadata.js.map

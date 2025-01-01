@@ -183,3 +183,4 @@ function layout(property) {
     }
     return ret;
 }
+//# sourceMappingURL=TraitPassType.js.map

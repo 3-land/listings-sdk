@@ -11,3 +11,4 @@ export interface StoreLutForAccounts {
 }
 export declare const layout: any;
 export declare function storeLutFor(args: StoreLutForArgs, accounts: StoreLutForAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=storeLutFor.d.ts.map

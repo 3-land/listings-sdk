@@ -22,15 +22,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -47,15 +38,15 @@ class Pack {
         this.globalState = fields.globalState;
         this.holder = fields.holder;
         this.creator = fields.creator;
-        this.dates = new types.IndexDates(Object.assign({}, fields.dates));
-        this.category = new types.Category(Object.assign({}, fields.category));
-        this.superCategory = new types.SuperCategory(Object.assign({}, fields.superCategory));
+        this.dates = new types.IndexDates({ ...fields.dates });
+        this.category = new types.Category({ ...fields.category });
+        this.superCategory = new types.SuperCategory({ ...fields.superCategory });
         this.eventCategory = fields.eventCategory;
         this.trackType = fields.trackType;
         this.mainCurrencyHash = fields.mainCurrencyHash;
-        this.track = new types.ItemTrack(Object.assign({}, fields.track));
-        this.popularity = new types.Popularity(Object.assign({}, fields.popularity));
-        this.filtering = new types.Filter(Object.assign({}, fields.filtering));
+        this.track = new types.ItemTrack({ ...fields.track });
+        this.popularity = new types.Popularity({ ...fields.popularity });
+        this.filtering = new types.Filter({ ...fields.filtering });
         this.page = fields.page;
         this.manager = fields.manager;
         this.isServerless = fields.isServerless;
@@ -63,25 +54,35 @@ class Pack {
         this.hasWrappedTokens = fields.hasWrappedTokens;
         this.burntPieces = fields.burntPieces;
         this.flag = fields.flag;
-        this.item = new types.Item(Object.assign({}, fields.item));
+        this.item = new types.Item({ ...fields.item });
         this.count = fields.count;
         this.live = fields.live;
         this.available = fields.available;
         this.printed = fields.printed;
-        this.saleConfig = new types.SaleConfig(Object.assign({}, fields.saleConfig));
+        this.saleConfig = new types.SaleConfig({ ...fields.saleConfig });
         this.opened = fields.opened;
         this.owed = fields.owed;
         this.identifier = fields.identifier;
         this.hash = fields.hash;
         this.hashTraits = fields.hashTraits;
-        this.packConfig = new types.PackConfig(Object.assign({}, fields.packConfig));
-        this.volume = fields.volume.map((item) => new types.FakeVolumeTrack(Object.assign({}, item)));
+        this.packConfig = new types.PackConfig({ ...fields.packConfig });
+        this.volume = fields.volume.map((item) => new types.FakeVolumeTrack({ ...item }));
         this.delegate = fields.delegate;
         this.extra = fields.extra;
     }
-    static fetch(c_1, address_1) {
-        return __awaiter(this, arguments, void 0, function* (c, address, programId = programId_1.PROGRAM_ID) {
-            const info = yield c.getAccountInfo(address);
+    static async fetch(c, address, programId = programId_1.PROGRAM_ID) {
+        const info = await c.getAccountInfo(address);
+        if (info === null) {
+            return null;
+        }
+        if (!info.owner.equals(programId)) {
+            throw new Error("account doesn't belong to this program");
+        }
+        return this.decode(info.data);
+    }
+    static async fetchMultiple(c, addresses, programId = programId_1.PROGRAM_ID) {
+        const infos = await c.getMultipleAccountsInfo(addresses);
+        return infos.map((info) => {
             if (info === null) {
                 return null;
             }
@@ -89,20 +90,6 @@ class Pack {
                 throw new Error("account doesn't belong to this program");
             }
             return this.decode(info.data);
-        });
-    }
-    static fetchMultiple(c_1, addresses_1) {
-        return __awaiter(this, arguments, void 0, function* (c, addresses, programId = programId_1.PROGRAM_ID) {
-            const infos = yield c.getMultipleAccountsInfo(addresses);
-            return infos.map((info) => {
-                if (info === null) {
-                    return null;
-                }
-                if (!info.owner.equals(programId)) {
-                    throw new Error("account doesn't belong to this program");
-                }
-                return this.decode(info.data);
-            });
         });
     }
     static decode(data) {
@@ -268,3 +255,4 @@ Pack.layout = borsh.struct([
     borsh.vec(borsh.publicKey(), "delegate"),
     borsh.array(borsh.u8(), 4, "extra"),
 ]);
+//# sourceMappingURL=Pack.js.map

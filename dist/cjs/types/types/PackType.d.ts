@@ -42,3 +42,4 @@ export declare class Bundle {
 export declare function fromDecoded(obj: any): types.PackTypeKind;
 export declare function fromJSON(obj: types.PackTypeJSON): types.PackTypeKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=PackType.d.ts.map

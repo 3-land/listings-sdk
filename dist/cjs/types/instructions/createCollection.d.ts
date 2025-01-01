@@ -19,3 +19,4 @@ export interface CreateCollectionAccounts {
 }
 export declare const layout: any;
 export declare function createCollection(args: CreateCollectionArgs, accounts: CreateCollectionAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=createCollection.d.ts.map

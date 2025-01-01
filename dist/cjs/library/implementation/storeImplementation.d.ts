@@ -17,3 +17,4 @@ declare function buySingleImp(options: StoreInitOptions, item: string): Promise<
 }>;
 declare function handleError(error: unknown): void;
 export { createStoreImp, createCollectionImp, createSingleImp, buySingleImp, handleError, };
+//# sourceMappingURL=storeImplementation.d.ts.map

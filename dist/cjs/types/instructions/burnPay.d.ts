@@ -16,3 +16,4 @@ export interface BurnPayAccounts {
 }
 export declare const layout: any;
 export declare function burnPay(args: BurnPayArgs, accounts: BurnPayAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=burnPay.d.ts.map

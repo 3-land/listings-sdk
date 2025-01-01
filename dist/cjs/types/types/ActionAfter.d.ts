@@ -81,3 +81,4 @@ export declare class SellingOut {
 export declare function fromDecoded(obj: any): types.ActionAfterKind;
 export declare function fromJSON(obj: types.ActionAfterJSON): types.ActionAfterKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=ActionAfter.d.ts.map

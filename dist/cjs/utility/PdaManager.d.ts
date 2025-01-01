@@ -17,3 +17,4 @@ export declare const collectorGlobalRegistryPDA: ({ user, currency, store }: any
 export declare const buyPaymentPDA: ({ owner, itemAccount }: any) => Promise<[PublicKey, number]>;
 export declare const treeAuthority: ({ tree }: any) => [PublicKey, number];
 export declare const getATAPDA: ({ owner, mint }: any) => Promise<PublicKey>;
+//# sourceMappingURL=PdaManager.d.ts.map

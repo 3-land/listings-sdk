@@ -16,3 +16,4 @@ export interface BuyPayAccounts {
 }
 export declare const layout: any;
 export declare function buyPay(args: BuyPayArgs, accounts: BuyPayAccounts, extraAccounts: any[], programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=buyPay.d.ts.map

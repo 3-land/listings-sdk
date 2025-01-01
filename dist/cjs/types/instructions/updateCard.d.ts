@@ -14,3 +14,4 @@ export interface UpdateCardAccounts {
 }
 export declare const layout: any;
 export declare function updateCard(args: UpdateCardArgs, accounts: UpdateCardAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=updateCard.d.ts.map

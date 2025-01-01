@@ -28,8 +28,8 @@ const types = __importStar(require("../types")); // eslint-disable-line @typescr
 const borsh = __importStar(require("@coral-xyz/borsh"));
 class IndexDates {
     constructor(fields) {
-        this.created = new types.IndexDate(Object.assign({}, fields.created));
-        this.activity = new types.IndexDate(Object.assign({}, fields.activity));
+        this.created = new types.IndexDate({ ...fields.created });
+        this.activity = new types.IndexDate({ ...fields.activity });
     }
     static layout(property) {
         return borsh.struct([types.IndexDate.layout("created"), types.IndexDate.layout("activity")], property);
@@ -64,3 +64,4 @@ class IndexDates {
     }
 }
 exports.IndexDates = IndexDates;
+//# sourceMappingURL=IndexDates.js.map

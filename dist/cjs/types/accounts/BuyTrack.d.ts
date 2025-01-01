@@ -19,3 +19,4 @@ export declare class BuyTrack {
     toJSON(): BuyTrackJSON;
     static fromJSON(obj: BuyTrackJSON): BuyTrack;
 }
+//# sourceMappingURL=BuyTrack.d.ts.map

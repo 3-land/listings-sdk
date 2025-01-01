@@ -10,3 +10,4 @@ export declare function uploadFilesIrysInstruction(options: any, irysObj: any, u
     signerIrys: Signer;
     metadataUrl: string | undefined;
 }>;
+//# sourceMappingURL=uploadFilesIryis.d.ts.map

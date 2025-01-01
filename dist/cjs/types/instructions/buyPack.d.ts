@@ -22,3 +22,4 @@ export interface BuyPackAccounts {
 }
 export declare const layout: any;
 export declare function buyPack(args: BuyPackArgs, accounts: BuyPackAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=buyPack.d.ts.map

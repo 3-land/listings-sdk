@@ -13,3 +13,4 @@ export declare class ZeroCard {
     toJSON(): ZeroCardJSON;
     static fromJSON(obj: ZeroCardJSON): ZeroCard;
 }
+//# sourceMappingURL=ZeroCard.d.ts.map

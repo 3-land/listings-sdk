@@ -67,3 +67,4 @@ class VolumeTrack {
     }
 }
 exports.VolumeTrack = VolumeTrack;
+//# sourceMappingURL=VolumeTrack.js.map

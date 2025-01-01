@@ -29,3 +29,4 @@ export declare class Closed {
 export declare function fromDecoded(obj: any): types.PoolStateKind;
 export declare function fromJSON(obj: types.PoolStateJSON): types.PoolStateKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=PoolState.d.ts.map

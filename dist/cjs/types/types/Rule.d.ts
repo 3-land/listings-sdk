@@ -112,3 +112,4 @@ export declare class WrappedSource {
 export declare function fromDecoded(obj: any): types.RuleKind;
 export declare function fromJSON(obj: types.RuleJSON): types.RuleKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=Rule.d.ts.map

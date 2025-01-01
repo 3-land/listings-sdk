@@ -51,3 +51,4 @@ export declare class Store {
     toJSON(): StoreJSON;
     static fromJSON(obj: StoreJSON): Store;
 }
+//# sourceMappingURL=Store.d.ts.map

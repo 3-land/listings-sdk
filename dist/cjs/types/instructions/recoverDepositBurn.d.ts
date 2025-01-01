@@ -31,3 +31,4 @@ export interface RecoverDepositBurnAccounts {
 }
 export declare const layout: any;
 export declare function recoverDepositBurn(args: RecoverDepositBurnArgs, accounts: RecoverDepositBurnAccounts, programId?: PublicKey): TransactionInstruction;
+//# sourceMappingURL=recoverDepositBurn.d.ts.map

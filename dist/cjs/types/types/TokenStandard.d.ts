@@ -55,3 +55,4 @@ export declare class NonFungibleEdition {
 export declare function fromDecoded(obj: any): types.TokenStandardKind;
 export declare function fromJSON(obj: types.TokenStandardJSON): types.TokenStandardKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;
+//# sourceMappingURL=TokenStandard.d.ts.map

@@ -84,3 +84,4 @@ class GlobalFee {
     }
 }
 exports.GlobalFee = GlobalFee;
+//# sourceMappingURL=GlobalFee.js.map

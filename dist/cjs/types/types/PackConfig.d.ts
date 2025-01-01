@@ -60,3 +60,4 @@ export declare class PackConfig {
         }[];
     };
 }
+//# sourceMappingURL=PackConfig.d.ts.map

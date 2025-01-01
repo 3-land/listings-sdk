@@ -19,3 +19,4 @@ export declare class TimedPerWalletArgs {
         amount: number;
     };
 }
+//# sourceMappingURL=TimedPerWalletArgs.d.ts.map
