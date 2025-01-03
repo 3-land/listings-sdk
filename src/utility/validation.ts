@@ -54,17 +54,17 @@ export function validateMetadata(metadata: ShortMetadataArgs) {
 }
 
 export function validateSaleConfig(config: SaleConfig) {
-  if (!config.prices || !config.prices.length) {
-    throw new ValidationError("At least one price configuration is required");
-  }
+  // if (!config.prices || !config.prices.length) {
+  //   throw new ValidationError("At least one price configuration is required");
+  // }
 
-  config.prices.forEach((price) => {
-    if (!price.amount || !(price.amount instanceof BN)) {
-      throw new ValidationError(
-        "Each price amount must be a valid BN instance"
-      );
-    }
-  });
+  // config.prices.forEach((price) => {
+  //   if (!price.amount || !(price.amount instanceof BN)) {
+  //     throw new ValidationError(
+  //       "Each price amount must be a valid BN instance"
+  //     );
+  //   }
+  // });
 
   if (config.sendToVault < 0) {
     throw new ValidationError("sendToVault must be non-negative");

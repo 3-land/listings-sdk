@@ -460,7 +460,10 @@ export class Store {
       const [creatorRegistry] = await creatorRegistryPDA({
         user: creator,
         store: storeAccount,
-        currency: toPublicKey(PROGRAM_CNFT),
+        currency:
+          saleConfig?.prices?.[0]?.priceType?.kind === "Spl"
+            ? toPublicKey(saleConfig?.prices?.[0]?.priceType?.value?.id)
+            : toPublicKey(PROGRAM_CNFT),
       });
 
       const registerIX = registerCreator(

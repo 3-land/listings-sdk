@@ -5,6 +5,7 @@ import {
   Creator,
   CurrencyType,
   FeeType,
+  Price,
   PriceJSON,
   PriceRule,
   SaleConfigJSON,
@@ -367,21 +368,46 @@ async function createSingleImp(
       };
     }
 
-    console.log("cover options: ", options);
+    let priceConfig: Price[];
+    if (createOptions?.price! <= 0) {
+      priceConfig = [];
+      console.log("price is zero");
+    } else {
+      if (createOptions.splHash) {
+        priceConfig = [
+          {
+            amount: new BN(createOptions.price!),
+            priceType: new CurrencyType.Spl({
+              id: new PublicKey(createOptions.splHash),
+            }),
+            toJSON: function (): PriceJSON {
+              throw new Error("Function not implemented.");
+            },
+            toEncodable: function () {
+              throw new Error("Function not implemented.");
+            },
+          },
+        ];
+        console.log("spl hash: ", createOptions.splHash);
+      } else {
+        priceConfig = [
+          {
+            amount: new BN(createOptions.price!),
+            priceType: new CurrencyType.Native(),
+            toJSON: function (): PriceJSON {
+              throw new Error("Function not implemented.");
+            },
+            toEncodable: function () {
+              throw new Error("Function not implemented.");
+            },
+          },
+        ];
+      }
+    }
 
+    console.log("priceConfig: ", priceConfig);
     const saleConfig: SaleConfig = {
-      prices: [
-        {
-          amount: new BN(createOptions.price!),
-          priceType: new CurrencyType.Native(),
-          toJSON: function (): PriceJSON {
-            throw new Error("Function not implemented.");
-          },
-          toEncodable: function () {
-            throw new Error("Function not implemented.");
-          },
-        },
-      ],
+      prices: priceConfig,
       priceType: new PriceRule.None(),
       rules: [],
       sendToVault: 0,

@@ -28,4 +28,5 @@ export interface CreateSingleOptions {
   price?: number;
   mainImageUrl?: string;
   coverImageUrl?: string;
+  splHash?: string;
 }
