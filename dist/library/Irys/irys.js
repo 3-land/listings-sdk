@@ -292,6 +292,7 @@ class IrysHelper {
             config: { providerUrl: irys_network },
             // wallet: { rpcUrl: rpc, provider },
         });
+        console.log("irysconfig inside: ", this.irys);
         await this.irys.ready();
         const to = await this.irys.utils.getBundlerAddress("solana");
         const bal = await this.getBalance();

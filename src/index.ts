@@ -20,7 +20,7 @@ async function main() {
 
   const optionsWithBase58: StoreInitOptions = {
     privateKey: "", //your private key
-    isMainnet: false,
+    isMainnet: true,
   };
 
   const storeSetup: CreateStoreParams = {
@@ -35,7 +35,7 @@ async function main() {
   };
 
   const createItemOptions: CreateSingleOptions = {
-    itemName: "supercoolitem11",
+    itemName: "supercoolitem12",
     sellerFee: 500,
     itemAmount: 101,
     itemSymbol: "SCI11",
@@ -65,11 +65,11 @@ async function main() {
     // console.log("collection mint: ", collection);
     // Create single edition
     // const storeAccount = "3MwBR619SgJ35ek7vDLxxE5QvBaNq1fmmEZSXKW2X3Lf"; //"P1c4bboejX24NbY3vMw8EncKVmvcGEryznWLs4PGp9j"; //current store created for testing
-    const collectionAccount = "Dj91sSU6EErETscXj4mv4tMV6GM8HgJKFvqDqmq3F7Fz"; //"7Zsbs84BhMuHVqtigJFH9yQgpxvYnRZY9MyxSQT1ftfa"; //"Fpm8XgXEuNxxjmqUQuqEFkGusiSsKM6astUGPs5U9x6v"; //"2rQq34FJG1613i7H8cDfxuGCtEjJmFAUNbAPJqK699oD";
+    const collectionAccount = "GKLBspqHCKJMFKSn46CNdSP3AUeKDvcyF5knXxsJmhLj"; //"7Zsbs84BhMuHVqtigJFH9yQgpxvYnRZY9MyxSQT1ftfa"; //"Fpm8XgXEuNxxjmqUQuqEFkGusiSsKM6astUGPs5U9x6v"; //"2rQq34FJG1613i7H8cDfxuGCtEjJmFAUNbAPJqK699oD";
     const singleEditionResult = await createSingleImp(
       optionsWithBase58,
-      landStoreDevnet,
-      // landStoreMainnet,
+      // landStoreDevnet,
+      landStoreMainnet,
       collectionAccount,
       createItemOptions
     );

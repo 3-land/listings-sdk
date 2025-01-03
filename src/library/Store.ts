@@ -361,6 +361,7 @@ export class Store {
             network: "mainnet",
           }
         : {};
+      console.log("irysConfig: ", irysConfig);
       const irys = await Irys(payer.publicKey.toBase58(), irysConfig);
       const uuid = "random_uuid_per_upload_session";
 

@@ -200,6 +200,7 @@ class Store {
                     network: "mainnet",
                 }
                 : {};
+            console.log("irysConfig: ", irysConfig);
             const irys = await (0, irys_1.init)(payer.publicKey.toBase58(), irysConfig);
             const uuid = "random_uuid_per_upload_session";
             const [itemAccount] = await (0, PdaManager_1.itemAccountPDA)({

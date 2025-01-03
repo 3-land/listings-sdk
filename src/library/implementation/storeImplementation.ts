@@ -372,7 +372,7 @@ async function createSingleImp(
     const saleConfig: SaleConfig = {
       prices: [
         {
-          amount: new BN(createOptions.price),
+          amount: new BN(createOptions.price!),
           priceType: new CurrencyType.Native(),
           toJSON: function (): PriceJSON {
             throw new Error("Function not implemented.");

@@ -21,7 +21,7 @@ export interface CreateSingleOptions {
     itemSymbol: string;
     itemDescription: string;
     traits: any;
-    price: number;
+    price?: number;
     mainImageUrl?: string;
     coverImageUrl?: string;
 }
