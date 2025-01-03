@@ -359,7 +359,7 @@ export class IrysHelper {
 
   async init(
     address: string,
-    options: { arweave_rpc?: string; rpc?: string }
+    options: { arweave_rpc?: string; rpc?: string; network?: string }
   ): Promise<boolean> {
     const irys_network =
       options?.arweave_rpc || "https://arweave.devnet.irys.xyz";
@@ -382,7 +382,7 @@ export class IrysHelper {
       // url: irys_network,
       token: "solana",
       key: wallet.secretKey,
-      network: "devnet",
+      network: options?.network || "devnet",
       config: { providerUrl: irys_network },
       // wallet: { rpcUrl: rpc, provider },
     });
@@ -398,7 +398,7 @@ let global: IrysHelper | null = null;
 
 export const init = async (
   address: string,
-  options: { arweave_rpc?: string; rpc?: string }
+  options: { arweave_rpc?: string; rpc?: string; network?: string }
 ): Promise<IrysHelper | null> => {
   if (global) {
     const g = await global.sync(address);

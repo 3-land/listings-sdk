@@ -25,9 +25,16 @@ import {
   CreateStoreParams,
   StoreInitOptions,
 } from "../../types/implementation/implementationTypes";
+import { NetworkType } from "../../utility/config";
 
 function initializeSDKAndWallet(options: StoreInitOptions) {
-  const sdk = new Store();
+  let sdk;
+  if (options.isMainnet) {
+    sdk = new Store({ network: NetworkType.MAINNET });
+  } else {
+    sdk = new Store();
+  }
+
   let walletKeypair: Keypair;
 
   if (options.privateKey) {
@@ -120,37 +127,98 @@ async function createCollectionImp(
     uses: null,
   };
 
-  const imageBuffer = fs2.readFileSync(
-    path.join(process.cwd(), "assets", "ds.jpeg")
-  ).buffer;
-  const coverBuffer = fs2.readFileSync(
-    path.join(process.cwd(), "assets", "3land_rebrand.gif")
-  ).buffer;
+  let optionsCollection;
+  if (collectionOpts.mainImageUrl) {
+    // Use URLs if provided
+    let files: any = {
+      file: {
+        url: collectionOpts.mainImageUrl,
+      },
+    };
 
-  const optionsCollection = {
-    symbol: metadata.symbol,
-    metadata: {
-      name: metadata.name,
-      description: collectionOpts.collectionDescription,
-      files: {
-        file: {
-          arrayBuffer() {
-            return imageBuffer;
+    // Add cover URL if provided
+    if (collectionOpts.coverImageUrl) {
+      files.cover = {
+        url: collectionOpts.coverImageUrl,
+      };
+    }
+
+    optionsCollection = {
+      symbol: metadata.symbol,
+      metadata: {
+        name: metadata.name,
+        description: collectionOpts.collectionDescription,
+        files: files,
+      },
+      creators: metadata.creators,
+      traits: [],
+      sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
+    };
+  } else {
+    const imageBuffer = fs2.readFileSync(
+      path.join(process.cwd(), "assets", "ds.jpeg")
+    ).buffer;
+    const coverBuffer = fs2.readFileSync(
+      path.join(process.cwd(), "assets", "3land_rebrand.gif")
+    ).buffer;
+
+    optionsCollection = {
+      symbol: metadata.symbol,
+      metadata: {
+        name: metadata.name,
+        description: collectionOpts.collectionDescription,
+        files: {
+          file: {
+            arrayBuffer() {
+              return imageBuffer;
+            },
+            type: "image/gif",
           },
-          type: "image/gif",
-        },
-        cover: {
-          arrayBuffer() {
-            return coverBuffer;
+          cover: {
+            arrayBuffer() {
+              return coverBuffer;
+            },
+            type: "image/gif",
           },
-          type: "image/gif",
         },
       },
-    },
-    creators: metadata.creators,
-    traits: [],
-    sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
-  };
+      creators: metadata.creators,
+      traits: [],
+      sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
+    };
+  }
+
+  // const imageBuffer = fs2.readFileSync(
+  //   path.join(process.cwd(), "assets", "ds.jpeg")
+  // ).buffer;
+  // const coverBuffer = fs2.readFileSync(
+  //   path.join(process.cwd(), "assets", "3land_rebrand.gif")
+  // ).buffer;
+
+  // const optionsCollection = {
+  //   symbol: metadata.symbol,
+  //   metadata: {
+  //     name: metadata.name,
+  //     description: collectionOpts.collectionDescription,
+  //     files: {
+  //       file: {
+  //         arrayBuffer() {
+  //           return imageBuffer;
+  //         },
+  //         type: "image/gif",
+  //       },
+  //       cover: {
+  //         arrayBuffer() {
+  //           return coverBuffer;
+  //         },
+  //         type: "image/gif",
+  //       },
+  //     },
+  //   },
+  //   creators: metadata.creators,
+  //   traits: [],
+  //   sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
+  // };
 
   try {
     const collectionTx = await sdk.createCollection(
@@ -329,7 +397,7 @@ async function createSingleImp(
     const createSingleEditionTxId = await sdk.createSingleEdition(
       walletKeypair,
       new PublicKey(storeAccount),
-      100,
+      createOptions.itemAmount,
       metadata,
       saleConfig,
       [1, 0, 0],

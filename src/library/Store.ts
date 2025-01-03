@@ -192,7 +192,16 @@ export class Store {
 
       if (metadata.uri.length !== 0) throw new Error("-- URI must be empty --");
 
-      const irys = await Irys(payer.publicKey.toBase58(), {});
+      const irysConfig = this.networkConfig.endpoint.includes(
+        NetworkType.MAINNET
+      )
+        ? {
+            arweave_rpc: "https://node2.irys.xyz",
+            rpc: "https://api.mainnet-beta.solana.com",
+            network: "mainnet",
+          }
+        : {};
+      const irys = await Irys(payer.publicKey.toBase58(), irysConfig);
       const uuid = "random_uuid_per_upload_session";
 
       const { instruction, signerIrys, metadataUrl } =
@@ -343,7 +352,16 @@ export class Store {
     validateIdentifier(identifier);
 
     try {
-      const irys = await Irys(payer.publicKey.toBase58(), {});
+      const irysConfig = this.networkConfig.endpoint.includes(
+        NetworkType.MAINNET
+      )
+        ? {
+            arweave_rpc: "https://node2.irys.xyz",
+            rpc: "https://api.mainnet-beta.solana.com",
+            network: "mainnet",
+          }
+        : {};
+      const irys = await Irys(payer.publicKey.toBase58(), irysConfig);
       const uuid = "random_uuid_per_upload_session";
 
       const [itemAccount] = await itemAccountPDA({
