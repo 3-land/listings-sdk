@@ -33,6 +33,7 @@ async function uploadFilesIrysInstruction(options, irysObj, uuid) {
                         uri: main_file?.irys?.url,
                     },
                     options.metadata.files.file.url && {
+                        type: await (0, utils_1.getUrlFileType)(options.metadata.files.file.url),
                         uri: options.metadata.files.file.url,
                     },
                     cover_file && {
@@ -40,6 +41,7 @@ async function uploadFilesIrysInstruction(options, irysObj, uuid) {
                         uri: cover_file?.irys?.url,
                     },
                     options?.metadata?.files?.cover?.url && {
+                        type: await (0, utils_1.getUrlFileType)(options.metadata.files.cover.url),
                         uri: options.metadata.files.cover.url,
                     },
                 ].filter(Boolean),
@@ -47,12 +49,12 @@ async function uploadFilesIrysInstruction(options, irysObj, uuid) {
             },
             image: (main_file || cover_file)?.irys?.url || options.metadata.files.file.url,
             attributes: options.traits,
-            category: main_file ? (0, utils_1.getFileCategory)(main_file) : 'image',
+            category: main_file ? (0, utils_1.getFileCategory)(main_file) : "image",
             animation_url: (0, utils_1.isAnimatable)(main_file?.type)
                 ? main_file?.irys?.url
                 : undefined,
         };
-        console.log('offchain_metadata: ', offchain_metadata);
+        console.log("offchain_metadata: ", offchain_metadata);
         const metadata_blob = new node_buffer_1.Blob([JSON.stringify(offchain_metadata)], {
             type: "application/json",
         });
