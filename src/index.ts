@@ -35,11 +35,11 @@ async function main() {
   };
 
   const createItemOptions: CreateSingleOptions = {
-    itemName: "supercoolitem16",
+    itemName: "vidiojuego2",
     sellerFee: 500,
     itemAmount: 55,
-    itemSymbol: "SCI15",
-    itemDescription: "testing mainnet after refactor",
+    itemSymbol: "VDJ",
+    itemDescription: "testing description",
     traits: [
       { trait_type: "type", value: "cool" },
       { trait_type: "creator", value: "me" },
