@@ -44,7 +44,7 @@ async function main() {
       { trait_type: "type", value: "cool" },
       { trait_type: "creator", value: "me" },
     ],
-    price: 0, //100000000 == 0.1 sol
+    price: 10000000, //100000000 == 0.1 sol
     // splHash: "HabTivxE5cnR1G9CmXf3kysdKSmzJncedPstiqiUZBMv",
     mainImageUrl:
       "https://arweave.net/FMkKYYsheEImBfejYaPPoJbI3CxJxunwvErD9VYzxOY?ext=jpeg",

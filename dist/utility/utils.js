@@ -1,13 +1,18 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkCategory = exports.checkFileType = exports.validateSolAddress = exports.nowS = exports.sleep = exports.cyrb53 = void 0;
 exports.bytesToU32 = bytesToU32;
 exports.normalizeFileData = normalizeFileData;
+exports.getUrlFileType = getUrlFileType;
 exports.getFileType = getFileType;
 exports.validateFileType = validateFileType;
 exports.getFileCategory = getFileCategory;
 exports.isAnimatable = isAnimatable;
 const web3_js_1 = require("@solana/web3.js");
+const node_fetch_1 = __importDefault(require("node-fetch"));
 function bytesToU32(slice) {
     let result = 0;
     for (let i = slice.length - 1; i >= 0; i--) {
@@ -136,6 +141,40 @@ function getMimeTypeFromBuffer(buffer) {
     if (header.startsWith("676c5446"))
         return "model/gltf-binary";
     return "application/octet-stream";
+}
+async function getUrlFileType(fileUrl) {
+    try {
+        // Fetch only the first 12 bytes of the file first to check if the file exists
+        const headResponse = await (0, node_fetch_1.default)(fileUrl, { method: "HEAD" });
+        if (!headResponse.ok) {
+            throw new Error(`Failed to fetch file: ${headResponse.statusText}`);
+        }
+        // Then fetch the beginning of the file using a range request
+        const response = await (0, node_fetch_1.default)(fileUrl, {
+            headers: {
+                Range: "bytes=0-11",
+            },
+        });
+        if (!response.ok) {
+            // If range request is not supported, fetch a small part of the file
+            const fullResponse = await (0, node_fetch_1.default)(fileUrl);
+            if (!fullResponse.ok) {
+                throw new Error(`Failed to fetch file: ${fullResponse.statusText}`);
+            }
+            const buffer = await fullResponse.arrayBuffer();
+            // Only take the first 12 bytes
+            const slicedBuffer = buffer.slice(0, 12);
+            return getMimeTypeFromBuffer(slicedBuffer);
+        }
+        const buffer = await response.arrayBuffer();
+        const fileType = getMimeTypeFromBuffer(buffer);
+        console.log("file type in getUrl: ", fileType);
+        return fileType;
+    }
+    catch (error) {
+        console.error("Error getting file type from URL:", error);
+        return "application/octet-stream"; // Default type if we can't determine the actual type
+    }
 }
 function getFileType(file) {
     if (!file)
