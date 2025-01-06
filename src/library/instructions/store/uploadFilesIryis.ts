@@ -4,6 +4,7 @@ import {
   checkFileType,
   getFileCategory,
   getFileType,
+  getUrlFileType,
   isAnimatable,
   normalizeFileData,
   validateFileType,
@@ -60,6 +61,7 @@ export async function uploadFilesIrysInstruction(
             uri: main_file?.irys?.url,
           },
           options.metadata.files.file.url && {
+            type: await getUrlFileType(options.metadata.files.file.url),
             uri: options.metadata.files.file.url,
           },
           cover_file && {
@@ -67,20 +69,22 @@ export async function uploadFilesIrysInstruction(
             uri: cover_file?.irys?.url,
           },
           options?.metadata?.files?.cover?.url && {
+            type: await getUrlFileType(options.metadata.files.cover.url),
             uri: options.metadata.files.cover.url,
           },
         ].filter(Boolean),
         creators: options.creators,
       },
-      image: (main_file || cover_file)?.irys?.url || options.metadata.files.file.url,
+      image:
+        (main_file || cover_file)?.irys?.url || options.metadata.files.file.url,
       attributes: options.traits,
-      category: main_file ? getFileCategory(main_file) : 'image',
+      category: main_file ? getFileCategory(main_file) : "image",
       animation_url: isAnimatable(main_file?.type)
         ? main_file?.irys?.url
         : undefined,
     };
 
-    console.log('offchain_metadata: ', offchain_metadata) 
+    console.log("offchain_metadata: ", offchain_metadata);
 
     const metadata_blob = new Blob([JSON.stringify(offchain_metadata)], {
       type: "application/json",
