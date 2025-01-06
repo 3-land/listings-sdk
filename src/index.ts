@@ -35,16 +35,16 @@ async function main() {
   };
 
   const createItemOptions: CreateSingleOptions = {
-    itemName: "supercoolitem16",
+    itemName: "hello",
     sellerFee: 500,
     itemAmount: 55,
     itemSymbol: "SCI15",
-    itemDescription: "testing mainnet after refactor",
+    itemDescription: "testing",
     traits: [
       { trait_type: "type", value: "cool" },
       { trait_type: "creator", value: "me" },
     ],
-    price: 0, //100000000 == 0.1 sol
+    price: 10000000, //100000000 == 0.1 sol
     // splHash: "HabTivxE5cnR1G9CmXf3kysdKSmzJncedPstiqiUZBMv",
     mainImageUrl:
       "https://arweave.net/FMkKYYsheEImBfejYaPPoJbI3CxJxunwvErD9VYzxOY?ext=jpeg",

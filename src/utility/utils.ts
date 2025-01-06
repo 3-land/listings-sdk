@@ -1,5 +1,6 @@
 import { PublicKey } from "@solana/web3.js";
 import { FileData } from "../library/instructions/store/uploadFilesIryis";
+import fetch from "node-fetch";
 
 export function bytesToU32(slice: any) {
   let result = 0;
@@ -131,6 +132,43 @@ function getMimeTypeFromBuffer(buffer: ArrayBuffer): string {
   if (header.startsWith("676c5446")) return "model/gltf-binary";
 
   return "application/octet-stream";
+}
+
+export async function getUrlFileType(fileUrl: string): Promise<string> {
+  try {
+    // Fetch only the first 12 bytes of the file first to check if the file exists
+    const headResponse = await fetch(fileUrl, { method: "HEAD" });
+    if (!headResponse.ok) {
+      throw new Error(`Failed to fetch file: ${headResponse.statusText}`);
+    }
+
+    // Then fetch the beginning of the file using a range request
+    const response = await fetch(fileUrl, {
+      headers: {
+        Range: "bytes=0-11",
+      },
+    });
+
+    if (!response.ok) {
+      // If range request is not supported, fetch a small part of the file
+      const fullResponse = await fetch(fileUrl);
+      if (!fullResponse.ok) {
+        throw new Error(`Failed to fetch file: ${fullResponse.statusText}`);
+      }
+      const buffer = await fullResponse.arrayBuffer();
+      // Only take the first 12 bytes
+      const slicedBuffer = buffer.slice(0, 12);
+      return getMimeTypeFromBuffer(slicedBuffer);
+    }
+
+    const buffer = await response.arrayBuffer();
+    const fileType = getMimeTypeFromBuffer(buffer);
+    console.log("file type in getUrl: ", fileType);
+    return fileType;
+  } catch (error) {
+    console.error("Error getting file type from URL:", error);
+    return "application/octet-stream"; // Default type if we can't determine the actual type
+  }
 }
 
 export function getFileType(file: any): string | null {
