@@ -1,6 +1,9 @@
 import { PublicKey } from "@solana/web3.js";
 import { FileData } from "../library/instructions/store/uploadFilesIryis";
 import fetch from "node-fetch";
+import BN from "bn.js";
+import { toPublicKey } from "./PdaManager";
+import { createAssociatedTokenAccountInstruction } from "@solana/spl-token";
 
 export function bytesToU32(slice: any) {
   let result = 0;
@@ -227,3 +230,82 @@ export function isAnimatable(type: string): boolean {
     type === "model/gltf-binary"
   );
 }
+
+export const buildTree = (prev_layer: any, layers: any): any => {
+  if (prev_layer.length === 1) {
+    return prev_layer;
+  }
+  const next_layer = [];
+  for (let i = 0; i < prev_layer.length; i += 2) {
+    const a = prev_layer[i];
+    const b = prev_layer[i + 1] || 0;
+    const aN = new BN(a).toArrayLike(Buffer, "le", 8);
+    const bN = new BN(b).toArrayLike(Buffer, "le", 8);
+    next_layer.push(cyrb53([...aN, ...bN], 0));
+  }
+  if (next_layer.length % 2 == 1) layers.unshift(next_layer);
+  if (layers.length > 100) return layers;
+  return buildTree(next_layer, layers);
+};
+
+export const mapTraits = (attributes: any, anchor: any): any => {
+  const hashes = [];
+  if (!attributes.length) return [[0]];
+  for (const attr of attributes) {
+    if (attr.offchain) continue;
+    const typeBytes = new BN(cyrb53(attr.trait_type + "", 0)).toArrayLike(
+      Buffer,
+      "le",
+      8
+    );
+    const valueBytes = new BN(cyrb53(attr.value + "", 0)).toArrayLike(
+      Buffer,
+      "le",
+      8
+    );
+    hashes.push(cyrb53([...typeBytes, ...valueBytes], 0));
+  }
+  const layers = [hashes];
+
+  buildTree(layers[0], layers);
+
+  return layers;
+};
+
+export const findAssociatedTokenAccountAddress2 = async (
+  mint: string,
+  wallet: string
+) => {
+  return PublicKey.findProgramAddress(
+    [
+      toPublicKey(wallet).toBuffer(),
+      toPublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA").toBuffer(),
+      toPublicKey(mint).toBuffer(),
+    ],
+    toPublicKey("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")
+  );
+};
+
+export const createATA = async ({ owner, payer, nft }: any) => {
+  owner = toPublicKey(owner);
+  nft = toPublicKey(nft);
+  payer = toPublicKey(payer || owner);
+
+  const [destination] = await findAssociatedTokenAccountAddress2(nft, owner);
+
+  // const instructions = [];
+
+  // instructions.push(
+
+  // );
+
+  const ix = createAssociatedTokenAccountInstruction(
+    payer, //payer
+    destination,
+    owner, //walletAddress
+    nft //mintAddress
+  );
+
+  // return { instructions };
+  return ix;
+};

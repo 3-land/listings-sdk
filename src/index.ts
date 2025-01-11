@@ -5,6 +5,7 @@ import {
   buySingleImp,
   handleError,
   createCollectionImp,
+  createSingleWithPoolImp,
 } from "./library/implementation/storeImplementation";
 import {
   CreateCollectionOptions,
@@ -19,7 +20,8 @@ async function main() {
   //   };
 
   const optionsWithBase58: StoreInitOptions = {
-    privateKey: "", //your private key
+    privateKey:
+      "3zB3ii8Mvsy5qFRLr1HRqc2QGRtegNa2nTLUXsqLS1UDjdr98sYH5WStgbwnJzVeg811LVCYMVCY4fUag8ifDPri", //your private key
     isMainnet: false,
   };
 
@@ -35,17 +37,17 @@ async function main() {
   };
 
   const createItemOptions: CreateSingleOptions = {
-    itemName: "hello",
+    itemName: "hellowithpool619",
     sellerFee: 500,
     itemAmount: 55,
-    itemSymbol: "SCI15",
-    itemDescription: "testing",
+    itemSymbol: "hwps333",
+    itemDescription: "this nft uses the same pool as hellowithpool333",
     traits: [
       { trait_type: "type", value: "cool" },
       { trait_type: "creator", value: "me" },
     ],
     price: 10000000, //100000000 == 0.1 sol
-    // splHash: "HabTivxE5cnR1G9CmXf3kysdKSmzJncedPstiqiUZBMv",
+    splHash: "HabTivxE5cnR1G9CmXf3kysdKSmzJncedPstiqiUZBMv",
     mainImageUrl:
       "https://arweave.net/FMkKYYsheEImBfejYaPPoJbI3CxJxunwvErD9VYzxOY?ext=jpeg",
   };
@@ -69,7 +71,15 @@ async function main() {
     const collectionAccountMain =
       "GKLBspqHCKJMFKSn46CNdSP3AUeKDvcyF5knXxsJmhLj";
     const collectionAccountDev = "Dj91sSU6EErETscXj4mv4tMV6GM8HgJKFvqDqmq3F7Fz";
-    const singleEditionResult = await createSingleImp(
+    // const singleEditionResult = await createSingleImp(
+    //   optionsWithBase58,
+    //   landStoreDevnet,
+    //   // landStoreMainnet,
+    //   // collectionAccountMain,
+    //   collectionAccountDev,
+    //   createItemOptions
+    // );
+    const singleEditionResult = await createSingleWithPoolImp(
       optionsWithBase58,
       landStoreDevnet,
       // landStoreMainnet,

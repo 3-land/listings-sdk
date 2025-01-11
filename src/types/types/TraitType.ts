@@ -176,6 +176,63 @@ export class NonFungible {
   }
 }
 
+export type DataFields = {
+  hash: BN
+  count: number
+  supply: BN
+}
+export type DataValue = {
+  hash: BN
+  count: number
+  supply: BN
+}
+
+export interface DataJSON {
+  kind: "Data"
+  value: {
+    hash: string
+    count: number
+    supply: string
+  }
+}
+
+export class Data {
+  static readonly discriminator = 3
+  static readonly kind = "Data"
+  readonly discriminator = 3
+  readonly kind = "Data"
+  readonly value: DataValue
+
+  constructor(value: DataFields) {
+    this.value = {
+      hash: value.hash,
+      count: value.count,
+      supply: value.supply,
+    }
+  }
+
+  toJSON(): DataJSON {
+    return {
+      kind: "Data",
+      value: {
+        hash: this.value.hash.toString(),
+        count: this.value.count,
+        supply: this.value.supply.toString(),
+      },
+    }
+  }
+
+  toEncodable() {
+    return {
+      Data: {
+        hash: this.value.hash,
+        count: this.value.count,
+        supply: this.value.supply,
+      },
+    }
+  }
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function fromDecoded(obj: any): types.TraitTypeKind {
   if (typeof obj !== "object") {
@@ -210,6 +267,14 @@ export function fromDecoded(obj: any): types.TraitTypeKind {
       ),
     })
   }
+  if ("Data" in obj) {
+    const val = obj["Data"]
+    return new Data({
+      hash: val["hash"],
+      count: val["count"],
+      supply: val["supply"],
+    })
+  }
 
   throw new Error("Invalid enum object")
 }
@@ -237,6 +302,13 @@ export function fromJSON(obj: types.TraitTypeJSON): types.TraitTypeKind {
         values: obj.value.values.map((item) => types.TraitValue.fromJSON(item)),
       })
     }
+    case "Data": {
+      return new Data({
+        hash: new BN(obj.value.hash),
+        count: obj.value.count,
+        supply: new BN(obj.value.supply),
+      })
+    }
   }
 }
 
@@ -258,6 +330,10 @@ export function layout(property?: string) {
     borsh.struct(
       [borsh.u64("hash"), borsh.vec(types.TraitValue.layout(), "values")],
       "NonFungible"
+    ),
+    borsh.struct(
+      [borsh.u64("hash"), borsh.u32("count"), borsh.u64("supply")],
+      "Data"
     ),
   ])
   if (property !== undefined) {

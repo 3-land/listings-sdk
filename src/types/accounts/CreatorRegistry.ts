@@ -12,7 +12,11 @@ export interface CreatorRegistryFields {
   donations: BN
   date: types.IndexDateFields
   filters: Array<number>
-  track: types.SaleTrackFields
+  registryType: types.RegistryTypeKind
+  created: BN
+  sold: BN
+  earned: BN
+  collectors: BN
   lut: PublicKey
 }
 
@@ -24,7 +28,11 @@ export interface CreatorRegistryJSON {
   donations: string
   date: types.IndexDateJSON
   filters: Array<number>
-  track: types.SaleTrackJSON
+  registryType: types.RegistryTypeJSON
+  created: string
+  sold: string
+  earned: string
+  collectors: string
   lut: string
 }
 
@@ -36,7 +44,11 @@ export class CreatorRegistry {
   readonly donations: BN
   readonly date: types.IndexDate
   readonly filters: Array<number>
-  readonly track: types.SaleTrack
+  readonly registryType: types.RegistryTypeKind
+  readonly created: BN
+  readonly sold: BN
+  readonly earned: BN
+  readonly collectors: BN
   readonly lut: PublicKey
 
   static readonly discriminator = Buffer.from([
@@ -50,8 +62,12 @@ export class CreatorRegistry {
     borsh.publicKey("creator"),
     borsh.u64("donations"),
     types.IndexDate.layout("date"),
-    borsh.array(borsh.u8(), 8, "filters"),
-    types.SaleTrack.layout("track"),
+    borsh.array(borsh.u8(), 7, "filters"),
+    types.RegistryType.layout("registryType"),
+    borsh.u64("created"),
+    borsh.u64("sold"),
+    borsh.u64("earned"),
+    borsh.u64("collectors"),
     borsh.publicKey("lut"),
   ])
 
@@ -63,7 +79,11 @@ export class CreatorRegistry {
     this.donations = fields.donations
     this.date = new types.IndexDate({ ...fields.date })
     this.filters = fields.filters
-    this.track = new types.SaleTrack({ ...fields.track })
+    this.registryType = fields.registryType
+    this.created = fields.created
+    this.sold = fields.sold
+    this.earned = fields.earned
+    this.collectors = fields.collectors
     this.lut = fields.lut
   }
 
@@ -118,7 +138,11 @@ export class CreatorRegistry {
       donations: dec.donations,
       date: types.IndexDate.fromDecoded(dec.date),
       filters: dec.filters,
-      track: types.SaleTrack.fromDecoded(dec.track),
+      registryType: types.RegistryType.fromDecoded(dec.registryType),
+      created: dec.created,
+      sold: dec.sold,
+      earned: dec.earned,
+      collectors: dec.collectors,
       lut: dec.lut,
     })
   }
@@ -132,7 +156,11 @@ export class CreatorRegistry {
       donations: this.donations.toString(),
       date: this.date.toJSON(),
       filters: this.filters,
-      track: this.track.toJSON(),
+      registryType: this.registryType.toJSON(),
+      created: this.created.toString(),
+      sold: this.sold.toString(),
+      earned: this.earned.toString(),
+      collectors: this.collectors.toString(),
       lut: this.lut.toString(),
     }
   }
@@ -146,7 +174,11 @@ export class CreatorRegistry {
       donations: new BN(obj.donations),
       date: types.IndexDate.fromJSON(obj.date),
       filters: obj.filters,
-      track: types.SaleTrack.fromJSON(obj.track),
+      registryType: types.RegistryType.fromJSON(obj.registryType),
+      created: new BN(obj.created),
+      sold: new BN(obj.sold),
+      earned: new BN(obj.earned),
+      collectors: new BN(obj.collectors),
       lut: new PublicKey(obj.lut),
     })
   }

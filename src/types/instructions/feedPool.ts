@@ -1,25 +1,29 @@
-import { TransactionInstruction, PublicKey, AccountMeta } from "@solana/web3.js" // eslint-disable-line @typescript-eslint/no-unused-vars
-import BN from "bn.js" // eslint-disable-line @typescript-eslint/no-unused-vars
-import * as borsh from "@coral-xyz/borsh" // eslint-disable-line @typescript-eslint/no-unused-vars
-import * as types from "../types" // eslint-disable-line @typescript-eslint/no-unused-vars
-import { PROGRAM_ID } from "../programId"
+import {
+  TransactionInstruction,
+  PublicKey,
+  AccountMeta,
+} from "@solana/web3.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import BN from "bn.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import * as borsh from "@coral-xyz/borsh"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import * as types from "../types"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { PROGRAM_ID } from "../programId";
 
 export interface FeedPoolArgs {
-  name: string
-  amount: BN
-  decimals: number
-  withdraw: number
+  name: string;
+  amount: BN;
+  decimals: number;
+  withdraw: number;
 }
 
 export interface FeedPoolAccounts {
-  poolVault: PublicKey
-  currency: PublicKey
-  fromAta: PublicKey
-  toAta: PublicKey
-  storeAccount: PublicKey
-  payer: PublicKey
-  tokenProgram: PublicKey
-  systemProgram: PublicKey
+  poolVault: PublicKey;
+  currency: PublicKey;
+  fromAta: PublicKey;
+  toAta: PublicKey;
+  storeAccount: PublicKey;
+  payer: PublicKey;
+  tokenProgram: PublicKey;
+  systemProgram: PublicKey;
 }
 
 export const layout = borsh.struct([
@@ -27,7 +31,7 @@ export const layout = borsh.struct([
   borsh.u64("amount"),
   borsh.u8("decimals"),
   borsh.u8("withdraw"),
-])
+]);
 
 export function feedPool(
   args: FeedPoolArgs,
@@ -43,9 +47,9 @@ export function feedPool(
     { pubkey: accounts.payer, isSigner: true, isWritable: true },
     { pubkey: accounts.tokenProgram, isSigner: false, isWritable: false },
     { pubkey: accounts.systemProgram, isSigner: false, isWritable: false },
-  ]
-  const identifier = Buffer.from([209, 238, 252, 180, 229, 87, 69, 160])
-  const buffer = Buffer.alloc(1000)
+  ];
+  const identifier = Buffer.from([209, 238, 252, 180, 229, 87, 69, 160]);
+  const buffer = Buffer.alloc(1000);
   const len = layout.encode(
     {
       name: args.name,
@@ -54,8 +58,8 @@ export function feedPool(
       withdraw: args.withdraw,
     },
     buffer
-  )
-  const data = Buffer.concat([identifier, buffer]).slice(0, 8 + len)
-  const ix = new TransactionInstruction({ keys, programId, data })
-  return ix
+  );
+  const data = Buffer.concat([identifier, buffer]).slice(0, 8 + len);
+  const ix = new TransactionInstruction({ keys, programId, data });
+  return ix;
 }

@@ -103,59 +103,6 @@ export class PdaCreator {
   }
 }
 
-export type CollectionFields = {
-  metadata: types.VerifyCollectionMetadataFields
-  subtype: types.DepositSubtypeKind
-}
-export type CollectionValue = {
-  metadata: types.VerifyCollectionMetadata
-  subtype: types.DepositSubtypeKind
-}
-
-export interface CollectionJSON {
-  kind: "Collection"
-  value: {
-    metadata: types.VerifyCollectionMetadataJSON
-    subtype: types.DepositSubtypeJSON
-  }
-}
-
-export class Collection {
-  static readonly discriminator = 2
-  static readonly kind = "Collection"
-  readonly discriminator = 2
-  readonly kind = "Collection"
-  readonly value: CollectionValue
-
-  constructor(value: CollectionFields) {
-    this.value = {
-      metadata: new types.VerifyCollectionMetadata({ ...value.metadata }),
-      subtype: value.subtype,
-    }
-  }
-
-  toJSON(): CollectionJSON {
-    return {
-      kind: "Collection",
-      value: {
-        metadata: this.value.metadata.toJSON(),
-        subtype: this.value.subtype.toJSON(),
-      },
-    }
-  }
-
-  toEncodable() {
-    return {
-      Collection: {
-        metadata: types.VerifyCollectionMetadata.toEncodable(
-          this.value.metadata
-        ),
-        subtype: this.value.subtype.toEncodable(),
-      },
-    }
-  }
-}
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function fromDecoded(obj: any): types.DepositTypeKind {
   if (typeof obj !== "object") {
@@ -183,13 +130,6 @@ export function fromDecoded(obj: any): types.DepositTypeKind {
       hasher: types.AccountHasher.fromDecoded(val["hasher"]),
     })
   }
-  if ("Collection" in obj) {
-    const val = obj["Collection"]
-    return new Collection({
-      metadata: types.VerifyCollectionMetadata.fromDecoded(val["metadata"]),
-      subtype: types.DepositSubtype.fromDecoded(val["subtype"]),
-    })
-  }
 
   throw new Error("Invalid enum object")
 }
@@ -211,12 +151,6 @@ export function fromJSON(obj: types.DepositTypeJSON): types.DepositTypeKind {
         hasher: types.AccountHasher.fromJSON(obj.value.hasher),
       })
     }
-    case "Collection": {
-      return new Collection({
-        metadata: types.VerifyCollectionMetadata.fromJSON(obj.value.metadata),
-        subtype: types.DepositSubtype.fromJSON(obj.value.subtype),
-      })
-    }
   }
 }
 
@@ -229,13 +163,6 @@ export function layout(property?: string) {
         types.AccountHasher.layout("hasher"),
       ],
       "PdaCreator"
-    ),
-    borsh.struct(
-      [
-        types.VerifyCollectionMetadata.layout("metadata"),
-        types.DepositSubtype.layout("subtype"),
-      ],
-      "Collection"
     ),
   ])
   if (property !== undefined) {

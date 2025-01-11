@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.13",
   "name": "cnfaucet",
   "instructions": [
     {
@@ -37,320 +37,51 @@
       ]
     },
     {
-      "name": "createCollection",
+      "name": "upgradeAsset",
       "accounts": [
+        {
+          "name": "itemAccount",
+          "isMut": true,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
+          "name": "packAccount",
+          "isMut": true,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
+          "name": "merkleManager",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "storeAccount",
+          "isMut": true,
+          "isSigner": false
+        },
         {
           "name": "creatorAuthority",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "metadata",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "edition",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "mint",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "storeAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenMetadataProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "tokenMetadata",
-          "type": {
-            "defined": "TokenMetadata"
-          }
-        }
-      ]
-    },
-    {
-      "name": "deleteTokenLauncher",
-      "accounts": [
-        {
-          "name": "tokenManager",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "mint",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "storeAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenMetadataProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "buyToken",
-      "accounts": [
-        {
-          "name": "tokenManager",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenMintRegistry",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenGlobalRegistry",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "mint",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "storeAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenMetadataProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "createTokenLauncher",
-      "accounts": [
-        {
-          "name": "tokenManager",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "metadata",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "mint",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "storeTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "genericUser",
-          "isMut": true,
-          "isSigner": false,
-          "isOptional": true
-        },
-        {
-          "name": "storeAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenMetadataProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "price",
-          "type": "u64"
-        },
-        {
-          "name": "decimals",
-          "type": "u8"
-        },
-        {
-          "name": "tokenMetadata",
-          "type": {
-            "defined": "TokenMetadata"
-          }
-        },
-        {
-          "name": "share",
-          "type": "u16"
-        },
-        {
-          "name": "tokenType",
-          "type": {
-            "defined": "TokenType"
-          }
-        }
-      ]
-    },
-    {
-      "name": "registerGenericUser",
-      "accounts": [
-        {
-          "name": "genericUser",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "storeAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "profileHolder",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "categoryHolder",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "oldCategoryHolder",
-          "isMut": true,
-          "isSigner": false,
-          "isOptional": true
-        },
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "merkleTree",
           "isMut": true,
-          "isSigner": false
+          "isSigner": false,
+          "docs": ["CHECK"]
+        },
+        {
+          "name": "owner",
+          "isMut": false,
+          "isSigner": false,
+          "docs": ["CHECK"]
+        },
+        {
+          "name": "creator",
+          "isMut": false,
+          "isSigner": true
         },
         {
           "name": "treeAuthority",
@@ -358,8 +89,22 @@
           "isSigner": false
         },
         {
-          "name": "merkleManager",
+          "name": "collectionAuthorityRecordPda",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "If there is no collecton authority record PDA then",
+            "this must be the Bubblegum program address."
+          ]
+        },
+        {
+          "name": "collectionMetadata",
           "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "collectionMint",
+          "isMut": false,
           "isSigner": false
         },
         {
@@ -390,60 +135,76 @@
       ],
       "args": [
         {
-          "name": "username",
-          "type": "string"
-        },
-        {
-          "name": "subApp",
-          "type": "u64"
-        },
-        {
-          "name": "subWallet",
-          "type": "publicKey"
-        },
-        {
-          "name": "category",
-          "type": "u64"
-        },
-        {
-          "name": "lut",
+          "name": "changing",
           "type": {
-            "option": "publicKey"
+            "defined": "ChangingMetadata"
           }
         },
         {
-          "name": "genericData",
-          "type": {
-            "option": {
-              "vec": {
-                "defined": "GenericStore"
-              }
-            }
-          }
+          "name": "index",
+          "type": "u32"
         },
         {
-          "name": "arweave",
+          "name": "root",
           "type": {
-            "option": "string"
-          }
-        },
-        {
-          "name": "cnft",
-          "type": {
-            "option": {
-              "defined": "CompactCnftData"
-            }
+            "array": ["u8", 32]
           }
         }
       ]
     },
     {
-      "name": "registerUser",
+      "name": "upgradeItem",
       "accounts": [
         {
-          "name": "threeId",
+          "name": "itemAccount",
+          "isMut": true,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
+          "name": "packAccount",
+          "isMut": true,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
+          "name": "storeAccount",
           "isMut": true,
           "isSigner": false
+        },
+        {
+          "name": "creator",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "metadata",
+          "type": {
+            "defined": "UpdateMetadata"
+          }
+        }
+      ]
+    },
+    {
+      "name": "createPool",
+      "accounts": [
+        {
+          "name": "poolVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "currency",
+          "isMut": false,
+          "isSigner": false,
+          "isOptional": true
         },
         {
           "name": "storeAccount",
@@ -463,16 +224,85 @@
       ],
       "args": [
         {
-          "name": "username",
+          "name": "name",
           "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "shareSecret",
+      "accounts": [
+        {
+          "name": "revealForMe",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          "name": "sub",
-          "type": "publicKey"
+          "name": "itemAccount",
+          "isMut": false,
+          "isSigner": false,
+          "docs": ["CHECK"]
         },
         {
-          "name": "lut",
-          "type": "publicKey"
+          "name": "storeAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "payload",
+          "type": {
+            "vec": "u8"
+          }
+        }
+      ]
+    },
+    {
+      "name": "registerSecure",
+      "accounts": [
+        {
+          "name": "secureHolder",
+          "isMut": true,
+          "isSigner": false,
+          "docs": ["CHECK"]
+        },
+        {
+          "name": "itemAccount",
+          "isMut": false,
+          "isSigner": false,
+          "docs": ["CHECK"]
+        },
+        {
+          "name": "storeAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "owner",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "arweave",
+          "type": "string"
         }
       ]
     },
@@ -760,15 +590,14 @@
           "isSigner": false
         },
         {
-          "name": "packAccount",
+          "name": "packTraits",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "packReserveList",
+          "name": "packAccount",
           "isMut": true,
-          "isSigner": false,
-          "isOptional": true
+          "isSigner": false
         },
         {
           "name": "creator",
@@ -791,12 +620,6 @@
           "name": "metadata",
           "type": {
             "defined": "MetadataArgs"
-          }
-        },
-        {
-          "name": "saleConfig",
-          "type": {
-            "defined": "SaleConfig"
           }
         },
         {
@@ -1669,74 +1492,6 @@
       ]
     },
     {
-      "name": "unwrapAndDestroy",
-      "accounts": [
-        {
-          "name": "itemAccount",
-          "isMut": true,
-          "isSigner": false,
-          "isOptional": true
-        },
-        {
-          "name": "packAccount",
-          "isMut": true,
-          "isSigner": false,
-          "isOptional": true
-        },
-        {
-          "name": "currency",
-          "isMut": false,
-          "isSigner": false,
-          "isOptional": true,
-          "docs": ["CHECK"]
-        },
-        {
-          "name": "splVaultFrom",
-          "isMut": true,
-          "isSigner": false,
-          "isOptional": true,
-          "docs": ["CHECK"]
-        },
-        {
-          "name": "splVaultTo",
-          "isMut": true,
-          "isSigner": false,
-          "isOptional": true,
-          "docs": ["CHECK"]
-        },
-        {
-          "name": "merkleTree",
-          "isMut": false,
-          "isSigner": false,
-          "docs": ["CHECK"]
-        },
-        {
-          "name": "owner",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false,
-          "isOptional": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "metadata",
-          "type": {
-            "defined": "UnwrapMetadata"
-          }
-        }
-      ]
-    },
-    {
       "name": "buyPay",
       "accounts": [
         {
@@ -2423,183 +2178,6 @@
         {
           "name": "userActivityBump",
           "type": "u8"
-        }
-      ]
-    },
-    {
-      "name": "feedPool",
-      "accounts": [
-        {
-          "name": "poolVault",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "currency",
-          "isMut": false,
-          "isSigner": false,
-          "isOptional": true
-        },
-        {
-          "name": "fromAta",
-          "isMut": true,
-          "isSigner": false,
-          "isOptional": true
-        },
-        {
-          "name": "toAta",
-          "isMut": true,
-          "isSigner": false,
-          "isOptional": true
-        },
-        {
-          "name": "storeAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false,
-          "isOptional": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "name",
-          "type": "string"
-        },
-        {
-          "name": "amount",
-          "type": "u64"
-        },
-        {
-          "name": "decimals",
-          "type": "u8"
-        },
-        {
-          "name": "withdraw",
-          "type": "u8"
-        }
-      ]
-    },
-    {
-      "name": "donateUser",
-      "accounts": [
-        {
-          "name": "donationRegistryNew",
-          "isMut": true,
-          "isSigner": false,
-          "isOptional": true
-        },
-        {
-          "name": "donationRegistryOld",
-          "isMut": true,
-          "isSigner": false,
-          "isOptional": true
-        },
-        {
-          "name": "donationRecord",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "currency",
-          "isMut": false,
-          "isSigner": false,
-          "isOptional": true
-        },
-        {
-          "name": "receiver",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "userActivity",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "storeAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "merkleTree",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "treeAuthority",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "merkleManager",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "logWrapper",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "bubblegumProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "compressionProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenMetadataProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "epoch",
-          "type": "u32"
-        },
-        {
-          "name": "amount",
-          "type": "u64"
-        },
-        {
-          "name": "message",
-          "type": "string"
-        },
-        {
-          "name": "previousRecord",
-          "type": {
-            "option": {
-              "defined": "PreviousDonationRecord"
-            }
-          }
         }
       ]
     },
@@ -3594,14 +3172,22 @@
           {
             "name": "filters",
             "type": {
-              "array": ["u8", 4]
+              "array": ["u8", 3]
             }
           },
           {
-            "name": "track",
+            "name": "registryType",
             "type": {
-              "defined": "CollectTrack"
+              "defined": "RegistryType"
             }
+          },
+          {
+            "name": "collected",
+            "type": "u64"
+          },
+          {
+            "name": "spent",
+            "type": "u64"
           }
         ]
       }
@@ -3618,94 +3204,6 @@
           {
             "name": "creator",
             "type": "publicKey"
-          }
-        ]
-      }
-    },
-    {
-      "name": "TokenManager",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "class",
-            "type": {
-              "defined": "AccountClass"
-            }
-          },
-          {
-            "name": "storeHash",
-            "type": "u64"
-          },
-          {
-            "name": "tokenType",
-            "type": {
-              "defined": "TokenType"
-            }
-          },
-          {
-            "name": "state",
-            "type": {
-              "defined": "TokenState"
-            }
-          },
-          {
-            "name": "currency",
-            "type": "publicKey"
-          },
-          {
-            "name": "creator",
-            "type": "publicKey"
-          },
-          {
-            "name": "communityShare",
-            "type": "u16"
-          },
-          {
-            "name": "name",
-            "type": "string"
-          },
-          {
-            "name": "base",
-            "type": "u64"
-          },
-          {
-            "name": "price",
-            "type": "u64"
-          },
-          {
-            "name": "supply",
-            "type": "u64"
-          },
-          {
-            "name": "created",
-            "type": "u64"
-          },
-          {
-            "name": "pool",
-            "type": "u64"
-          },
-          {
-            "name": "pending",
-            "type": "u64"
-          },
-          {
-            "name": "taxes",
-            "type": {
-              "array": ["u16", 4]
-            }
-          },
-          {
-            "name": "options",
-            "type": {
-              "array": ["u8", 8]
-            }
-          },
-          {
-            "name": "extra",
-            "type": {
-              "array": ["u8", 64]
-            }
           }
         ]
       }
@@ -3746,14 +3244,30 @@
           {
             "name": "filters",
             "type": {
-              "array": ["u8", 8]
+              "array": ["u8", 7]
             }
           },
           {
-            "name": "track",
+            "name": "registryType",
             "type": {
-              "defined": "SaleTrack"
+              "defined": "RegistryType"
             }
+          },
+          {
+            "name": "created",
+            "type": "u64"
+          },
+          {
+            "name": "sold",
+            "type": "u64"
+          },
+          {
+            "name": "earned",
+            "type": "u64"
+          },
+          {
+            "name": "collectors",
+            "type": "u64"
           },
           {
             "name": "lut",
@@ -3802,76 +3316,20 @@
             }
           },
           {
-            "name": "track",
-            "type": {
-              "defined": "SaleTrack"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "PoolVault",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "class",
-            "type": {
-              "defined": "AccountClass"
-            }
-          },
-          {
-            "name": "state",
-            "type": {
-              "defined": "PoolState"
-            }
-          },
-          {
-            "name": "storeHash",
+            "name": "created",
             "type": "u64"
           },
           {
-            "name": "currency",
-            "type": "publicKey"
-          },
-          {
-            "name": "creator",
-            "type": "publicKey"
-          },
-          {
-            "name": "poolType",
-            "type": {
-              "defined": "PoolType"
-            }
-          },
-          {
-            "name": "access",
-            "type": {
-              "defined": "PoolAccess"
-            }
-          },
-          {
-            "name": "deposit",
+            "name": "sold",
             "type": "u64"
           },
           {
-            "name": "secured",
+            "name": "earned",
             "type": "u64"
           },
           {
-            "name": "decimals",
-            "type": "u8"
-          },
-          {
-            "name": "managers",
-            "type": {
-              "vec": "publicKey"
-            }
-          },
-          {
-            "name": "name",
-            "type": "string"
+            "name": "collectors",
+            "type": "u64"
           }
         ]
       }
@@ -4035,13 +3493,6 @@
             "name": "class",
             "type": {
               "defined": "AccountClass"
-            }
-          },
-
-          {
-            "name": "state",
-            "type": {
-              "defined": "BurnState"
             }
           },
           {
@@ -4365,7 +3816,7 @@
       }
     },
     {
-      "name": "SecureHolder",
+      "name": "PoolVault",
       "type": {
         "kind": "struct",
         "fields": [
@@ -4376,9 +3827,105 @@
             }
           },
           {
-            "name": "payload",
+            "name": "state",
             "type": {
-              "defined": "EncryptedPayload"
+              "defined": "PoolState"
+            }
+          },
+          {
+            "name": "storeHash",
+            "type": "u64"
+          },
+          {
+            "name": "currency",
+            "type": "publicKey"
+          },
+          {
+            "name": "creator",
+            "type": "publicKey"
+          },
+          {
+            "name": "poolType",
+            "type": {
+              "defined": "PoolType"
+            }
+          },
+          {
+            "name": "poolHash",
+            "type": "u64"
+          },
+          {
+            "name": "access",
+            "type": {
+              "defined": "PoolAccess"
+            }
+          },
+          {
+            "name": "deposit",
+            "type": "u64"
+          },
+          {
+            "name": "secured",
+            "type": "u64"
+          },
+          {
+            "name": "decimals",
+            "type": "u8"
+          },
+          {
+            "name": "managers",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "ins",
+            "type": "u32"
+          },
+          {
+            "name": "outs",
+            "type": "u32"
+          },
+          {
+            "name": "volumeOut",
+            "type": "u64"
+          },
+          {
+            "name": "volumeIn",
+            "type": "u64"
+          },
+          {
+            "name": "defaultCurrency",
+            "type": "u8"
+          },
+          {
+            "name": "createdAt",
+            "type": "u32"
+          },
+          {
+            "name": "flags",
+            "type": {
+              "array": ["u8", 3]
+            }
+          },
+          {
+            "name": "config",
+            "type": {
+              "vec": {
+                "defined": "PoolConfig"
+              }
+            }
+          },
+          {
+            "name": "otherCurrencies",
+            "type": {
+              "vec": {
+                "defined": "Currency"
+              }
             }
           }
         ]
@@ -4410,9 +3957,23 @@
             "type": "publicKey"
           },
           {
-            "name": "dates",
+            "name": "createdHour",
+            "type": "u32"
+          },
+          {
+            "name": "createdDates",
             "type": {
-              "defined": "IndexDates"
+              "defined": "IndexDateNoHour"
+            }
+          },
+          {
+            "name": "activityHour",
+            "type": "u32"
+          },
+          {
+            "name": "activityDates",
+            "type": {
+              "defined": "IndexDateNoHour"
             }
           },
           {
@@ -4442,10 +4003,18 @@
             "type": "u64"
           },
           {
-            "name": "track",
+            "name": "state",
             "type": {
-              "defined": "ItemTrack"
+              "defined": "ItemState"
             }
+          },
+          {
+            "name": "supply",
+            "type": "u64"
+          },
+          {
+            "name": "createdPieces",
+            "type": "u64"
           },
           {
             "name": "popularity",
@@ -4468,25 +4037,9 @@
             "type": "publicKey"
           },
           {
-            "name": "isServerless",
-            "type": "u8"
-          },
-          {
-            "name": "availableOption",
-            "type": "u8"
-          },
-          {
-            "name": "hasWrappedTokens",
-            "type": "u8"
-          },
-          {
-            "name": "burntPieces",
-            "type": "u32"
-          },
-          {
-            "name": "flag",
+            "name": "extra",
             "type": {
-              "array": ["u8", 1]
+              "array": ["u8", 8]
             }
           },
           {
@@ -4520,12 +4073,6 @@
                 "defined": "FakeVolumeTrack"
               }
             }
-          },
-          {
-            "name": "extra",
-            "type": {
-              "array": ["u8", 4]
-            }
           }
         ]
       }
@@ -4556,9 +4103,23 @@
             "type": "publicKey"
           },
           {
-            "name": "dates",
+            "name": "createdHour",
+            "type": "u32"
+          },
+          {
+            "name": "createdDates",
             "type": {
-              "defined": "IndexDates"
+              "defined": "IndexDateNoHour"
+            }
+          },
+          {
+            "name": "activityHour",
+            "type": "u32"
+          },
+          {
+            "name": "activityDates",
+            "type": {
+              "defined": "IndexDateNoHour"
             }
           },
           {
@@ -4588,10 +4149,18 @@
             "type": "u64"
           },
           {
-            "name": "track",
+            "name": "state",
             "type": {
-              "defined": "ItemTrack"
+              "defined": "ItemState"
             }
+          },
+          {
+            "name": "supply",
+            "type": "u64"
+          },
+          {
+            "name": "createdPieces",
+            "type": "u64"
           },
           {
             "name": "popularity",
@@ -4614,25 +4183,9 @@
             "type": "publicKey"
           },
           {
-            "name": "isServerless",
-            "type": "u8"
-          },
-          {
-            "name": "availableOption",
-            "type": "u8"
-          },
-          {
-            "name": "hasWrappedTokens",
-            "type": "u8"
-          },
-          {
-            "name": "burntPieces",
-            "type": "u32"
-          },
-          {
-            "name": "flag",
+            "name": "extra",
             "type": {
-              "array": ["u8", 1]
+              "array": ["u8", 8]
             }
           },
           {
@@ -4702,153 +4255,6 @@
             "type": {
               "vec": "publicKey"
             }
-          },
-          {
-            "name": "extra",
-            "type": {
-              "array": ["u8", 4]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "GenericUser",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "class",
-            "type": {
-              "defined": "AccountClass"
-            }
-          },
-          {
-            "name": "subApp",
-            "type": "u64"
-          },
-          {
-            "name": "holderHash",
-            "type": "u64"
-          },
-          {
-            "name": "category",
-            "type": "u64"
-          },
-          {
-            "name": "creator",
-            "type": "publicKey"
-          },
-          {
-            "name": "lutAccount",
-            "type": "publicKey"
-          },
-          {
-            "name": "subWallets",
-            "type": {
-              "vec": "publicKey"
-            }
-          },
-          {
-            "name": "extended",
-            "type": "u8"
-          },
-          {
-            "name": "flags",
-            "type": {
-              "array": ["u8", 8]
-            }
-          },
-          {
-            "name": "username",
-            "type": "string"
-          },
-          {
-            "name": "genericStore",
-            "type": {
-              "vec": {
-                "defined": "GenericStore"
-              }
-            }
-          },
-          {
-            "name": "extra",
-            "type": {
-              "array": ["u8", 32]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "ThreeId",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "class",
-            "type": {
-              "defined": "AccountClass"
-            }
-          },
-          {
-            "name": "holderHash",
-            "type": "u64"
-          },
-          {
-            "name": "creator",
-            "type": "publicKey"
-          },
-          {
-            "name": "lutAccount",
-            "type": "publicKey"
-          },
-          {
-            "name": "points1",
-            "type": "u64"
-          },
-          {
-            "name": "points2",
-            "type": "u64"
-          },
-          {
-            "name": "coin1",
-            "type": "u32"
-          },
-          {
-            "name": "coin2",
-            "type": "u32"
-          },
-          {
-            "name": "settings",
-            "type": {
-              "array": ["u8", 8]
-            }
-          },
-          {
-            "name": "subwallets",
-            "type": {
-              "vec": "publicKey"
-            }
-          },
-
-          {
-            "name": "username",
-            "type": "string"
-          },
-          {
-            "name": "generalStore",
-            "type": {
-              "vec": {
-                "defined": "GeneralStore"
-              }
-            }
-          },
-          {
-            "name": "extra",
-            "type": {
-              "array": ["u8", 32]
-            }
           }
         ]
       }
@@ -4890,6 +4296,22 @@
   ],
   "types": [
     {
+      "name": "TraitPass",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "list",
+            "type": {
+              "vec": {
+                "defined": "TraitPassType"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "CurrencyArtistProof",
       "type": {
         "kind": "struct",
@@ -4909,22 +4331,6 @@
           {
             "name": "artistVerifier",
             "type": "u32"
-          }
-        ]
-      }
-    },
-    {
-      "name": "TraitPass",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "list",
-            "type": {
-              "vec": {
-                "defined": "TraitPassType"
-              }
-            }
           }
         ]
       }
@@ -5035,6 +4441,23 @@
                 }
               }
             ]
+          },
+          {
+            "name": "Data",
+            "fields": [
+              {
+                "name": "hash",
+                "type": "u64"
+              },
+              {
+                "name": "count",
+                "type": "u32"
+              },
+              {
+                "name": "supply",
+                "type": "u64"
+              }
+            ]
           }
         ]
       }
@@ -5092,6 +4515,15 @@
                 }
               }
             ]
+          },
+          {
+            "name": "Data",
+            "fields": [
+              {
+                "name": "hash",
+                "type": "u64"
+              }
+            ]
           }
         ]
       }
@@ -5128,6 +4560,42 @@
           {
             "name": "date",
             "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DataTraitInitMap",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "hash",
+            "type": "u64"
+          },
+          {
+            "name": "data",
+            "type": "u64"
+          },
+          {
+            "name": "index",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DataTraitInit",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "hash",
+            "type": "u64"
+          },
+          {
+            "name": "data",
+            "type": "u64"
           }
         ]
       }
@@ -5232,21 +4700,25 @@
       }
     },
     {
-      "name": "TokenMetadata",
+      "name": "Currency",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "name",
-            "type": "string"
+            "name": "address",
+            "type": "publicKey"
           },
           {
-            "name": "symbol",
-            "type": "string"
+            "name": "deposit",
+            "type": "u64"
           },
           {
-            "name": "arweave",
-            "type": "string"
+            "name": "secured",
+            "type": "u64"
+          },
+          {
+            "name": "decimals",
+            "type": "u8"
           }
         ]
       }
@@ -5319,22 +4791,6 @@
           {
             "name": "amount",
             "type": "u16"
-          }
-        ]
-      }
-    },
-    {
-      "name": "EncryptedPayload",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "encType",
-            "type": "u8"
-          },
-          {
-            "name": "arweave",
-            "type": "string"
           }
         ]
       }
@@ -5443,28 +4899,6 @@
       }
     },
     {
-      "name": "PreviousDonationRecord",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "cnft",
-            "type": {
-              "defined": "CnftData"
-            }
-          },
-          {
-            "name": "amount",
-            "type": "u64"
-          },
-          {
-            "name": "message",
-            "type": "string"
-          }
-        ]
-      }
-    },
-    {
       "name": "CnftData",
       "type": {
         "kind": "struct",
@@ -5486,85 +4920,6 @@
             "type": {
               "array": ["u8", 32]
             }
-          },
-          {
-            "name": "index",
-            "type": "u32"
-          }
-        ]
-      }
-    },
-    {
-      "name": "DepositType",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Creator",
-            "fields": [
-              {
-                "name": "creators",
-                "type": {
-                  "vec": {
-                    "defined": "Creator"
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "name": "PdaCreator",
-            "fields": [
-              {
-                "name": "creators",
-                "type": {
-                  "vec": {
-                    "defined": "Creator"
-                  }
-                }
-              },
-              {
-                "name": "hasher",
-                "type": {
-                  "defined": "AccountHasher"
-                }
-              }
-            ]
-          },
-          {
-            "name": "Collection",
-            "fields": [
-              {
-                "name": "metadata",
-                "type": {
-                  "defined": "VerifyCollectionMetadata"
-                }
-              },
-              {
-                "name": "subtype",
-                "type": {
-                  "defined": "DepositSubtype"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "name": "CompactCnftData",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "root",
-            "type": {
-              "array": ["u8", 32]
-            }
-          },
-          {
-            "name": "arweave",
-            "type": "string"
           },
           {
             "name": "index",
@@ -5611,9 +4966,6 @@
           },
           {
             "name": "PdaCreator"
-          },
-          {
-            "name": "Collection"
           }
         ]
       }
@@ -5657,20 +5009,6 @@
       }
     },
     {
-      "name": "BurnState",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "NonPending"
-          },
-          {
-            "name": "Pending"
-          }
-        ]
-      }
-    },
-    {
       "name": "DepositState",
       "type": {
         "kind": "enum",
@@ -5685,20 +5023,6 @@
       }
     },
     {
-      "name": "DepositSubtype",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "None"
-          },
-          {
-            "name": "Three"
-          }
-        ]
-      }
-    },
-    {
       "name": "DepositFormat",
       "type": {
         "kind": "enum",
@@ -5708,6 +5032,46 @@
           },
           {
             "name": "Nft"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DepositType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Creator",
+            "fields": [
+              {
+                "name": "creators",
+                "type": {
+                  "vec": {
+                    "defined": "Creator"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "PdaCreator",
+            "fields": [
+              {
+                "name": "creators",
+                "type": {
+                  "vec": {
+                    "defined": "Creator"
+                  }
+                }
+              },
+              {
+                "name": "hasher",
+                "type": {
+                  "defined": "AccountHasher"
+                }
+              }
+            ]
           }
         ]
       }
@@ -5810,6 +5174,30 @@
           {
             "name": "created",
             "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "IndexDateNoHour",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "day",
+            "type": "u32"
+          },
+          {
+            "name": "week",
+            "type": "u32"
+          },
+          {
+            "name": "month",
+            "type": "u32"
+          },
+          {
+            "name": "minRelative",
+            "type": "u8"
           }
         ]
       }
@@ -6312,6 +5700,26 @@
       }
     },
     {
+      "name": "WrappedDestiny",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "pool",
+            "type": "publicKey"
+          },
+          {
+            "name": "destinyType",
+            "type": "u8"
+          },
+          {
+            "name": "flag1",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
       "name": "WrappedSource",
       "type": {
         "kind": "struct",
@@ -6331,53 +5739,6 @@
           {
             "name": "track",
             "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "GenericValue",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "None"
-          },
-          {
-            "name": "Key",
-            "fields": [
-              {
-                "name": "value",
-                "type": "publicKey"
-              }
-            ]
-          },
-          {
-            "name": "EightBytes",
-            "fields": [
-              {
-                "name": "value",
-                "type": "u64"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "name": "GenericStore",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "storeType",
-            "type": "u16"
-          },
-          {
-            "name": "data",
-            "type": {
-              "defined": "GenericValue"
-            }
           }
         ]
       }
@@ -6452,42 +5813,6 @@
           {
             "name": "share",
             "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "VerifyCollectionMetadata",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "name",
-            "type": "string"
-          },
-          {
-            "name": "symbol",
-            "type": "string"
-          },
-          {
-            "name": "uri",
-            "type": "string"
-          },
-          {
-            "name": "royalty",
-            "type": "u16"
-          },
-          {
-            "name": "collection",
-            "type": "u8"
-          },
-          {
-            "name": "creators",
-            "type": {
-              "vec": {
-                "defined": "Creator"
-              }
-            }
           }
         ]
       }
@@ -6583,66 +5908,6 @@
                   "defined": "ShortCreator"
                 }
               }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "UnwrapMetadata",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "wrappedAmount",
-            "type": "u64"
-          },
-          {
-            "name": "decimals",
-            "type": "u8"
-          },
-          {
-            "name": "traitHash",
-            "type": "u64"
-          },
-          {
-            "name": "name",
-            "type": "string"
-          },
-          {
-            "name": "arweave",
-            "type": "string"
-          },
-          {
-            "name": "edition",
-            "type": "u32"
-          },
-          {
-            "name": "leafIndex",
-            "type": "u32"
-          },
-          {
-            "name": "cardIndex",
-            "type": {
-              "option": "u32"
-            }
-          },
-          {
-            "name": "royalty",
-            "type": "u16"
-          },
-          {
-            "name": "creators",
-            "type": {
-              "vec": {
-                "defined": "ShortCreator"
-              }
-            }
-          },
-          {
-            "name": "bumps",
-            "type": {
-              "array": ["u8", 2]
             }
           }
         ]
@@ -6767,6 +6032,66 @@
               "vec": {
                 "defined": "ShortCreator"
               }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateMetadata",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          },
+          {
+            "name": "uriType",
+            "type": "u8"
+          },
+          {
+            "name": "hashTraits",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ChangingMetadata",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "edition",
+            "type": "u64"
+          },
+          {
+            "name": "name",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "uri",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "hashTraits",
+            "type": {
+              "option": "u64"
+            }
+          },
+          {
+            "name": "afterTraits",
+            "type": {
+              "option": "string"
             }
           }
         ]
@@ -6998,12 +6323,26 @@
           },
           {
             "name": "NoMarketFee"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RegistryType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "None"
           },
           {
-            "name": "Partnership"
-          },
-          {
-            "name": "LocksInVault"
+            "name": "WrappedPool",
+            "fields": [
+              {
+                "name": "poolHash",
+                "type": "u64"
+              }
+            ]
           }
         ]
       }
@@ -7207,35 +6546,6 @@
       }
     },
     {
-      "name": "UnlocksAfter",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "MintingOut"
-          },
-          {
-            "name": "Supply",
-            "fields": [
-              {
-                "name": "limit",
-                "type": "u32"
-              }
-            ]
-          },
-          {
-            "name": "Hours",
-            "fields": [
-              {
-                "name": "hours",
-                "type": "u16"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
       "name": "ActionAfter",
       "type": {
         "kind": "enum",
@@ -7304,6 +6614,17 @@
                 }
               }
             ]
+          },
+          {
+            "name": "WrappedDestiny",
+            "fields": [
+              {
+                "name": "rule",
+                "type": {
+                  "defined": "WrappedDestiny"
+                }
+              }
+            ]
           }
         ]
       }
@@ -7323,7 +6644,7 @@
       }
     },
     {
-      "name": "GeneralStore",
+      "name": "PoolConfig",
       "type": {
         "kind": "enum",
         "variants": [
@@ -7343,6 +6664,9 @@
           },
           {
             "name": "Token"
+          },
+          {
+            "name": "MultiToken"
           }
         ]
       }
@@ -7477,12 +6801,6 @@
           },
           {
             "name": "PoolVaultV1"
-          },
-          {
-            "name": "GenericUserV1"
-          },
-          {
-            "name": "TokenManagerV1"
           }
         ]
       }
@@ -7503,34 +6821,9 @@
           },
           {
             "name": "FlaggedPirate"
-          }
-        ]
-      }
-    },
-    {
-      "name": "TokenType",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Basic"
           },
           {
-            "name": "OnlyUp"
-          }
-        ]
-      }
-    },
-    {
-      "name": "TokenState",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "New"
-          },
-          {
-            "name": "Active"
+            "name": "WaitingGlobalApproval"
           }
         ]
       }

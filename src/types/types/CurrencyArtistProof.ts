@@ -1,33 +1,33 @@
-import { PublicKey } from "@solana/web3.js" // eslint-disable-line @typescript-eslint/no-unused-vars
-import BN from "bn.js" // eslint-disable-line @typescript-eslint/no-unused-vars
-import * as types from "../types" // eslint-disable-line @typescript-eslint/no-unused-vars
-import * as borsh from "@coral-xyz/borsh"
+import { PublicKey } from "@solana/web3.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import BN from "bn.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import * as types from "../types"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import * as borsh from "@coral-xyz/borsh";
 
 export interface CurrencyArtistProofFields {
-  proofHash: BN
-  amount: BN
-  currencyVerifier: BN//number
-  artistVerifier: BN//number
+  proofHash: BN;
+  amount: BN;
+  currencyVerifier: BN;
+  artistVerifier: BN;
 }
 
 export interface CurrencyArtistProofJSON {
-  proofHash: string
-  amount: string
-  currencyVerifier:  BN//number
-  artistVerifier:  BN//number
+  proofHash: string;
+  amount: string;
+  currencyVerifier: BN;
+  artistVerifier: BN;
 }
 
 export class CurrencyArtistProof {
-  readonly proofHash: BN
-  readonly amount: BN
-  readonly currencyVerifier:  BN//number
-  readonly artistVerifier:  BN//number
+  readonly proofHash: BN;
+  readonly amount: BN;
+  readonly currencyVerifier: BN;
+  readonly artistVerifier: BN;
 
   constructor(fields: CurrencyArtistProofFields) {
-    this.proofHash = fields.proofHash
-    this.amount = fields.amount
-    this.currencyVerifier = fields.currencyVerifier
-    this.artistVerifier = fields.artistVerifier
+    this.proofHash = fields.proofHash;
+    this.amount = fields.amount;
+    this.currencyVerifier = fields.currencyVerifier;
+    this.artistVerifier = fields.artistVerifier;
   }
 
   static layout(property?: string) {
@@ -39,7 +39,7 @@ export class CurrencyArtistProof {
         borsh.u32("artistVerifier"),
       ],
       property
-    )
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -49,7 +49,7 @@ export class CurrencyArtistProof {
       amount: obj.amount,
       currencyVerifier: obj.currencyVerifier,
       artistVerifier: obj.artistVerifier,
-    })
+    });
   }
 
   static toEncodable(fields: CurrencyArtistProofFields) {
@@ -58,7 +58,7 @@ export class CurrencyArtistProof {
       amount: fields.amount,
       currencyVerifier: fields.currencyVerifier,
       artistVerifier: fields.artistVerifier,
-    }
+    };
   }
 
   toJSON(): CurrencyArtistProofJSON {
@@ -67,7 +67,7 @@ export class CurrencyArtistProof {
       amount: this.amount.toString(),
       currencyVerifier: this.currencyVerifier,
       artistVerifier: this.artistVerifier,
-    }
+    };
   }
 
   static fromJSON(obj: CurrencyArtistProofJSON): CurrencyArtistProof {
@@ -76,10 +76,10 @@ export class CurrencyArtistProof {
       amount: new BN(obj.amount),
       currencyVerifier: obj.currencyVerifier,
       artistVerifier: obj.artistVerifier,
-    })
+    });
   }
 
   toEncodable() {
-    return CurrencyArtistProof.toEncodable(this)
+    return CurrencyArtistProof.toEncodable(this);
   }
 }

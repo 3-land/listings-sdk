@@ -138,6 +138,51 @@ export class WrappedSource {
   }
 }
 
+export type WrappedDestinyFields = {
+  rule: types.WrappedDestinyFields
+}
+export type WrappedDestinyValue = {
+  rule: types.WrappedDestiny
+}
+
+export interface WrappedDestinyJSON {
+  kind: "WrappedDestiny"
+  value: {
+    rule: types.WrappedDestinyJSON
+  }
+}
+
+export class WrappedDestiny {
+  static readonly discriminator = 3
+  static readonly kind = "WrappedDestiny"
+  readonly discriminator = 3
+  readonly kind = "WrappedDestiny"
+  readonly value: WrappedDestinyValue
+
+  constructor(value: WrappedDestinyFields) {
+    this.value = {
+      rule: new types.WrappedDestiny({ ...value.rule }),
+    }
+  }
+
+  toJSON(): WrappedDestinyJSON {
+    return {
+      kind: "WrappedDestiny",
+      value: {
+        rule: this.value.rule.toJSON(),
+      },
+    }
+  }
+
+  toEncodable() {
+    return {
+      WrappedDestiny: {
+        rule: types.WrappedDestiny.toEncodable(this.value.rule),
+      },
+    }
+  }
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function fromDecoded(obj: any): types.RuleKind {
   if (typeof obj !== "object") {
@@ -162,6 +207,12 @@ export function fromDecoded(obj: any): types.RuleKind {
       rule: types.WrappedSource.fromDecoded(val["rule"]),
     })
   }
+  if ("WrappedDestiny" in obj) {
+    const val = obj["WrappedDestiny"]
+    return new WrappedDestiny({
+      rule: types.WrappedDestiny.fromDecoded(val["rule"]),
+    })
+  }
 
   throw new Error("Invalid enum object")
 }
@@ -183,6 +234,11 @@ export function fromJSON(obj: types.RuleJSON): types.RuleKind {
         rule: types.WrappedSource.fromJSON(obj.value.rule),
       })
     }
+    case "WrappedDestiny": {
+      return new WrappedDestiny({
+        rule: types.WrappedDestiny.fromJSON(obj.value.rule),
+      })
+    }
   }
 }
 
@@ -191,6 +247,7 @@ export function layout(property?: string) {
     borsh.struct([types.ActionAfter.layout("rule")], "UnlocksAfter"),
     borsh.struct([types.ActionAfter.layout("rule")], "UnwrapsAfter"),
     borsh.struct([types.WrappedSource.layout("rule")], "WrappedSource"),
+    borsh.struct([types.WrappedDestiny.layout("rule")], "WrappedDestiny"),
   ])
   if (property !== undefined) {
     return ret.replicate(property)

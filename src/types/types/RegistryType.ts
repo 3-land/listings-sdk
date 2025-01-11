@@ -26,54 +26,53 @@ export class None {
   }
 }
 
-export interface TokenJSON {
-  kind: "Token"
+export type WrappedPoolFields = {
+  poolHash: BN
+}
+export type WrappedPoolValue = {
+  poolHash: BN
 }
 
-export class Token {
+export interface WrappedPoolJSON {
+  kind: "WrappedPool"
+  value: {
+    poolHash: string
+  }
+}
+
+export class WrappedPool {
   static readonly discriminator = 1
-  static readonly kind = "Token"
+  static readonly kind = "WrappedPool"
   readonly discriminator = 1
-  readonly kind = "Token"
+  readonly kind = "WrappedPool"
+  readonly value: WrappedPoolValue
 
-  toJSON(): TokenJSON {
+  constructor(value: WrappedPoolFields) {
+    this.value = {
+      poolHash: value.poolHash,
+    }
+  }
+
+  toJSON(): WrappedPoolJSON {
     return {
-      kind: "Token",
+      kind: "WrappedPool",
+      value: {
+        poolHash: this.value.poolHash.toString(),
+      },
     }
   }
 
   toEncodable() {
     return {
-      Token: {},
-    }
-  }
-}
-
-export interface MultiTokenJSON {
-  kind: "MultiToken"
-}
-
-export class MultiToken {
-  static readonly discriminator = 2
-  static readonly kind = "MultiToken"
-  readonly discriminator = 2
-  readonly kind = "MultiToken"
-
-  toJSON(): MultiTokenJSON {
-    return {
-      kind: "MultiToken",
-    }
-  }
-
-  toEncodable() {
-    return {
-      MultiToken: {},
+      WrappedPool: {
+        poolHash: this.value.poolHash,
+      },
     }
   }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function fromDecoded(obj: any): types.PoolTypeKind {
+export function fromDecoded(obj: any): types.RegistryTypeKind {
   if (typeof obj !== "object") {
     throw new Error("Invalid enum object")
   }
@@ -81,26 +80,25 @@ export function fromDecoded(obj: any): types.PoolTypeKind {
   if ("None" in obj) {
     return new None()
   }
-  if ("Token" in obj) {
-    return new Token()
-  }
-  if ("MultiToken" in obj) {
-    return new MultiToken()
+  if ("WrappedPool" in obj) {
+    const val = obj["WrappedPool"]
+    return new WrappedPool({
+      poolHash: val["poolHash"],
+    })
   }
 
   throw new Error("Invalid enum object")
 }
 
-export function fromJSON(obj: types.PoolTypeJSON): types.PoolTypeKind {
+export function fromJSON(obj: types.RegistryTypeJSON): types.RegistryTypeKind {
   switch (obj.kind) {
     case "None": {
       return new None()
     }
-    case "Token": {
-      return new Token()
-    }
-    case "MultiToken": {
-      return new MultiToken()
+    case "WrappedPool": {
+      return new WrappedPool({
+        poolHash: new BN(obj.value.poolHash),
+      })
     }
   }
 }
@@ -108,8 +106,7 @@ export function fromJSON(obj: types.PoolTypeJSON): types.PoolTypeKind {
 export function layout(property?: string) {
   const ret = borsh.rustEnum([
     borsh.struct([], "None"),
-    borsh.struct([], "Token"),
-    borsh.struct([], "MultiToken"),
+    borsh.struct([borsh.u64("poolHash")], "WrappedPool"),
   ])
   if (property !== undefined) {
     return ret.replicate(property)

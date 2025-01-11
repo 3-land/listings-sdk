@@ -6,19 +6,16 @@ import { PROGRAM_ID } from "../programId"
 
 export interface BurnDepositFields {
   class: types.AccountClassKind
-  state: types.BurnStateKind
   deposits: Array<types.FakeDepositFields>
 }
 
 export interface BurnDepositJSON {
   class: types.AccountClassJSON
-  state: types.BurnStateJSON
   deposits: Array<types.FakeDepositJSON>
 }
 
 export class BurnDeposit {
   readonly class: types.AccountClassKind
-  readonly state: types.BurnStateKind
   readonly deposits: Array<types.FakeDeposit>
 
   static readonly discriminator = Buffer.from([
@@ -27,13 +24,11 @@ export class BurnDeposit {
 
   static readonly layout = borsh.struct([
     types.AccountClass.layout("class"),
-    types.BurnState.layout("state"),
     borsh.vec(types.FakeDeposit.layout(), "deposits"),
   ])
 
   constructor(fields: BurnDepositFields) {
     this.class = fields.class
-    this.state = fields.state
     this.deposits = fields.deposits.map(
       (item) => new types.FakeDeposit({ ...item })
     )
@@ -84,7 +79,6 @@ export class BurnDeposit {
 
     return new BurnDeposit({
       class: types.AccountClass.fromDecoded(dec.class),
-      state: types.BurnState.fromDecoded(dec.state),
       deposits: dec.deposits.map(
         (
           item: any /* eslint-disable-line @typescript-eslint/no-explicit-any */
@@ -96,7 +90,6 @@ export class BurnDeposit {
   toJSON(): BurnDepositJSON {
     return {
       class: this.class.toJSON(),
-      state: this.state.toJSON(),
       deposits: this.deposits.map((item) => item.toJSON()),
     }
   }
@@ -104,7 +97,6 @@ export class BurnDeposit {
   static fromJSON(obj: BurnDepositJSON): BurnDeposit {
     return new BurnDeposit({
       class: types.AccountClass.fromJSON(obj.class),
-      state: types.BurnState.fromJSON(obj.state),
       deposits: obj.deposits.map((item) => types.FakeDeposit.fromJSON(item)),
     })
   }

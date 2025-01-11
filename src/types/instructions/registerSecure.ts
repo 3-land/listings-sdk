@@ -4,39 +4,39 @@ import * as borsh from "@coral-xyz/borsh" // eslint-disable-line @typescript-esl
 import * as types from "../types" // eslint-disable-line @typescript-eslint/no-unused-vars
 import { PROGRAM_ID } from "../programId"
 
-export interface RegisterCreatorArgs {
-  userActivityBump: number
+export interface RegisterSecureArgs {
+  arweave: string
 }
 
-export interface RegisterCreatorAccounts {
-  creatorRegistry: PublicKey
-  userActivity: PublicKey
+export interface RegisterSecureAccounts {
+  /** CHECK */
+  secureHolder: PublicKey
+  /** CHECK */
   itemAccount: PublicKey
-  store: PublicKey
-  payer: PublicKey
+  storeAccount: PublicKey
+  owner: PublicKey
   systemProgram: PublicKey
 }
 
-export const layout = borsh.struct([borsh.u8("userActivityBump")])
+export const layout = borsh.struct([borsh.str("arweave")])
 
-export function registerCreator(
-  args: RegisterCreatorArgs,
-  accounts: RegisterCreatorAccounts,
+export function registerSecure(
+  args: RegisterSecureArgs,
+  accounts: RegisterSecureAccounts,
   programId: PublicKey = PROGRAM_ID
 ) {
   const keys: Array<AccountMeta> = [
-    { pubkey: accounts.creatorRegistry, isSigner: false, isWritable: true },
-    { pubkey: accounts.userActivity, isSigner: false, isWritable: true },
+    { pubkey: accounts.secureHolder, isSigner: false, isWritable: true },
     { pubkey: accounts.itemAccount, isSigner: false, isWritable: false },
-    { pubkey: accounts.store, isSigner: false, isWritable: false },
-    { pubkey: accounts.payer, isSigner: true, isWritable: true },
+    { pubkey: accounts.storeAccount, isSigner: false, isWritable: false },
+    { pubkey: accounts.owner, isSigner: true, isWritable: false },
     { pubkey: accounts.systemProgram, isSigner: false, isWritable: false },
   ]
-  const identifier = Buffer.from([85, 3, 194, 210, 164, 140, 160, 195])
+  const identifier = Buffer.from([25, 11, 194, 18, 140, 27, 102, 192])
   const buffer = Buffer.alloc(1000)
   const len = layout.encode(
     {
-      userActivityBump: args.userActivityBump,
+      arweave: args.arweave,
     },
     buffer
   )

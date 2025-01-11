@@ -49,29 +49,6 @@ export class PdaCreator {
   }
 }
 
-export interface CollectionJSON {
-  kind: "Collection"
-}
-
-export class Collection {
-  static readonly discriminator = 2
-  static readonly kind = "Collection"
-  readonly discriminator = 2
-  readonly kind = "Collection"
-
-  toJSON(): CollectionJSON {
-    return {
-      kind: "Collection",
-    }
-  }
-
-  toEncodable() {
-    return {
-      Collection: {},
-    }
-  }
-}
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function fromDecoded(obj: any): types.DepositTrackTypeKind {
   if (typeof obj !== "object") {
@@ -83,9 +60,6 @@ export function fromDecoded(obj: any): types.DepositTrackTypeKind {
   }
   if ("PdaCreator" in obj) {
     return new PdaCreator()
-  }
-  if ("Collection" in obj) {
-    return new Collection()
   }
 
   throw new Error("Invalid enum object")
@@ -101,9 +75,6 @@ export function fromJSON(
     case "PdaCreator": {
       return new PdaCreator()
     }
-    case "Collection": {
-      return new Collection()
-    }
   }
 }
 
@@ -111,7 +82,6 @@ export function layout(property?: string) {
   const ret = borsh.rustEnum([
     borsh.struct([], "Creator"),
     borsh.struct([], "PdaCreator"),
-    borsh.struct([], "Collection"),
   ])
   if (property !== undefined) {
     return ret.replicate(property)

@@ -16,7 +16,6 @@ import {
 } from "../../types/types";
 import { Wallet } from "@project-serum/anchor";
 import * as fs2 from "fs";
-import { PROGRAM_CNFT, SOLANA_ENDPOINT } from "../../types/programId";
 import path from "path";
 import { arrayBuffer } from "stream/consumers";
 import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
@@ -27,6 +26,7 @@ import {
   StoreInitOptions,
 } from "../../types/implementation/implementationTypes";
 import { NetworkType } from "../../utility/config";
+import { mapTraits } from "../../utility/utils";
 
 function initializeSDKAndWallet(options: StoreInitOptions) {
   let sdk;
@@ -446,6 +446,224 @@ async function createSingleImp(
   }
 }
 
+async function createSingleWithPoolImp(
+  options: StoreInitOptions,
+  storeAccount: string,
+  collectionAccount: string,
+  createOptions: CreateSingleOptions
+) {
+  const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
+
+  try {
+    const creator = new Creator({
+      address: payer.publicKey,
+      verified: false,
+      share: 0,
+    });
+
+    const metadata: ShortMetadataArgs = {
+      name: createOptions.itemName,
+      uri: "",
+      uriType: 1,
+      sellerFeeBasisPoints: createOptions.sellerFee,
+      collection: new PublicKey(collectionAccount),
+      creators: [creator],
+      toJSON: function (): ShortMetadataArgsJSON {
+        throw new Error("Function not implemented.");
+      },
+      toEncodable: function () {
+        throw new Error("Function not implemented.");
+      },
+    };
+
+    /*
+      For MP4
+      const videoBuffer = await fs2.promises.readFile(
+        path.join(process.cwd(), "assets", "video.mp4")
+      );
+
+      For MP3
+      const audioBuffer = await fs2.promises.readFile(
+        path.join(process.cwd(), "assets", "audio.mp3")
+      );
+
+      For WebP
+      const webpBuffer = await fs2.promises.readFile(
+        path.join(process.cwd(), "assets", "image.webp")
+      );
+
+      For GLB
+      const glbBuffer = await fs2.promises.readFile(
+        path.join(process.cwd(), "assets", "model.glb")
+);
+    */
+    let options;
+    if (createOptions.mainImageUrl) {
+      // Define the type for metadata files
+      interface MetadataFiles {
+        file: {
+          url: string;
+        };
+        cover?: {
+          url: string;
+        };
+      }
+
+      // Create base metadata files object
+      let baseMetadataFiles: MetadataFiles = {
+        file: {
+          url: createOptions.mainImageUrl,
+        },
+      };
+
+      // Add cover if present
+      if (createOptions.coverImageUrl) {
+        baseMetadataFiles.cover = {
+          url: createOptions.coverImageUrl,
+        };
+      }
+
+      options = {
+        symbol: createOptions.itemSymbol,
+        metadata: {
+          name: metadata.name,
+          description: createOptions.itemDescription,
+          files: baseMetadataFiles,
+        },
+        creators: metadata.creators,
+        traits: createOptions.traits,
+        sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
+      };
+    } else {
+      const imageBuffer = await fs2.promises.readFile(
+        path.join(process.cwd(), "assets", "og.png")
+      );
+
+      if (!imageBuffer || imageBuffer.byteLength === 0) {
+        throw new Error("Failed to read main image file");
+      }
+
+      const coverBuffer = await fs2.promises.readFile(
+        path.join(process.cwd(), "assets", "niicl.gif")
+      );
+
+      if (!coverBuffer) {
+        throw new Error("Failed to read cover file");
+      }
+      options = {
+        symbol: createOptions.itemSymbol,
+        metadata: {
+          name: metadata.name,
+          description: createOptions.itemDescription,
+          files: {
+            file: {
+              arrayBuffer: () => imageBuffer,
+              type: "image/png",
+              name: "og.png",
+              size: imageBuffer.length,
+            },
+            cover: {
+              arrayBuffer: () => coverBuffer,
+              type: "image/gif",
+              name: "niicl.gif",
+              size: coverBuffer.length,
+            },
+          },
+        },
+        creators: metadata.creators,
+        traits: createOptions.traits,
+        sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
+      };
+    }
+
+    let priceConfig: Price[];
+    if (createOptions?.price! <= 0) {
+      priceConfig = [];
+      console.log("price is zero");
+    } else {
+      if (createOptions.splHash) {
+        priceConfig = [
+          {
+            amount: new BN(createOptions.price!),
+            priceType: new CurrencyType.Spl({
+              id: new PublicKey(createOptions.splHash),
+            }),
+            toJSON: function (): PriceJSON {
+              throw new Error("Function not implemented.");
+            },
+            toEncodable: function () {
+              throw new Error("Function not implemented.");
+            },
+          },
+        ];
+        console.log("spl hash: ", createOptions.splHash);
+      } else {
+        priceConfig = [
+          {
+            amount: new BN(createOptions.price!),
+            priceType: new CurrencyType.Native(),
+            toJSON: function (): PriceJSON {
+              throw new Error("Function not implemented.");
+            },
+            toEncodable: function () {
+              throw new Error("Function not implemented.");
+            },
+          },
+        ];
+      }
+    }
+
+    console.log("priceConfig: ", priceConfig);
+    const saleConfig: SaleConfig = {
+      prices: priceConfig,
+      priceType: new PriceRule.None(),
+      rules: [],
+      sendToVault: 1,
+      saleType: new SaleType.Normal(),
+      toJSON: function (): SaleConfigJSON {
+        throw new Error("Function not implemented.");
+      },
+      toEncodable: function () {
+        throw new Error("Function not implemented.");
+      },
+    };
+
+    const t = mapTraits(
+      options.traits.map((x: any) => ({
+        trait_type: x.trait_type + "",
+        value: x.value + "",
+      })),
+      ""
+    );
+    const hashTraits = new BN(t[0][0]);
+
+    const createSingleEditionTxId = await sdk.createSingleEditionWithPool(
+      walletKeypair,
+      new PublicKey(storeAccount),
+      createOptions.itemAmount,
+      metadata,
+      saleConfig,
+      [1, 0, 0],
+      [1, 0],
+      0,
+      hashTraits,
+      new PublicKey(collectionAccount),
+      {
+        options: options,
+      },
+      new PublicKey(createOptions.splHash!)
+    );
+
+    return {
+      transactionId: createSingleEditionTxId,
+      payerPublicKey: payer.publicKey.toString(),
+    };
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+}
+
 async function buySingleImp(options: StoreInitOptions, item: string) {
   const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
 
@@ -481,6 +699,7 @@ export {
   createStoreImp,
   createCollectionImp,
   createSingleImp,
+  createSingleWithPoolImp,
   buySingleImp,
   handleError,
 };

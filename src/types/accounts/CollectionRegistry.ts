@@ -12,7 +12,10 @@ export interface CollectionRegistryFields {
   donations: BN
   date: types.IndexDateFields
   filters: Array<number>
-  track: types.SaleTrackFields
+  created: BN
+  sold: BN
+  earned: BN
+  collectors: BN
 }
 
 export interface CollectionRegistryJSON {
@@ -23,7 +26,10 @@ export interface CollectionRegistryJSON {
   donations: string
   date: types.IndexDateJSON
   filters: Array<number>
-  track: types.SaleTrackJSON
+  created: string
+  sold: string
+  earned: string
+  collectors: string
 }
 
 export class CollectionRegistry {
@@ -34,7 +40,10 @@ export class CollectionRegistry {
   readonly donations: BN
   readonly date: types.IndexDate
   readonly filters: Array<number>
-  readonly track: types.SaleTrack
+  readonly created: BN
+  readonly sold: BN
+  readonly earned: BN
+  readonly collectors: BN
 
   static readonly discriminator = Buffer.from([
     103, 157, 231, 9, 181, 43, 15, 106,
@@ -48,7 +57,10 @@ export class CollectionRegistry {
     borsh.u64("donations"),
     types.IndexDate.layout("date"),
     borsh.array(borsh.u8(), 8, "filters"),
-    types.SaleTrack.layout("track"),
+    borsh.u64("created"),
+    borsh.u64("sold"),
+    borsh.u64("earned"),
+    borsh.u64("collectors"),
   ])
 
   constructor(fields: CollectionRegistryFields) {
@@ -59,7 +71,10 @@ export class CollectionRegistry {
     this.donations = fields.donations
     this.date = new types.IndexDate({ ...fields.date })
     this.filters = fields.filters
-    this.track = new types.SaleTrack({ ...fields.track })
+    this.created = fields.created
+    this.sold = fields.sold
+    this.earned = fields.earned
+    this.collectors = fields.collectors
   }
 
   static async fetch(
@@ -113,7 +128,10 @@ export class CollectionRegistry {
       donations: dec.donations,
       date: types.IndexDate.fromDecoded(dec.date),
       filters: dec.filters,
-      track: types.SaleTrack.fromDecoded(dec.track),
+      created: dec.created,
+      sold: dec.sold,
+      earned: dec.earned,
+      collectors: dec.collectors,
     })
   }
 
@@ -126,7 +144,10 @@ export class CollectionRegistry {
       donations: this.donations.toString(),
       date: this.date.toJSON(),
       filters: this.filters,
-      track: this.track.toJSON(),
+      created: this.created.toString(),
+      sold: this.sold.toString(),
+      earned: this.earned.toString(),
+      collectors: this.collectors.toString(),
     }
   }
 
@@ -139,7 +160,10 @@ export class CollectionRegistry {
       donations: new BN(obj.donations),
       date: types.IndexDate.fromJSON(obj.date),
       filters: obj.filters,
-      track: types.SaleTrack.fromJSON(obj.track),
+      created: new BN(obj.created),
+      sold: new BN(obj.sold),
+      earned: new BN(obj.earned),
+      collectors: new BN(obj.collectors),
     })
   }
 }

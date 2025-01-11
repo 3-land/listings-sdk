@@ -6,7 +6,8 @@
   "types": "./dist/library/implementation/storeImplementation.d.ts",
   "scripts": {
     "build:cjs": "tsc --module CommonJS --outDir dist",
-    "test": "npx tsx ./src/index.ts"
+    "test": "npx tsx ./src/index.ts",
+    "generate:from:idl": "anchor-client-gen idl.json src/types"
   },
   "author": "biccs",
   "license": "ISC",
@@ -17,9 +18,11 @@
     "@metaplex-foundation/mpl-token-metadata": "^2.13.0",
     "@project-serum/anchor": "^0.26.0",
     "@solana/web3.js": "^1.95.4",
+    "anchor-client-gen": "^0.28.1",
     "bn": "^1.0.5",
     "bn.js": "^5.2.1",
     "bs58": "^6.0.0",
+    "buffer-layout": "^1.2.2",
     "cyrb53": "^1.0.0",
     "fs": "^0.0.1-security",
     "irys": "^0.0.1",

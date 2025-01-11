@@ -4,39 +4,37 @@ import * as borsh from "@coral-xyz/borsh" // eslint-disable-line @typescript-esl
 import * as types from "../types" // eslint-disable-line @typescript-eslint/no-unused-vars
 import { PROGRAM_ID } from "../programId"
 
-export interface RegisterCreatorArgs {
-  userActivityBump: number
+export interface UpgradeItemArgs {
+  metadata: types.UpdateMetadataFields
 }
 
-export interface RegisterCreatorAccounts {
-  creatorRegistry: PublicKey
-  userActivity: PublicKey
+export interface UpgradeItemAccounts {
   itemAccount: PublicKey
-  store: PublicKey
-  payer: PublicKey
+  packAccount: PublicKey
+  storeAccount: PublicKey
+  creator: PublicKey
   systemProgram: PublicKey
 }
 
-export const layout = borsh.struct([borsh.u8("userActivityBump")])
+export const layout = borsh.struct([types.UpdateMetadata.layout("metadata")])
 
-export function registerCreator(
-  args: RegisterCreatorArgs,
-  accounts: RegisterCreatorAccounts,
+export function upgradeItem(
+  args: UpgradeItemArgs,
+  accounts: UpgradeItemAccounts,
   programId: PublicKey = PROGRAM_ID
 ) {
   const keys: Array<AccountMeta> = [
-    { pubkey: accounts.creatorRegistry, isSigner: false, isWritable: true },
-    { pubkey: accounts.userActivity, isSigner: false, isWritable: true },
-    { pubkey: accounts.itemAccount, isSigner: false, isWritable: false },
-    { pubkey: accounts.store, isSigner: false, isWritable: false },
-    { pubkey: accounts.payer, isSigner: true, isWritable: true },
+    { pubkey: accounts.itemAccount, isSigner: false, isWritable: true },
+    { pubkey: accounts.packAccount, isSigner: false, isWritable: true },
+    { pubkey: accounts.storeAccount, isSigner: false, isWritable: true },
+    { pubkey: accounts.creator, isSigner: true, isWritable: false },
     { pubkey: accounts.systemProgram, isSigner: false, isWritable: false },
   ]
-  const identifier = Buffer.from([85, 3, 194, 210, 164, 140, 160, 195])
+  const identifier = Buffer.from([71, 129, 235, 228, 204, 136, 160, 115])
   const buffer = Buffer.alloc(1000)
   const len = layout.encode(
     {
-      userActivityBump: args.userActivityBump,
+      metadata: types.UpdateMetadata.toEncodable(args.metadata),
     },
     buffer
   )

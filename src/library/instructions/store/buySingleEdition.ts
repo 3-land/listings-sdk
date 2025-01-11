@@ -25,7 +25,7 @@ import {
 import { bytesToU32, cyrb53 } from "../../../utility/utils";
 import { BN } from "bn.js";
 import { ExtraParameter } from "../../../types/types";
-import { BorshCoder } from "@project-serum/anchor";
+import { BorshCoder, Idl } from "@project-serum/anchor";
 import { idl } from "./idl";
 export let lutAccount = toPublicKey(
   "EJbrXVgac2wEL2H7FJr38vD7LQpEujWZiSPHSYZ3htCa"
@@ -180,7 +180,7 @@ export async function buySingleEditionInstruction(
   if (!data?.pre) data.pre = [];
   if (!data?.post) data.post = [];
 
-  const coder = new BorshCoder(idl);
+  const coder = new BorshCoder(idl as Idl);
 
   const storedata = await connection.getAccountInfo(toPublicKey(storeAccount));
   if (!storedata) {

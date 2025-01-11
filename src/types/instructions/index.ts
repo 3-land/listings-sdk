@@ -1,26 +1,18 @@
 export { initialize } from "./initialize"
 export type { InitializeArgs, InitializeAccounts } from "./initialize"
-export { createCollection } from "./createCollection"
+export { upgradeAsset } from "./upgradeAsset"
+export type { UpgradeAssetArgs, UpgradeAssetAccounts } from "./upgradeAsset"
+export { upgradeItem } from "./upgradeItem"
+export type { UpgradeItemArgs, UpgradeItemAccounts } from "./upgradeItem"
+export { createPool } from "./createPool"
+export type { CreatePoolArgs, CreatePoolAccounts } from "./createPool"
+export { shareSecret } from "./shareSecret"
+export type { ShareSecretArgs, ShareSecretAccounts } from "./shareSecret"
+export { registerSecure } from "./registerSecure"
 export type {
-  CreateCollectionArgs,
-  CreateCollectionAccounts,
-} from "./createCollection"
-export { deleteTokenLauncher } from "./deleteTokenLauncher"
-export type { DeleteTokenLauncherAccounts } from "./deleteTokenLauncher"
-export { buyToken } from "./buyToken"
-export type { BuyTokenArgs, BuyTokenAccounts } from "./buyToken"
-export { createTokenLauncher } from "./createTokenLauncher"
-export type {
-  CreateTokenLauncherArgs,
-  CreateTokenLauncherAccounts,
-} from "./createTokenLauncher"
-export { registerGenericUser } from "./registerGenericUser"
-export type {
-  RegisterGenericUserArgs,
-  RegisterGenericUserAccounts,
-} from "./registerGenericUser"
-export { registerUser } from "./registerUser"
-export type { RegisterUserArgs, RegisterUserAccounts } from "./registerUser"
+  RegisterSecureArgs,
+  RegisterSecureAccounts,
+} from "./registerSecure"
 export { createStore } from "./createStore"
 export type { CreateStoreArgs, CreateStoreAccounts } from "./createStore"
 export { updatePack } from "./updatePack"
@@ -69,11 +61,6 @@ export type {
   CloseDepositBurnArgs,
   CloseDepositBurnAccounts,
 } from "./closeDepositBurn"
-export { unwrapAndDestroy } from "./unwrapAndDestroy"
-export type {
-  UnwrapAndDestroyArgs,
-  UnwrapAndDestroyAccounts,
-} from "./unwrapAndDestroy"
 export { buyPay } from "./buyPay"
 export type { BuyPayArgs, BuyPayAccounts } from "./buyPay"
 export { addBurn } from "./addBurn"
@@ -104,10 +91,6 @@ export type {
   RegisterCreatorArgs,
   RegisterCreatorAccounts,
 } from "./registerCreator"
-export { feedPool } from "./feedPool"
-export type { FeedPoolArgs, FeedPoolAccounts } from "./feedPool"
-export { donateUser } from "./donateUser"
-export type { DonateUserArgs, DonateUserAccounts } from "./donateUser"
 export { registerCollector } from "./registerCollector"
 export type {
   RegisterCollectorArgs,

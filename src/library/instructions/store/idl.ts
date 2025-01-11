@@ -1,5 +1,5 @@
 export const idl = {
-  version: "0.1.0",
+  version: "0.1.13",
   name: "cnfaucet",
   instructions: [
     {
@@ -33,6 +33,199 @@ export const idl = {
               defined: "GlobalFee",
             },
           },
+        },
+      ],
+    },
+    {
+      name: "upgradeAsset",
+      accounts: [
+        {
+          name: "itemAccount",
+          isMut: true,
+          isSigner: false,
+          isOptional: true,
+        },
+        {
+          name: "packAccount",
+          isMut: true,
+          isSigner: false,
+          isOptional: true,
+        },
+        {
+          name: "merkleManager",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "storeAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "creatorAuthority",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "merkleTree",
+          isMut: true,
+          isSigner: false,
+          docs: ["CHECK"],
+        },
+        {
+          name: "owner",
+          isMut: false,
+          isSigner: false,
+          docs: ["CHECK"],
+        },
+        {
+          name: "creator",
+          isMut: false,
+          isSigner: true,
+        },
+        {
+          name: "treeAuthority",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "collectionAuthorityRecordPda",
+          isMut: false,
+          isSigner: false,
+          docs: [
+            "If there is no collecton authority record PDA then",
+            "this must be the Bubblegum program address.",
+          ],
+        },
+        {
+          name: "collectionMetadata",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "collectionMint",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "logWrapper",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "bubblegumProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "compressionProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "tokenMetadataProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "systemProgram",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: "changing",
+          type: {
+            defined: "ChangingMetadata",
+          },
+        },
+        {
+          name: "index",
+          type: "u32",
+        },
+        {
+          name: "root",
+          type: {
+            array: ["u8", 32],
+          },
+        },
+      ],
+    },
+    {
+      name: "upgradeItem",
+      accounts: [
+        {
+          name: "itemAccount",
+          isMut: true,
+          isSigner: false,
+          isOptional: true,
+        },
+        {
+          name: "packAccount",
+          isMut: true,
+          isSigner: false,
+          isOptional: true,
+        },
+        {
+          name: "storeAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "creator",
+          isMut: false,
+          isSigner: true,
+        },
+        {
+          name: "systemProgram",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: "metadata",
+          type: {
+            defined: "UpdateMetadata",
+          },
+        },
+      ],
+    },
+    {
+      name: "createPool",
+      accounts: [
+        {
+          name: "poolVault",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "currency",
+          isMut: false,
+          isSigner: false,
+          isOptional: true,
+        },
+        {
+          name: "storeAccount",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "payer",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "systemProgram",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: "name",
+          type: "string",
         },
       ],
     },

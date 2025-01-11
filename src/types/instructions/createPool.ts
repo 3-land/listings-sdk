@@ -4,39 +4,37 @@ import * as borsh from "@coral-xyz/borsh" // eslint-disable-line @typescript-esl
 import * as types from "../types" // eslint-disable-line @typescript-eslint/no-unused-vars
 import { PROGRAM_ID } from "../programId"
 
-export interface RegisterCreatorArgs {
-  userActivityBump: number
+export interface CreatePoolArgs {
+  name: string
 }
 
-export interface RegisterCreatorAccounts {
-  creatorRegistry: PublicKey
-  userActivity: PublicKey
-  itemAccount: PublicKey
-  store: PublicKey
+export interface CreatePoolAccounts {
+  poolVault: PublicKey
+  currency: PublicKey
+  storeAccount: PublicKey
   payer: PublicKey
   systemProgram: PublicKey
 }
 
-export const layout = borsh.struct([borsh.u8("userActivityBump")])
+export const layout = borsh.struct([borsh.str("name")])
 
-export function registerCreator(
-  args: RegisterCreatorArgs,
-  accounts: RegisterCreatorAccounts,
+export function createPool(
+  args: CreatePoolArgs,
+  accounts: CreatePoolAccounts,
   programId: PublicKey = PROGRAM_ID
 ) {
   const keys: Array<AccountMeta> = [
-    { pubkey: accounts.creatorRegistry, isSigner: false, isWritable: true },
-    { pubkey: accounts.userActivity, isSigner: false, isWritable: true },
-    { pubkey: accounts.itemAccount, isSigner: false, isWritable: false },
-    { pubkey: accounts.store, isSigner: false, isWritable: false },
+    { pubkey: accounts.poolVault, isSigner: false, isWritable: true },
+    { pubkey: accounts.currency, isSigner: false, isWritable: false },
+    { pubkey: accounts.storeAccount, isSigner: false, isWritable: false },
     { pubkey: accounts.payer, isSigner: true, isWritable: true },
     { pubkey: accounts.systemProgram, isSigner: false, isWritable: false },
   ]
-  const identifier = Buffer.from([85, 3, 194, 210, 164, 140, 160, 195])
+  const identifier = Buffer.from([233, 146, 209, 142, 207, 104, 64, 188])
   const buffer = Buffer.alloc(1000)
   const len = layout.encode(
     {
-      userActivityBump: args.userActivityBump,
+      name: args.name,
     },
     buffer
   )

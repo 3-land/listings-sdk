@@ -6,7 +6,6 @@ import { PROGRAM_ID } from "../programId"
 
 export interface CreatePackArgs {
   metadata: types.MetadataArgsFields
-  saleConfig: types.SaleConfigFields
   identifier: BN
   category: Array<number>
   superCategory: Array<number>
@@ -18,8 +17,8 @@ export interface CreatePackArgs {
 export interface CreatePackAccounts {
   storeAccount: PublicKey
   creatorAuthority: PublicKey
+  packTraits: PublicKey
   packAccount: PublicKey
-  packReserveList: PublicKey
   creator: PublicKey
   payer: PublicKey
   systemProgram: PublicKey
@@ -27,7 +26,6 @@ export interface CreatePackAccounts {
 
 export const layout = borsh.struct([
   types.MetadataArgs.layout("metadata"),
-  types.SaleConfig.layout("saleConfig"),
   borsh.u64("identifier"),
   borsh.array(borsh.u16(), 3, "category"),
   borsh.array(borsh.u8(), 2, "superCategory"),
@@ -44,8 +42,8 @@ export function createPack(
   const keys: Array<AccountMeta> = [
     { pubkey: accounts.storeAccount, isSigner: false, isWritable: true },
     { pubkey: accounts.creatorAuthority, isSigner: false, isWritable: true },
+    { pubkey: accounts.packTraits, isSigner: false, isWritable: true },
     { pubkey: accounts.packAccount, isSigner: false, isWritable: true },
-    { pubkey: accounts.packReserveList, isSigner: false, isWritable: true },
     { pubkey: accounts.creator, isSigner: false, isWritable: false },
     { pubkey: accounts.payer, isSigner: true, isWritable: true },
     { pubkey: accounts.systemProgram, isSigner: false, isWritable: false },
@@ -55,7 +53,6 @@ export function createPack(
   const len = layout.encode(
     {
       metadata: types.MetadataArgs.toEncodable(args.metadata),
-      saleConfig: types.SaleConfig.toEncodable(args.saleConfig),
       identifier: args.identifier,
       category: args.category,
       superCategory: args.superCategory,

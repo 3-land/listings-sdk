@@ -144,6 +144,51 @@ export class NonFungible {
   }
 }
 
+export type DataFields = {
+  hash: BN
+}
+export type DataValue = {
+  hash: BN
+}
+
+export interface DataJSON {
+  kind: "Data"
+  value: {
+    hash: string
+  }
+}
+
+export class Data {
+  static readonly discriminator = 3
+  static readonly kind = "Data"
+  readonly discriminator = 3
+  readonly kind = "Data"
+  readonly value: DataValue
+
+  constructor(value: DataFields) {
+    this.value = {
+      hash: value.hash,
+    }
+  }
+
+  toJSON(): DataJSON {
+    return {
+      kind: "Data",
+      value: {
+        hash: this.value.hash.toString(),
+      },
+    }
+  }
+
+  toEncodable() {
+    return {
+      Data: {
+        hash: this.value.hash,
+      },
+    }
+  }
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function fromDecoded(obj: any): types.TraitInitKind {
   if (typeof obj !== "object") {
@@ -169,6 +214,12 @@ export function fromDecoded(obj: any): types.TraitInitKind {
       values: val["values"],
     })
   }
+  if ("Data" in obj) {
+    const val = obj["Data"]
+    return new Data({
+      hash: val["hash"],
+    })
+  }
 
   throw new Error("Invalid enum object")
 }
@@ -191,6 +242,11 @@ export function fromJSON(obj: types.TraitInitJSON): types.TraitInitKind {
         values: obj.value.values.map((item) => new BN(item)),
       })
     }
+    case "Data": {
+      return new Data({
+        hash: new BN(obj.value.hash),
+      })
+    }
   }
 }
 
@@ -202,6 +258,7 @@ export function layout(property?: string) {
       [borsh.u64("hash"), borsh.vec(borsh.u64(), "values")],
       "NonFungible"
     ),
+    borsh.struct([borsh.u64("hash")], "Data"),
   ])
   if (property !== undefined) {
     return ret.replicate(property)

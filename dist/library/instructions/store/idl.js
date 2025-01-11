@@ -40,6 +40,43 @@ exports.idl = {
             ],
         },
         {
+            name: "createPool",
+            accounts: [
+                {
+                    name: "poolVault",
+                    isMut: true,
+                    isSigner: false
+                },
+                {
+                    name: "currency",
+                    isMut: false,
+                    isSigner: false,
+                    isOptional: true
+                },
+                {
+                    name: "storeAccount",
+                    isMut: false,
+                    isSigner: false
+                },
+                {
+                    name: "payer",
+                    isMut: true,
+                    isSigner: true
+                },
+                {
+                    name: "systemProgram",
+                    isMut: false,
+                    isSigner: false
+                }
+            ],
+            args: [
+                {
+                    name: "name",
+                    type: "string"
+                }
+            ]
+        },
+        {
             name: "createCollection",
             accounts: [
                 {

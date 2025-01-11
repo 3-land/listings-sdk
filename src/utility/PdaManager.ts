@@ -7,6 +7,8 @@ import {
   TOKEN_PROGRAM_ID,
 } from "../types/programId";
 import { PublicKey } from "@solana/web3.js";
+import { cyrb53 } from "./utils";
+import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
 
 export const METADATA_PREFIX = "metadata";
 
@@ -136,6 +138,43 @@ export const collectionAuthorityRecord = async ({
   );
 };
 
+export const poolCreatorRegistryPDA = ({
+  user,
+  currency,
+  store,
+  type,
+}: any) => {
+  user = toPublicKey(user);
+  currency = toPublicKey(currency);
+  store = toPublicKey(store);
+
+  const word = [...Buffer.from("creator_registry")];
+
+  if (type?.pool) {
+    while (word.length > 23) {
+      if (word.length % 2 == 0) {
+        word.splice(word.length - 1, 1);
+      } else {
+        word.splice(0, 1);
+      }
+    }
+    word.push(1);
+    const pool = toPublicKey(type.pool).toBytes();
+    const pool_hash = new BN(cyrb53([...pool], 0)).toArrayLike(Buffer, "le", 8);
+    word.push(...pool_hash);
+  }
+
+  return PublicKey.findProgramAddress(
+    [
+      bs58.decode(bs58.encode(word)),
+      currency.toBytes(),
+      user.toBytes(),
+      store.toBytes(),
+    ],
+    toPublicKey(PROGRAM_ID)
+  );
+};
+
 export const creatorRegistryPDA = ({ user, currency, store }: any) => {
   user = toPublicKey(user);
   currency = toPublicKey(currency);
@@ -227,4 +266,22 @@ export const getATAPDA = async ({ owner, mint }: any) => {
     SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID
   );
   return publicKey;
+};
+
+export const poolVaultPDA = ({ creator, store, currency, type, name }: any) => {
+  store = toPublicKey(store);
+  creator = toPublicKey(creator);
+  currency = toPublicKey(currency);
+  type = type || 1;
+  return PublicKey.findProgramAddress(
+    [
+      Buffer.from("token_pool"),
+      currency.toBytes(),
+      store.toBytes(),
+      creator.toBytes(),
+      [type],
+      Buffer.from(name.toLowerCase()),
+    ],
+    toPublicKey(PROGRAM_ID)
+  );
 };

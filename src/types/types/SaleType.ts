@@ -49,52 +49,6 @@ export class NoMarketFee {
   }
 }
 
-export interface PartnershipJSON {
-  kind: "Partnership"
-}
-
-export class Partnership {
-  static readonly discriminator = 2
-  static readonly kind = "Partnership"
-  readonly discriminator = 2
-  readonly kind = "Partnership"
-
-  toJSON(): PartnershipJSON {
-    return {
-      kind: "Partnership",
-    }
-  }
-
-  toEncodable() {
-    return {
-      Partnership: {},
-    }
-  }
-}
-
-export interface LocksInVaultJSON {
-  kind: "LocksInVault"
-}
-
-export class LocksInVault {
-  static readonly discriminator = 3
-  static readonly kind = "LocksInVault"
-  readonly discriminator = 3
-  readonly kind = "LocksInVault"
-
-  toJSON(): LocksInVaultJSON {
-    return {
-      kind: "LocksInVault",
-    }
-  }
-
-  toEncodable() {
-    return {
-      LocksInVault: {},
-    }
-  }
-}
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function fromDecoded(obj: any): types.SaleTypeKind {
   if (typeof obj !== "object") {
@@ -106,12 +60,6 @@ export function fromDecoded(obj: any): types.SaleTypeKind {
   }
   if ("NoMarketFee" in obj) {
     return new NoMarketFee()
-  }
-  if ("Partnership" in obj) {
-    return new Partnership()
-  }
-  if ("LocksInVault" in obj) {
-    return new LocksInVault()
   }
 
   throw new Error("Invalid enum object")
@@ -125,12 +73,6 @@ export function fromJSON(obj: types.SaleTypeJSON): types.SaleTypeKind {
     case "NoMarketFee": {
       return new NoMarketFee()
     }
-    case "Partnership": {
-      return new Partnership()
-    }
-    case "LocksInVault": {
-      return new LocksInVault()
-    }
   }
 }
 
@@ -138,8 +80,6 @@ export function layout(property?: string) {
   const ret = borsh.rustEnum([
     borsh.struct([], "Normal"),
     borsh.struct([], "NoMarketFee"),
-    borsh.struct([], "Partnership"),
-    borsh.struct([], "LocksInVault"),
   ])
   if (property !== undefined) {
     return ret.replicate(property)

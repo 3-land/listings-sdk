@@ -95,6 +95,29 @@ export class FlaggedPirate {
   }
 }
 
+export interface WaitingGlobalApprovalJSON {
+  kind: "WaitingGlobalApproval"
+}
+
+export class WaitingGlobalApproval {
+  static readonly discriminator = 4
+  static readonly kind = "WaitingGlobalApproval"
+  readonly discriminator = 4
+  readonly kind = "WaitingGlobalApproval"
+
+  toJSON(): WaitingGlobalApprovalJSON {
+    return {
+      kind: "WaitingGlobalApproval",
+    }
+  }
+
+  toEncodable() {
+    return {
+      WaitingGlobalApproval: {},
+    }
+  }
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function fromDecoded(obj: any): types.GlobalStateKind {
   if (typeof obj !== "object") {
@@ -112,6 +135,9 @@ export function fromDecoded(obj: any): types.GlobalStateKind {
   }
   if ("FlaggedPirate" in obj) {
     return new FlaggedPirate()
+  }
+  if ("WaitingGlobalApproval" in obj) {
+    return new WaitingGlobalApproval()
   }
 
   throw new Error("Invalid enum object")
@@ -131,6 +157,9 @@ export function fromJSON(obj: types.GlobalStateJSON): types.GlobalStateKind {
     case "FlaggedPirate": {
       return new FlaggedPirate()
     }
+    case "WaitingGlobalApproval": {
+      return new WaitingGlobalApproval()
+    }
   }
 }
 
@@ -140,6 +169,7 @@ export function layout(property?: string) {
     borsh.struct([], "Public"),
     borsh.struct([], "HiddenByUser"),
     borsh.struct([], "FlaggedPirate"),
+    borsh.struct([], "WaitingGlobalApproval"),
   ])
   if (property !== undefined) {
     return ret.replicate(property)

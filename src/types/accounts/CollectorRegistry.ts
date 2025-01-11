@@ -12,7 +12,9 @@ export interface CollectorRegistryFields {
   currency: PublicKey
   date: types.IndexDateFields
   filters: Array<number>
-  track: types.CollectTrackFields
+  registryType: types.RegistryTypeKind
+  collected: BN
+  spent: BN
 }
 
 export interface CollectorRegistryJSON {
@@ -23,7 +25,9 @@ export interface CollectorRegistryJSON {
   currency: string
   date: types.IndexDateJSON
   filters: Array<number>
-  track: types.CollectTrackJSON
+  registryType: types.RegistryTypeJSON
+  collected: string
+  spent: string
 }
 
 export class CollectorRegistry {
@@ -34,7 +38,9 @@ export class CollectorRegistry {
   readonly currency: PublicKey
   readonly date: types.IndexDate
   readonly filters: Array<number>
-  readonly track: types.CollectTrack
+  readonly registryType: types.RegistryTypeKind
+  readonly collected: BN
+  readonly spent: BN
 
   static readonly discriminator = Buffer.from([
     25, 164, 62, 184, 54, 145, 8, 211,
@@ -47,8 +53,10 @@ export class CollectorRegistry {
     borsh.publicKey("holder"),
     borsh.publicKey("currency"),
     types.IndexDate.layout("date"),
-    borsh.array(borsh.u8(), 4, "filters"),
-    types.CollectTrack.layout("track"),
+    borsh.array(borsh.u8(), 3, "filters"),
+    types.RegistryType.layout("registryType"),
+    borsh.u64("collected"),
+    borsh.u64("spent"),
   ])
 
   constructor(fields: CollectorRegistryFields) {
@@ -59,7 +67,9 @@ export class CollectorRegistry {
     this.currency = fields.currency
     this.date = new types.IndexDate({ ...fields.date })
     this.filters = fields.filters
-    this.track = new types.CollectTrack({ ...fields.track })
+    this.registryType = fields.registryType
+    this.collected = fields.collected
+    this.spent = fields.spent
   }
 
   static async fetch(
@@ -113,7 +123,9 @@ export class CollectorRegistry {
       currency: dec.currency,
       date: types.IndexDate.fromDecoded(dec.date),
       filters: dec.filters,
-      track: types.CollectTrack.fromDecoded(dec.track),
+      registryType: types.RegistryType.fromDecoded(dec.registryType),
+      collected: dec.collected,
+      spent: dec.spent,
     })
   }
 
@@ -126,7 +138,9 @@ export class CollectorRegistry {
       currency: this.currency.toString(),
       date: this.date.toJSON(),
       filters: this.filters,
-      track: this.track.toJSON(),
+      registryType: this.registryType.toJSON(),
+      collected: this.collected.toString(),
+      spent: this.spent.toString(),
     }
   }
 
@@ -139,7 +153,9 @@ export class CollectorRegistry {
       currency: new PublicKey(obj.currency),
       date: types.IndexDate.fromJSON(obj.date),
       filters: obj.filters,
-      track: types.CollectTrack.fromJSON(obj.track),
+      registryType: types.RegistryType.fromJSON(obj.registryType),
+      collected: new BN(obj.collected),
+      spent: new BN(obj.spent),
     })
   }
 }

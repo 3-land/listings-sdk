@@ -1,28 +1,32 @@
-import { TransactionInstruction, PublicKey, AccountMeta } from "@solana/web3.js" // eslint-disable-line @typescript-eslint/no-unused-vars
-import BN from "bn.js" // eslint-disable-line @typescript-eslint/no-unused-vars
-import * as borsh from "@coral-xyz/borsh" // eslint-disable-line @typescript-eslint/no-unused-vars
-import * as types from "../types" // eslint-disable-line @typescript-eslint/no-unused-vars
-import { PROGRAM_ID } from "../programId"
+import {
+  TransactionInstruction,
+  PublicKey,
+  AccountMeta,
+} from "@solana/web3.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import BN from "bn.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import * as borsh from "@coral-xyz/borsh"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import * as types from "../types"; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { PROGRAM_ID } from "../programId";
 
 export interface CreateSingleArgs {
-  supply: BN
-  shortMetadata: types.ShortMetadataArgsFields
-  saleConfig: types.SaleConfigFields
-  identifier: BN
-  category: Array<number>
-  superCategory: Array<number>
-  eventCategory: number
-  hashTraits: BN
+  supply: BN;
+  shortMetadata: types.ShortMetadataArgsFields;
+  saleConfig: types.SaleConfigFields;
+  identifier: BN;
+  category: Array<number>;
+  superCategory: Array<number>;
+  eventCategory: number;
+  hashTraits: BN;
 }
 
 export interface CreateSingleAccounts {
-  storeAccount: PublicKey
-  itemAccount: PublicKey
-  creatorAuthority: PublicKey
-  itemReserveList: PublicKey
-  creator: PublicKey
-  payer: PublicKey
-  systemProgram: PublicKey
+  storeAccount: PublicKey;
+  itemAccount: PublicKey;
+  creatorAuthority: PublicKey;
+  itemReserveList: PublicKey;
+  creator: PublicKey;
+  payer: PublicKey;
+  systemProgram: PublicKey;
 }
 
 export const layout = borsh.struct([
@@ -34,11 +38,12 @@ export const layout = borsh.struct([
   borsh.array(borsh.u8(), 2, "superCategory"),
   borsh.u16("eventCategory"),
   borsh.u64("hashTraits"),
-])
+]);
 
 export function createSingle(
   args: CreateSingleArgs,
   accounts: CreateSingleAccounts,
+  extraAccounts?: any[],
   programId: PublicKey = PROGRAM_ID
 ) {
   const keys: Array<AccountMeta> = [
@@ -49,9 +54,18 @@ export function createSingle(
     { pubkey: accounts.creator, isSigner: false, isWritable: false },
     { pubkey: accounts.payer, isSigner: true, isWritable: true },
     { pubkey: accounts.systemProgram, isSigner: false, isWritable: false },
-  ]
-  const identifier = Buffer.from([148, 238, 14, 208, 161, 59, 195, 11])
-  const buffer = Buffer.alloc(1000)
+  ];
+  if (extraAccounts) {
+    for (let item of extraAccounts) {
+      keys.push({
+        pubkey: item.pubkey,
+        isSigner: item.isSigner,
+        isWritable: item.isWritable,
+      });
+    }
+  }
+  const identifier = Buffer.from([148, 238, 14, 208, 161, 59, 195, 11]);
+  const buffer = Buffer.alloc(1000);
   const len = layout.encode(
     {
       supply: args.supply,
@@ -64,8 +78,8 @@ export function createSingle(
       hashTraits: args.hashTraits,
     },
     buffer
-  )
-  const data = Buffer.concat([identifier, buffer]).slice(0, 8 + len)
-  const ix = new TransactionInstruction({ keys, programId, data })
-  return ix
+  );
+  const data = Buffer.concat([identifier, buffer]).slice(0, 8 + len);
+  const ix = new TransactionInstruction({ keys, programId, data });
+  return ix;
 }

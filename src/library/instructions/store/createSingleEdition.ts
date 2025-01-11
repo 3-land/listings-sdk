@@ -8,6 +8,12 @@ import {
 import { createSingle } from "../../../types/instructions";
 import BN from "bn.js";
 
+type ExtraAccountMeta = {
+  pubkey: PublicKey;
+  isSigner: boolean;
+  isWritable: boolean;
+};
+
 export function createSingleEditionInstruction(
   storeAccount: PublicKey,
   itemAccount: PublicKey,
@@ -22,28 +28,35 @@ export function createSingleEditionInstruction(
   category: number[],
   superCategory: number[],
   eventCategory: number,
-  hashTraits: number
+  hashTraits: BN,
+  extraAccounts?: ExtraAccountMeta[]
 ): TransactionInstruction {
-  return createSingle(
-    {
-      supply: new BN(supply),
-      shortMetadata,
-      saleConfig,
-      identifier: new BN(identifier),
-      category,
-      superCategory,
-      eventCategory,
-      hashTraits: new BN(hashTraits),
-    },
-    {
-      storeAccount,
-      itemAccount,
-      creatorAuthority,
-      itemReserveList,
-      creator,
-      payer,
-      systemProgram: PublicKey.default,
-    },
-    PROGRAM_ID
-  );
+  try {
+    return createSingle(
+      {
+        supply: new BN(supply),
+        shortMetadata,
+        saleConfig,
+        identifier: new BN(identifier),
+        category,
+        superCategory,
+        eventCategory,
+        hashTraits: hashTraits,
+      },
+      {
+        storeAccount,
+        itemAccount,
+        creatorAuthority,
+        itemReserveList,
+        creator,
+        payer,
+        systemProgram: PublicKey.default,
+      },
+      extraAccounts,
+      PROGRAM_ID
+    );
+  } catch (error) {
+    console.log("error in createSingleEdition", error);
+    throw error;
+  }
 }
