@@ -27,6 +27,7 @@ const instructions_1 = require("../types/instructions");
 const validation_1 = require("../utility/validation");
 const config_1 = require("../utility/config");
 const accounts_1 = require("../types/accounts");
+const utils_1 = require("../utility/utils");
 const extraAccount = [
     {
         pubkey: new web3_js_1.PublicKey("GyPCu89S63P9NcCQAtuSJesiefhhgpGWrNVJs4bF2cSK"), //global store
@@ -179,19 +180,18 @@ class Store {
             throw new Error(`Failed to create collection: ${error}`);
         }
     }
-    async createSingleEdition(payer, storeAccount, supply, metadata, saleConfig, category, superCategory, eventCategory, hashTraits, collection, irysData) {
-        const identifier = Math.floor(Math.random() * 1000000);
-        const creator = payer.publicKey;
-        if (!payer || !payer.publicKey) {
+    async createSingleEdition(payer, storeAccount, supply, metadata, saleConfig, category, superCategory, eventCategory, hashTraits, collection, irysData, poolConfig) {
+        if (!payer?.publicKey)
             throw new validation_1.ValidationError("Invalid payer");
-        }
-        if (!storeAccount) {
+        if (!storeAccount)
             throw new validation_1.ValidationError("Store account is required");
-        }
         (0, validation_1.validateSupply)(supply);
-        (0, validation_1.validateMetadata)(metadata);
         (0, validation_1.validateSaleConfig)(saleConfig);
+        const identifier = Math.floor(Math.random() * 1000000);
         (0, validation_1.validateIdentifier)(identifier);
+        const creator = payer.publicKey;
+        let instructions = [];
+        let signers = [payer];
         try {
             const irysConfig = this.networkConfig.endpoint.includes(config_1.NetworkType.MAINNET)
                 ? {
@@ -200,11 +200,10 @@ class Store {
                     network: "mainnet",
                 }
                 : {};
-            console.log("irysConfig: ", irysConfig);
             const irys = await (0, irys_1.init)(payer.publicKey.toBase58(), irysConfig);
             const uuid = "random_uuid_per_upload_session";
             const [itemAccount] = await (0, PdaManager_1.itemAccountPDA)({
-                creator: creator,
+                creator,
                 store: storeAccount,
                 identifier: new bn_js_1.default(identifier),
             });
@@ -212,48 +211,68 @@ class Store {
                 creator: payer.publicKey,
                 store: storeAccount,
             });
-            let instructions = [];
-            let signers = [payer];
-            const { instruction, signerIrys, metadataUrl } = await (0, uploadFilesIryis_1.uploadFilesIrysInstruction)(irysData.options, irys, uuid);
-            instructions.push(instruction);
+            let pool;
+            if (poolConfig) {
+                const poolName = poolConfig.poolName ||
+                    poolConfig.currencyHash
+                        .toBase58()
+                        .slice(0, poolConfig.currencyHash.toBase58().length / 2);
+                [pool] = await (0, PdaManager_1.poolVaultPDA)({
+                    creator,
+                    store: storeAccount,
+                    currency: poolConfig.currencyHash,
+                    type: 2,
+                    name: poolName,
+                });
+                const poolAccount = await this.connection.getAccountInfo(pool);
+                if (!poolAccount) {
+                    instructions.push((0, instructions_1.createPool)({ name: poolName }, {
+                        poolVault: pool,
+                        currency: poolConfig.currencyHash,
+                        storeAccount: storeAccount,
+                        payer: payer.publicKey,
+                        systemProgram: web3_js_1.PublicKey.default,
+                    }));
+                    console.log("pool val: ", pool, creator);
+                    instructions.push(await (0, utils_1.createATA)({
+                        owner: pool,
+                        payer: payer.publicKey,
+                        nft: poolConfig.currencyHash,
+                    }));
+                    instructions.push(await (0, utils_1.createATA)({
+                        owner: creator,
+                        payer: payer.publicKey,
+                        nft: poolConfig.currencyHash,
+                    }));
+                }
+                metadata.creators.push(new types_1.Creator({ verified: false, address: pool, share: 100 }));
+                saleConfig.rules.push(new types_1.Rule.WrappedDestiny({
+                    rule: { pool: pool, destinyType: 2, flag1: 0 },
+                }));
+            }
+            const { instruction: uploadInstruction, signerIrys, metadataUrl, } = await (0, uploadFilesIryis_1.uploadFilesIrysInstruction)(irysData.options, irys, uuid);
+            instructions.push(uploadInstruction);
             signers.push(signerIrys);
-            const collection_mint = (0, PdaManager_1.toPublicKey)(collection);
-            const new_authority = creatorAuthority;
             const [authRecord] = await (0, PdaManager_1.collectionAuthorityRecord)({
-                mint: collection_mint,
-                new_authority: new_authority,
+                mint: collection,
+                new_authority: creatorAuthority,
             });
-            let collection_permission = false;
-            try {
-                const res = await this.connection.getAccountInfo(authRecord);
-                if (res)
-                    collection_permission = true;
-            }
-            catch (e) {
-                collection_permission = false;
-            }
-            if (!collection_permission) {
-                const metadataPda = await (0, PdaManager_1.getMetadataPDA)(collection_mint);
-                const accounts = {
+            const hasCollectionPermission = !!(await this.connection.getAccountInfo(authRecord));
+            if (!hasCollectionPermission) {
+                const metadataPda = await (0, PdaManager_1.getMetadataPDA)(collection);
+                instructions.push((0, mpl_token_metadata_2.createApproveCollectionAuthorityInstruction)({
                     collectionAuthorityRecord: authRecord,
-                    newCollectionAuthority: new_authority,
+                    newCollectionAuthority: creatorAuthority,
                     updateAuthority: payer.publicKey,
                     payer: payer.publicKey,
                     metadata: metadataPda,
-                    mint: collection_mint,
-                };
-                const approveInstruction = (0, mpl_token_metadata_2.createApproveCollectionAuthorityInstruction)(accounts);
-                instructions.push(approveInstruction);
-                // signers.push(new_authority)
+                    mint: collection,
+                }));
             }
-            console.log("metadataurl: ", metadataUrl);
             const meta = {
-                name: metadata.name,
+                ...metadata,
                 uri: metadataUrl ? metadataUrl.split(".net/")[1] : "",
                 uriType: 1,
-                sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
-                collection: metadata.collection,
-                creators: metadata.creators,
                 toJSON: function () {
                     throw new Error("Function not implemented.");
                 },
@@ -261,43 +280,48 @@ class Store {
                     throw new Error("Function not implemented.");
                 },
             };
-            console.log("meta: ", meta);
-            const instructionSing = (0, createSingleEdition_1.createSingleEditionInstruction)(storeAccount, itemAccount, creatorAuthority, programId_1.PROGRAM_ID, payer.publicKey, payer.publicKey, supply, meta, saleConfig, identifier, category, superCategory, eventCategory, hashTraits);
-            instructions.push(instructionSing);
+            const extraAccounts = poolConfig
+                ? [{ pubkey: pool, isSigner: false, isWritable: true }]
+                : undefined;
+            instructions.push((0, createSingleEdition_1.createSingleEditionInstruction)(storeAccount, itemAccount, creatorAuthority, programId_1.PROGRAM_ID, payer.publicKey, payer.publicKey, supply, meta, saleConfig, identifier, category, superCategory, eventCategory, hashTraits, extraAccounts));
             const [userActivity, userActivityBump] = await (0, PdaManager_1.userActivityPDA)({
                 user: creator,
                 store: storeAccount,
             });
-            const [creatorRegistry] = await (0, PdaManager_1.creatorRegistryPDA)({
-                user: creator,
-                store: storeAccount,
-                currency: saleConfig?.prices?.[0]?.priceType?.kind === "Spl"
-                    ? (0, PdaManager_1.toPublicKey)(saleConfig?.prices?.[0]?.priceType?.value?.id)
-                    : (0, PdaManager_1.toPublicKey)(programId_1.PROGRAM_CNFT),
-            });
-            const registerIX = (0, registerCreator_1.registerCreator)({
-                userActivityBump: userActivityBump,
-            }, {
+            const currency = saleConfig?.prices?.[0]?.priceType?.kind === "Spl"
+                ? (0, PdaManager_1.toPublicKey)(saleConfig?.prices?.[0]?.priceType?.value?.id)
+                : (0, PdaManager_1.toPublicKey)(programId_1.PROGRAM_CNFT);
+            const [creatorRegistry] = poolConfig
+                ? await (0, PdaManager_1.poolCreatorRegistryPDA)({
+                    user: creator,
+                    store: storeAccount,
+                    currency,
+                    type: { pool: pool },
+                })
+                : await (0, PdaManager_1.creatorRegistryPDA)({
+                    user: creator,
+                    store: storeAccount,
+                    currency,
+                });
+            instructions.push((0, registerCreator_1.registerCreator)({ userActivityBump }, {
                 creatorRegistry,
                 userActivity,
                 itemAccount,
                 store: storeAccount,
                 payer: payer.publicKey,
                 systemProgram: web3_js_1.SystemProgram.programId,
-            });
-            instructions.push(registerIX);
+            }));
             const transaction = new web3_js_1.Transaction().add(...instructions);
-            const sendedconfirmedTransaction = await (0, web3_js_1.sendAndConfirmTransaction)(this.connection, transaction, signers);
-            const { errors, succeeds } = await irys?.uploadFiles({
+            const signature = await (0, web3_js_1.sendAndConfirmTransaction)(this.connection, transaction, signers);
+            await irys?.uploadFiles({
                 uuid,
-                signature: sendedconfirmedTransaction,
+                signature,
             });
-            return sendedconfirmedTransaction;
+            return signature;
         }
         catch (error) {
-            if (error instanceof validation_1.ValidationError) {
+            if (error instanceof validation_1.ValidationError)
                 throw error;
-            }
             throw new Error(`Failed to create single edition: ${error}`);
         }
     }

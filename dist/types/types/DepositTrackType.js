@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Collection = exports.PdaCreator = exports.Creator = void 0;
+exports.PdaCreator = exports.Creator = void 0;
 exports.fromDecoded = fromDecoded;
 exports.fromJSON = fromJSON;
 exports.layout = layout;
@@ -66,25 +66,6 @@ class PdaCreator {
 exports.PdaCreator = PdaCreator;
 PdaCreator.discriminator = 1;
 PdaCreator.kind = "PdaCreator";
-class Collection {
-    constructor() {
-        this.discriminator = 2;
-        this.kind = "Collection";
-    }
-    toJSON() {
-        return {
-            kind: "Collection",
-        };
-    }
-    toEncodable() {
-        return {
-            Collection: {},
-        };
-    }
-}
-exports.Collection = Collection;
-Collection.discriminator = 2;
-Collection.kind = "Collection";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function fromDecoded(obj) {
     if (typeof obj !== "object") {
@@ -96,9 +77,6 @@ function fromDecoded(obj) {
     if ("PdaCreator" in obj) {
         return new PdaCreator();
     }
-    if ("Collection" in obj) {
-        return new Collection();
-    }
     throw new Error("Invalid enum object");
 }
 function fromJSON(obj) {
@@ -109,16 +87,12 @@ function fromJSON(obj) {
         case "PdaCreator": {
             return new PdaCreator();
         }
-        case "Collection": {
-            return new Collection();
-        }
     }
 }
 function layout(property) {
     const ret = borsh.rustEnum([
         borsh.struct([], "Creator"),
         borsh.struct([], "PdaCreator"),
-        borsh.struct([], "Collection"),
     ]);
     if (property !== undefined) {
         return ret.replicate(property);

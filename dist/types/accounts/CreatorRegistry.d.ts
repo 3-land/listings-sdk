@@ -9,7 +9,11 @@ export interface CreatorRegistryFields {
     donations: BN;
     date: types.IndexDateFields;
     filters: Array<number>;
-    track: types.SaleTrackFields;
+    registryType: types.RegistryTypeKind;
+    created: BN;
+    sold: BN;
+    earned: BN;
+    collectors: BN;
     lut: PublicKey;
 }
 export interface CreatorRegistryJSON {
@@ -20,7 +24,11 @@ export interface CreatorRegistryJSON {
     donations: string;
     date: types.IndexDateJSON;
     filters: Array<number>;
-    track: types.SaleTrackJSON;
+    registryType: types.RegistryTypeJSON;
+    created: string;
+    sold: string;
+    earned: string;
+    collectors: string;
     lut: string;
 }
 export declare class CreatorRegistry {
@@ -31,7 +39,11 @@ export declare class CreatorRegistry {
     readonly donations: BN;
     readonly date: types.IndexDate;
     readonly filters: Array<number>;
-    readonly track: types.SaleTrack;
+    readonly registryType: types.RegistryTypeKind;
+    readonly created: BN;
+    readonly sold: BN;
+    readonly earned: BN;
+    readonly collectors: BN;
     readonly lut: PublicKey;
     static readonly discriminator: Buffer;
     static readonly layout: any;

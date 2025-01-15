@@ -52,6 +52,19 @@ export declare class FlaggedPirate {
         FlaggedPirate: {};
     };
 }
+export interface WaitingGlobalApprovalJSON {
+    kind: "WaitingGlobalApproval";
+}
+export declare class WaitingGlobalApproval {
+    static readonly discriminator = 4;
+    static readonly kind = "WaitingGlobalApproval";
+    readonly discriminator = 4;
+    readonly kind = "WaitingGlobalApproval";
+    toJSON(): WaitingGlobalApprovalJSON;
+    toEncodable(): {
+        WaitingGlobalApproval: {};
+    };
+}
 export declare function fromDecoded(obj: any): types.GlobalStateKind;
 export declare function fromJSON(obj: types.GlobalStateJSON): types.GlobalStateKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;

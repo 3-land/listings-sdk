@@ -30,7 +30,6 @@ const programId_1 = require("../programId");
 class BurnDeposit {
     constructor(fields) {
         this.class = fields.class;
-        this.state = fields.state;
         this.deposits = fields.deposits.map((item) => new types.FakeDeposit({ ...item }));
     }
     static async fetch(c, address, programId = programId_1.PROGRAM_ID) {
@@ -62,21 +61,18 @@ class BurnDeposit {
         const dec = BurnDeposit.layout.decode(data.slice(8));
         return new BurnDeposit({
             class: types.AccountClass.fromDecoded(dec.class),
-            state: types.BurnState.fromDecoded(dec.state),
             deposits: dec.deposits.map((item /* eslint-disable-line @typescript-eslint/no-explicit-any */) => types.FakeDeposit.fromDecoded(item)),
         });
     }
     toJSON() {
         return {
             class: this.class.toJSON(),
-            state: this.state.toJSON(),
             deposits: this.deposits.map((item) => item.toJSON()),
         };
     }
     static fromJSON(obj) {
         return new BurnDeposit({
             class: types.AccountClass.fromJSON(obj.class),
-            state: types.BurnState.fromJSON(obj.state),
             deposits: obj.deposits.map((item) => types.FakeDeposit.fromJSON(item)),
         });
     }
@@ -87,7 +83,6 @@ BurnDeposit.discriminator = Buffer.from([
 ]);
 BurnDeposit.layout = borsh.struct([
     types.AccountClass.layout("class"),
-    types.BurnState.layout("state"),
     borsh.vec(types.FakeDeposit.layout(), "deposits"),
 ]);
 //# sourceMappingURL=BurnDeposit.js.map

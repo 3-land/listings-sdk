@@ -21,8 +21,6 @@ export declare class FakeBurnCount {
                 Creator: {};
             } | {
                 PdaCreator: {};
-            } | {
-                Collection: {};
             };
             depositState: {
                 Available: {};
@@ -40,8 +38,6 @@ export declare class FakeBurnCount {
                 Creator: {};
             } | {
                 PdaCreator: {};
-            } | {
-                Collection: {};
             };
             depositState: {
                 Available: {};

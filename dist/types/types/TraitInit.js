@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NonFungible = exports.Date = exports.SemiFungible = void 0;
+exports.Data = exports.NonFungible = exports.Date = exports.SemiFungible = void 0;
 exports.fromDecoded = fromDecoded;
 exports.fromJSON = fromJSON;
 exports.layout = layout;
@@ -116,6 +116,33 @@ class NonFungible {
 exports.NonFungible = NonFungible;
 NonFungible.discriminator = 2;
 NonFungible.kind = "NonFungible";
+class Data {
+    constructor(value) {
+        this.discriminator = 3;
+        this.kind = "Data";
+        this.value = {
+            hash: value.hash,
+        };
+    }
+    toJSON() {
+        return {
+            kind: "Data",
+            value: {
+                hash: this.value.hash.toString(),
+            },
+        };
+    }
+    toEncodable() {
+        return {
+            Data: {
+                hash: this.value.hash,
+            },
+        };
+    }
+}
+exports.Data = Data;
+Data.discriminator = 3;
+Data.kind = "Data";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function fromDecoded(obj) {
     if (typeof obj !== "object") {
@@ -140,6 +167,12 @@ function fromDecoded(obj) {
             values: val["values"],
         });
     }
+    if ("Data" in obj) {
+        const val = obj["Data"];
+        return new Data({
+            hash: val["hash"],
+        });
+    }
     throw new Error("Invalid enum object");
 }
 function fromJSON(obj) {
@@ -160,6 +193,11 @@ function fromJSON(obj) {
                 values: obj.value.values.map((item) => new bn_js_1.default(item)),
             });
         }
+        case "Data": {
+            return new Data({
+                hash: new bn_js_1.default(obj.value.hash),
+            });
+        }
     }
 }
 function layout(property) {
@@ -167,6 +205,7 @@ function layout(property) {
         borsh.struct([borsh.u64("hash")], "SemiFungible"),
         borsh.struct([borsh.u64("hash")], "Date"),
         borsh.struct([borsh.u64("hash"), borsh.vec(borsh.u64(), "values")], "NonFungible"),
+        borsh.struct([borsh.u64("hash")], "Data"),
     ]);
     if (property !== undefined) {
         return ret.replicate(property);

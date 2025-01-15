@@ -16,7 +16,7 @@ export declare class PreviousDonationRecord {
     readonly message: string;
     constructor(fields: PreviousDonationRecordFields);
     static layout(property?: string): any;
-    static fromDecoded(obj: any): types.PreviousDonationRecord;
+    static fromDecoded(obj: any): PreviousDonationRecord;
     static toEncodable(fields: PreviousDonationRecordFields): {
         cnft: {
             root: number[];

@@ -109,6 +109,36 @@ export declare class WrappedSource {
         };
     };
 }
+export type WrappedDestinyFields = {
+    rule: types.WrappedDestinyFields;
+};
+export type WrappedDestinyValue = {
+    rule: types.WrappedDestiny;
+};
+export interface WrappedDestinyJSON {
+    kind: "WrappedDestiny";
+    value: {
+        rule: types.WrappedDestinyJSON;
+    };
+}
+export declare class WrappedDestiny {
+    static readonly discriminator = 3;
+    static readonly kind = "WrappedDestiny";
+    readonly discriminator = 3;
+    readonly kind = "WrappedDestiny";
+    readonly value: WrappedDestinyValue;
+    constructor(value: WrappedDestinyFields);
+    toJSON(): WrappedDestinyJSON;
+    toEncodable(): {
+        WrappedDestiny: {
+            rule: {
+                pool: PublicKey;
+                destinyType: number;
+                flag1: number;
+            };
+        };
+    };
+}
 export declare function fromDecoded(obj: any): types.RuleKind;
 export declare function fromJSON(obj: types.RuleJSON): types.RuleKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;

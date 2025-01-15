@@ -26,32 +26,6 @@ export declare class NoMarketFee {
         NoMarketFee: {};
     };
 }
-export interface PartnershipJSON {
-    kind: "Partnership";
-}
-export declare class Partnership {
-    static readonly discriminator = 2;
-    static readonly kind = "Partnership";
-    readonly discriminator = 2;
-    readonly kind = "Partnership";
-    toJSON(): PartnershipJSON;
-    toEncodable(): {
-        Partnership: {};
-    };
-}
-export interface LocksInVaultJSON {
-    kind: "LocksInVault";
-}
-export declare class LocksInVault {
-    static readonly discriminator = 3;
-    static readonly kind = "LocksInVault";
-    readonly discriminator = 3;
-    readonly kind = "LocksInVault";
-    toJSON(): LocksInVaultJSON;
-    toEncodable(): {
-        LocksInVault: {};
-    };
-}
 export declare function fromDecoded(obj: any): types.SaleTypeKind;
 export declare function fromJSON(obj: types.SaleTypeJSON): types.SaleTypeKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getATAPDA = exports.treeAuthority = exports.buyPaymentPDA = exports.collectorGlobalRegistryPDA = exports.collectorArtistRegistryPDA = exports.userActivityPDA = exports.creatorRegistryPDA = exports.collectionAuthorityRecord = exports.getEditionPDA = exports.getMetadataPDA = exports.toPublicKey = exports.METADATA_PREFIX = void 0;
+exports.poolVaultPDA = exports.getATAPDA = exports.treeAuthority = exports.buyPaymentPDA = exports.collectorGlobalRegistryPDA = exports.collectorArtistRegistryPDA = exports.userActivityPDA = exports.creatorRegistryPDA = exports.poolCreatorRegistryPDA = exports.collectionAuthorityRecord = exports.getEditionPDA = exports.getMetadataPDA = exports.toPublicKey = exports.METADATA_PREFIX = void 0;
 exports.holderPDA = holderPDA;
 exports.holderAccountPDA = holderAccountPDA;
 exports.storePDA = storePDA;
@@ -13,6 +13,8 @@ exports.itemReserveListPDA = itemReserveListPDA;
 const bn_js_1 = __importDefault(require("bn.js"));
 const programId_1 = require("../types/programId");
 const web3_js_1 = require("@solana/web3.js");
+const utils_1 = require("./utils");
+const bytes_1 = require("@project-serum/anchor/dist/cjs/utils/bytes");
 exports.METADATA_PREFIX = "metadata";
 function holderPDA({ creator, slot }) {
     if (!slot)
@@ -108,6 +110,33 @@ const collectionAuthorityRecord = async ({ mint, new_authority, }) => {
     ], programId_1.TOKEN_METADATA_PROGRAM_ID);
 };
 exports.collectionAuthorityRecord = collectionAuthorityRecord;
+const poolCreatorRegistryPDA = ({ user, currency, store, type, }) => {
+    user = (0, exports.toPublicKey)(user);
+    currency = (0, exports.toPublicKey)(currency);
+    store = (0, exports.toPublicKey)(store);
+    const word = [...Buffer.from("creator_registry")];
+    if (type?.pool) {
+        while (word.length > 23) {
+            if (word.length % 2 == 0) {
+                word.splice(word.length - 1, 1);
+            }
+            else {
+                word.splice(0, 1);
+            }
+        }
+        word.push(1);
+        const pool = (0, exports.toPublicKey)(type.pool).toBytes();
+        const pool_hash = new bn_js_1.default((0, utils_1.cyrb53)([...pool], 0)).toArrayLike(Buffer, "le", 8);
+        word.push(...pool_hash);
+    }
+    return web3_js_1.PublicKey.findProgramAddress([
+        bytes_1.bs58.decode(bytes_1.bs58.encode(word)),
+        currency.toBytes(),
+        user.toBytes(),
+        store.toBytes(),
+    ], (0, exports.toPublicKey)(programId_1.PROGRAM_ID));
+};
+exports.poolCreatorRegistryPDA = poolCreatorRegistryPDA;
 const creatorRegistryPDA = ({ user, currency, store }) => {
     user = (0, exports.toPublicKey)(user);
     currency = (0, exports.toPublicKey)(currency);
@@ -172,4 +201,19 @@ const getATAPDA = async ({ owner, mint }) => {
     return publicKey;
 };
 exports.getATAPDA = getATAPDA;
+const poolVaultPDA = ({ creator, store, currency, type, name }) => {
+    store = (0, exports.toPublicKey)(store);
+    creator = (0, exports.toPublicKey)(creator);
+    currency = (0, exports.toPublicKey)(currency);
+    type = type || 1;
+    return web3_js_1.PublicKey.findProgramAddress([
+        Buffer.from("token_pool"),
+        currency.toBytes(),
+        store.toBytes(),
+        creator.toBytes(),
+        [type],
+        Buffer.from(name.toLowerCase()),
+    ], (0, exports.toPublicKey)(programId_1.PROGRAM_ID));
+};
+exports.poolVaultPDA = poolVaultPDA;
 //# sourceMappingURL=PdaManager.js.map

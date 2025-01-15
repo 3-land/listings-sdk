@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NonFungible = exports.Date = exports.SemiFungible = void 0;
+exports.Data = exports.NonFungible = exports.Date = exports.SemiFungible = void 0;
 exports.fromDecoded = fromDecoded;
 exports.fromJSON = fromJSON;
 exports.layout = layout;
@@ -132,6 +132,39 @@ class NonFungible {
 exports.NonFungible = NonFungible;
 NonFungible.discriminator = 2;
 NonFungible.kind = "NonFungible";
+class Data {
+    constructor(value) {
+        this.discriminator = 3;
+        this.kind = "Data";
+        this.value = {
+            hash: value.hash,
+            count: value.count,
+            supply: value.supply,
+        };
+    }
+    toJSON() {
+        return {
+            kind: "Data",
+            value: {
+                hash: this.value.hash.toString(),
+                count: this.value.count,
+                supply: this.value.supply.toString(),
+            },
+        };
+    }
+    toEncodable() {
+        return {
+            Data: {
+                hash: this.value.hash,
+                count: this.value.count,
+                supply: this.value.supply,
+            },
+        };
+    }
+}
+exports.Data = Data;
+Data.discriminator = 3;
+Data.kind = "Data";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function fromDecoded(obj) {
     if (typeof obj !== "object") {
@@ -161,6 +194,14 @@ function fromDecoded(obj) {
             values: val["values"].map((item /* eslint-disable-line @typescript-eslint/no-explicit-any */) => types.TraitValue.fromDecoded(item)),
         });
     }
+    if ("Data" in obj) {
+        const val = obj["Data"];
+        return new Data({
+            hash: val["hash"],
+            count: val["count"],
+            supply: val["supply"],
+        });
+    }
     throw new Error("Invalid enum object");
 }
 function fromJSON(obj) {
@@ -186,6 +227,13 @@ function fromJSON(obj) {
                 values: obj.value.values.map((item) => types.TraitValue.fromJSON(item)),
             });
         }
+        case "Data": {
+            return new Data({
+                hash: new bn_js_1.default(obj.value.hash),
+                count: obj.value.count,
+                supply: new bn_js_1.default(obj.value.supply),
+            });
+        }
     }
 }
 function layout(property) {
@@ -198,6 +246,7 @@ function layout(property) {
         ], "SemiFungible"),
         borsh.struct([borsh.u64("hash"), borsh.u32("count"), borsh.u64("supply")], "Date"),
         borsh.struct([borsh.u64("hash"), borsh.vec(types.TraitValue.layout(), "values")], "NonFungible"),
+        borsh.struct([borsh.u64("hash"), borsh.u32("count"), borsh.u64("supply")], "Data"),
     ]);
     if (property !== undefined) {
         return ret.replicate(property);

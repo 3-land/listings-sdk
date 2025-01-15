@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FlaggedPirate = exports.HiddenByUser = exports.Public = exports.HiddenBySystem = void 0;
+exports.WaitingGlobalApproval = exports.FlaggedPirate = exports.HiddenByUser = exports.Public = exports.HiddenBySystem = void 0;
 exports.fromDecoded = fromDecoded;
 exports.fromJSON = fromJSON;
 exports.layout = layout;
@@ -104,6 +104,25 @@ class FlaggedPirate {
 exports.FlaggedPirate = FlaggedPirate;
 FlaggedPirate.discriminator = 3;
 FlaggedPirate.kind = "FlaggedPirate";
+class WaitingGlobalApproval {
+    constructor() {
+        this.discriminator = 4;
+        this.kind = "WaitingGlobalApproval";
+    }
+    toJSON() {
+        return {
+            kind: "WaitingGlobalApproval",
+        };
+    }
+    toEncodable() {
+        return {
+            WaitingGlobalApproval: {},
+        };
+    }
+}
+exports.WaitingGlobalApproval = WaitingGlobalApproval;
+WaitingGlobalApproval.discriminator = 4;
+WaitingGlobalApproval.kind = "WaitingGlobalApproval";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function fromDecoded(obj) {
     if (typeof obj !== "object") {
@@ -121,6 +140,9 @@ function fromDecoded(obj) {
     if ("FlaggedPirate" in obj) {
         return new FlaggedPirate();
     }
+    if ("WaitingGlobalApproval" in obj) {
+        return new WaitingGlobalApproval();
+    }
     throw new Error("Invalid enum object");
 }
 function fromJSON(obj) {
@@ -137,6 +159,9 @@ function fromJSON(obj) {
         case "FlaggedPirate": {
             return new FlaggedPirate();
         }
+        case "WaitingGlobalApproval": {
+            return new WaitingGlobalApproval();
+        }
     }
 }
 function layout(property) {
@@ -145,6 +170,7 @@ function layout(property) {
         borsh.struct([], "Public"),
         borsh.struct([], "HiddenByUser"),
         borsh.struct([], "FlaggedPirate"),
+        borsh.struct([], "WaitingGlobalApproval"),
     ]);
     if (property !== undefined) {
         return ret.replicate(property);

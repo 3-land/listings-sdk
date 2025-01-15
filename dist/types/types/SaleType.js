@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LocksInVault = exports.Partnership = exports.NoMarketFee = exports.Normal = void 0;
+exports.NoMarketFee = exports.Normal = void 0;
 exports.fromDecoded = fromDecoded;
 exports.fromJSON = fromJSON;
 exports.layout = layout;
@@ -66,44 +66,6 @@ class NoMarketFee {
 exports.NoMarketFee = NoMarketFee;
 NoMarketFee.discriminator = 1;
 NoMarketFee.kind = "NoMarketFee";
-class Partnership {
-    constructor() {
-        this.discriminator = 2;
-        this.kind = "Partnership";
-    }
-    toJSON() {
-        return {
-            kind: "Partnership",
-        };
-    }
-    toEncodable() {
-        return {
-            Partnership: {},
-        };
-    }
-}
-exports.Partnership = Partnership;
-Partnership.discriminator = 2;
-Partnership.kind = "Partnership";
-class LocksInVault {
-    constructor() {
-        this.discriminator = 3;
-        this.kind = "LocksInVault";
-    }
-    toJSON() {
-        return {
-            kind: "LocksInVault",
-        };
-    }
-    toEncodable() {
-        return {
-            LocksInVault: {},
-        };
-    }
-}
-exports.LocksInVault = LocksInVault;
-LocksInVault.discriminator = 3;
-LocksInVault.kind = "LocksInVault";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function fromDecoded(obj) {
     if (typeof obj !== "object") {
@@ -115,12 +77,6 @@ function fromDecoded(obj) {
     if ("NoMarketFee" in obj) {
         return new NoMarketFee();
     }
-    if ("Partnership" in obj) {
-        return new Partnership();
-    }
-    if ("LocksInVault" in obj) {
-        return new LocksInVault();
-    }
     throw new Error("Invalid enum object");
 }
 function fromJSON(obj) {
@@ -131,20 +87,12 @@ function fromJSON(obj) {
         case "NoMarketFee": {
             return new NoMarketFee();
         }
-        case "Partnership": {
-            return new Partnership();
-        }
-        case "LocksInVault": {
-            return new LocksInVault();
-        }
     }
 }
 function layout(property) {
     const ret = borsh.rustEnum([
         borsh.struct([], "Normal"),
         borsh.struct([], "NoMarketFee"),
-        borsh.struct([], "Partnership"),
-        borsh.struct([], "LocksInVault"),
     ]);
     if (property !== undefined) {
         return ret.replicate(property);

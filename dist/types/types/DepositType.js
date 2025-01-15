@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Collection = exports.PdaCreator = exports.Creator = void 0;
+exports.PdaCreator = exports.Creator = void 0;
 exports.fromDecoded = fromDecoded;
 exports.fromJSON = fromJSON;
 exports.layout = layout;
@@ -86,36 +86,6 @@ class PdaCreator {
 exports.PdaCreator = PdaCreator;
 PdaCreator.discriminator = 1;
 PdaCreator.kind = "PdaCreator";
-class Collection {
-    constructor(value) {
-        this.discriminator = 2;
-        this.kind = "Collection";
-        this.value = {
-            metadata: new types.VerifyCollectionMetadata({ ...value.metadata }),
-            subtype: value.subtype,
-        };
-    }
-    toJSON() {
-        return {
-            kind: "Collection",
-            value: {
-                metadata: this.value.metadata.toJSON(),
-                subtype: this.value.subtype.toJSON(),
-            },
-        };
-    }
-    toEncodable() {
-        return {
-            Collection: {
-                metadata: types.VerifyCollectionMetadata.toEncodable(this.value.metadata),
-                subtype: this.value.subtype.toEncodable(),
-            },
-        };
-    }
-}
-exports.Collection = Collection;
-Collection.discriminator = 2;
-Collection.kind = "Collection";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function fromDecoded(obj) {
     if (typeof obj !== "object") {
@@ -134,13 +104,6 @@ function fromDecoded(obj) {
             hasher: types.AccountHasher.fromDecoded(val["hasher"]),
         });
     }
-    if ("Collection" in obj) {
-        const val = obj["Collection"];
-        return new Collection({
-            metadata: types.VerifyCollectionMetadata.fromDecoded(val["metadata"]),
-            subtype: types.DepositSubtype.fromDecoded(val["subtype"]),
-        });
-    }
     throw new Error("Invalid enum object");
 }
 function fromJSON(obj) {
@@ -156,12 +119,6 @@ function fromJSON(obj) {
                 hasher: types.AccountHasher.fromJSON(obj.value.hasher),
             });
         }
-        case "Collection": {
-            return new Collection({
-                metadata: types.VerifyCollectionMetadata.fromJSON(obj.value.metadata),
-                subtype: types.DepositSubtype.fromJSON(obj.value.subtype),
-            });
-        }
     }
 }
 function layout(property) {
@@ -171,10 +128,6 @@ function layout(property) {
             borsh.vec(types.Creator.layout(), "creators"),
             types.AccountHasher.layout("hasher"),
         ], "PdaCreator"),
-        borsh.struct([
-            types.VerifyCollectionMetadata.layout("metadata"),
-            types.DepositSubtype.layout("subtype"),
-        ], "Collection"),
     ]);
     if (property !== undefined) {
         return ret.replicate(property);

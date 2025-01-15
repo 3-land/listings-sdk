@@ -41,7 +41,11 @@ class CreatorRegistry {
         this.donations = fields.donations;
         this.date = new types.IndexDate({ ...fields.date });
         this.filters = fields.filters;
-        this.track = new types.SaleTrack({ ...fields.track });
+        this.registryType = fields.registryType;
+        this.created = fields.created;
+        this.sold = fields.sold;
+        this.earned = fields.earned;
+        this.collectors = fields.collectors;
         this.lut = fields.lut;
     }
     static async fetch(c, address, programId = programId_1.PROGRAM_ID) {
@@ -79,7 +83,11 @@ class CreatorRegistry {
             donations: dec.donations,
             date: types.IndexDate.fromDecoded(dec.date),
             filters: dec.filters,
-            track: types.SaleTrack.fromDecoded(dec.track),
+            registryType: types.RegistryType.fromDecoded(dec.registryType),
+            created: dec.created,
+            sold: dec.sold,
+            earned: dec.earned,
+            collectors: dec.collectors,
             lut: dec.lut,
         });
     }
@@ -92,7 +100,11 @@ class CreatorRegistry {
             donations: this.donations.toString(),
             date: this.date.toJSON(),
             filters: this.filters,
-            track: this.track.toJSON(),
+            registryType: this.registryType.toJSON(),
+            created: this.created.toString(),
+            sold: this.sold.toString(),
+            earned: this.earned.toString(),
+            collectors: this.collectors.toString(),
             lut: this.lut.toString(),
         };
     }
@@ -105,7 +117,11 @@ class CreatorRegistry {
             donations: new bn_js_1.default(obj.donations),
             date: types.IndexDate.fromJSON(obj.date),
             filters: obj.filters,
-            track: types.SaleTrack.fromJSON(obj.track),
+            registryType: types.RegistryType.fromJSON(obj.registryType),
+            created: new bn_js_1.default(obj.created),
+            sold: new bn_js_1.default(obj.sold),
+            earned: new bn_js_1.default(obj.earned),
+            collectors: new bn_js_1.default(obj.collectors),
             lut: new web3_js_1.PublicKey(obj.lut),
         });
     }
@@ -121,8 +137,12 @@ CreatorRegistry.layout = borsh.struct([
     borsh.publicKey("creator"),
     borsh.u64("donations"),
     types.IndexDate.layout("date"),
-    borsh.array(borsh.u8(), 8, "filters"),
-    types.SaleTrack.layout("track"),
+    borsh.array(borsh.u8(), 7, "filters"),
+    types.RegistryType.layout("registryType"),
+    borsh.u64("created"),
+    borsh.u64("sold"),
+    borsh.u64("earned"),
+    borsh.u64("collectors"),
     borsh.publicKey("lut"),
 ]);
 //# sourceMappingURL=CreatorRegistry.js.map

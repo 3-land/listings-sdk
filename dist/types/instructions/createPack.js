@@ -31,7 +31,6 @@ const types = __importStar(require("../types")); // eslint-disable-line @typescr
 const programId_1 = require("../programId");
 exports.layout = borsh.struct([
     types.MetadataArgs.layout("metadata"),
-    types.SaleConfig.layout("saleConfig"),
     borsh.u64("identifier"),
     borsh.array(borsh.u16(), 3, "category"),
     borsh.array(borsh.u8(), 2, "superCategory"),
@@ -43,8 +42,8 @@ function createPack(args, accounts, programId = programId_1.PROGRAM_ID) {
     const keys = [
         { pubkey: accounts.storeAccount, isSigner: false, isWritable: true },
         { pubkey: accounts.creatorAuthority, isSigner: false, isWritable: true },
+        { pubkey: accounts.packTraits, isSigner: false, isWritable: true },
         { pubkey: accounts.packAccount, isSigner: false, isWritable: true },
-        { pubkey: accounts.packReserveList, isSigner: false, isWritable: true },
         { pubkey: accounts.creator, isSigner: false, isWritable: false },
         { pubkey: accounts.payer, isSigner: true, isWritable: true },
         { pubkey: accounts.systemProgram, isSigner: false, isWritable: false },
@@ -53,7 +52,6 @@ function createPack(args, accounts, programId = programId_1.PROGRAM_ID) {
     const buffer = Buffer.alloc(1000);
     const len = exports.layout.encode({
         metadata: types.MetadataArgs.toEncodable(args.metadata),
-        saleConfig: types.SaleConfig.toEncodable(args.saleConfig),
         identifier: args.identifier,
         category: args.category,
         superCategory: args.superCategory,

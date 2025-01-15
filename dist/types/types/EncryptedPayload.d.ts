@@ -1,4 +1,3 @@
-import * as types from "../types";
 export interface EncryptedPayloadFields {
     encType: number;
     arweave: string;
@@ -12,7 +11,7 @@ export declare class EncryptedPayload {
     readonly arweave: string;
     constructor(fields: EncryptedPayloadFields);
     static layout(property?: string): any;
-    static fromDecoded(obj: any): types.EncryptedPayload;
+    static fromDecoded(obj: any): EncryptedPayload;
     static toEncodable(fields: EncryptedPayloadFields): {
         encType: number;
         arweave: string;

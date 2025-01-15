@@ -46,26 +46,6 @@ export declare class Deposit {
                     bump: number;
                 };
             };
-        } | {
-            Collection: {
-                metadata: {
-                    name: string;
-                    symbol: string;
-                    uri: string;
-                    royalty: number;
-                    collection: number;
-                    creators: {
-                        address: PublicKey;
-                        verified: boolean;
-                        share: number;
-                    }[];
-                };
-                subtype: {
-                    None: {};
-                } | {
-                    Three: {};
-                };
-            };
         };
         format: {
             Cnft: {};
@@ -100,26 +80,6 @@ export declare class Deposit {
                     insertAt: number;
                     program: PublicKey;
                     bump: number;
-                };
-            };
-        } | {
-            Collection: {
-                metadata: {
-                    name: string;
-                    symbol: string;
-                    uri: string;
-                    royalty: number;
-                    collection: number;
-                    creators: {
-                        address: PublicKey;
-                        verified: boolean;
-                        share: number;
-                    }[];
-                };
-                subtype: {
-                    None: {};
-                } | {
-                    Three: {};
                 };
             };
         };

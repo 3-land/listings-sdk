@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TokenManagerV1 = exports.GenericUserV1 = exports.PoolVaultV1 = exports.DonationRegistryV1 = exports.ThreeIdV1 = exports.RevealerForMeV1 = exports.SecureHolderV1 = exports.ArtistBurnTrackV1 = exports.GlobalBurnTrackV1 = exports.BurnDepositV1 = exports.ZeroOpenHolderV1 = exports.PackUploadsV1 = exports.PackTraitsV1 = exports.CollectorArtistRegistryV1 = exports.CollectorGlobalRegistryV1 = exports.CreatorRegistryV1 = exports.None = exports.PackArchiveV1 = exports.SingleArchiveV1 = exports.BuyTrackV1 = exports.PackOpenHolderV1 = exports.PackContentV1 = exports.PackReceiptV1 = exports.CardV1 = exports.PackV1 = exports.SingleV1 = exports.StoreV1 = exports.HolderV1 = void 0;
+exports.PoolVaultV1 = exports.DonationRegistryV1 = exports.ThreeIdV1 = exports.RevealerForMeV1 = exports.SecureHolderV1 = exports.ArtistBurnTrackV1 = exports.GlobalBurnTrackV1 = exports.BurnDepositV1 = exports.ZeroOpenHolderV1 = exports.PackUploadsV1 = exports.PackTraitsV1 = exports.CollectorArtistRegistryV1 = exports.CollectorGlobalRegistryV1 = exports.CreatorRegistryV1 = exports.None = exports.PackArchiveV1 = exports.SingleArchiveV1 = exports.BuyTrackV1 = exports.PackOpenHolderV1 = exports.PackContentV1 = exports.PackReceiptV1 = exports.CardV1 = exports.PackV1 = exports.SingleV1 = exports.StoreV1 = exports.HolderV1 = void 0;
 exports.fromDecoded = fromDecoded;
 exports.fromJSON = fromJSON;
 exports.layout = layout;
@@ -522,44 +522,6 @@ class PoolVaultV1 {
 exports.PoolVaultV1 = PoolVaultV1;
 PoolVaultV1.discriminator = 25;
 PoolVaultV1.kind = "PoolVaultV1";
-class GenericUserV1 {
-    constructor() {
-        this.discriminator = 26;
-        this.kind = "GenericUserV1";
-    }
-    toJSON() {
-        return {
-            kind: "GenericUserV1",
-        };
-    }
-    toEncodable() {
-        return {
-            GenericUserV1: {},
-        };
-    }
-}
-exports.GenericUserV1 = GenericUserV1;
-GenericUserV1.discriminator = 26;
-GenericUserV1.kind = "GenericUserV1";
-class TokenManagerV1 {
-    constructor() {
-        this.discriminator = 27;
-        this.kind = "TokenManagerV1";
-    }
-    toJSON() {
-        return {
-            kind: "TokenManagerV1",
-        };
-    }
-    toEncodable() {
-        return {
-            TokenManagerV1: {},
-        };
-    }
-}
-exports.TokenManagerV1 = TokenManagerV1;
-TokenManagerV1.discriminator = 27;
-TokenManagerV1.kind = "TokenManagerV1";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function fromDecoded(obj) {
     if (typeof obj !== "object") {
@@ -643,12 +605,6 @@ function fromDecoded(obj) {
     if ("PoolVaultV1" in obj) {
         return new PoolVaultV1();
     }
-    if ("GenericUserV1" in obj) {
-        return new GenericUserV1();
-    }
-    if ("TokenManagerV1" in obj) {
-        return new TokenManagerV1();
-    }
     throw new Error("Invalid enum object");
 }
 function fromJSON(obj) {
@@ -731,12 +687,6 @@ function fromJSON(obj) {
         case "PoolVaultV1": {
             return new PoolVaultV1();
         }
-        case "GenericUserV1": {
-            return new GenericUserV1();
-        }
-        case "TokenManagerV1": {
-            return new TokenManagerV1();
-        }
     }
 }
 function layout(property) {
@@ -767,8 +717,6 @@ function layout(property) {
         borsh.struct([], "ThreeIdV1"),
         borsh.struct([], "DonationRegistryV1"),
         borsh.struct([], "PoolVaultV1"),
-        borsh.struct([], "GenericUserV1"),
-        borsh.struct([], "TokenManagerV1"),
     ]);
     if (property !== undefined) {
         return ret.replicate(property);

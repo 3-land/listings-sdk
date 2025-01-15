@@ -2,17 +2,14 @@ import { PublicKey, Connection } from "@solana/web3.js";
 import * as types from "../types";
 export interface BurnDepositFields {
     class: types.AccountClassKind;
-    state: types.BurnStateKind;
     deposits: Array<types.FakeDepositFields>;
 }
 export interface BurnDepositJSON {
     class: types.AccountClassJSON;
-    state: types.BurnStateJSON;
     deposits: Array<types.FakeDepositJSON>;
 }
 export declare class BurnDeposit {
     readonly class: types.AccountClassKind;
-    readonly state: types.BurnStateKind;
     readonly deposits: Array<types.FakeDeposit>;
     static readonly discriminator: Buffer;
     static readonly layout: any;

@@ -25,6 +25,10 @@ export declare class FeedingTraits {
                 hash: BN;
                 values: BN[];
             };
+        } | {
+            Data: {
+                hash: BN;
+            };
         })[];
     };
     toJSON(): FeedingTraitsJSON;
@@ -42,6 +46,10 @@ export declare class FeedingTraits {
             NonFungible: {
                 hash: BN;
                 values: BN[];
+            };
+        } | {
+            Data: {
+                hash: BN;
             };
         })[];
     };

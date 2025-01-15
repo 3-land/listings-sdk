@@ -1,5 +1,3 @@
-import { PublicKey } from "@solana/web3.js";
-import BN from "bn.js";
 import * as types from "../types";
 export interface GenericStoreFields {
     storeType: number;
@@ -14,36 +12,16 @@ export declare class GenericStore {
     readonly data: types.GenericValueKind;
     constructor(fields: GenericStoreFields);
     static layout(property?: string): any;
-    static fromDecoded(obj: any): types.GenericStore;
+    static fromDecoded(obj: any): GenericStore;
     static toEncodable(fields: GenericStoreFields): {
         storeType: number;
-        data: {
-            None: {};
-        } | {
-            Key: {
-                value: PublicKey;
-            };
-        } | {
-            EightBytes: {
-                value: BN;
-            };
-        };
+        data: any;
     };
     toJSON(): GenericStoreJSON;
     static fromJSON(obj: GenericStoreJSON): GenericStore;
     toEncodable(): {
         storeType: number;
-        data: {
-            None: {};
-        } | {
-            Key: {
-                value: PublicKey;
-            };
-        } | {
-            EightBytes: {
-                value: BN;
-            };
-        };
+        data: any;
     };
 }
 //# sourceMappingURL=GenericStore.d.ts.map

@@ -39,7 +39,7 @@ exports.layout = borsh.struct([
     borsh.u16("eventCategory"),
     borsh.u64("hashTraits"),
 ]);
-function createSingle(args, accounts, programId = programId_1.PROGRAM_ID) {
+function createSingle(args, accounts, extraAccounts, programId = programId_1.PROGRAM_ID) {
     const keys = [
         { pubkey: accounts.storeAccount, isSigner: false, isWritable: true },
         { pubkey: accounts.itemAccount, isSigner: false, isWritable: true },
@@ -49,6 +49,15 @@ function createSingle(args, accounts, programId = programId_1.PROGRAM_ID) {
         { pubkey: accounts.payer, isSigner: true, isWritable: true },
         { pubkey: accounts.systemProgram, isSigner: false, isWritable: false },
     ];
+    if (extraAccounts) {
+        for (let item of extraAccounts) {
+            keys.push({
+                pubkey: item.pubkey,
+                isSigner: item.isSigner,
+                isWritable: item.isWritable,
+            });
+        }
+    }
     const identifier = Buffer.from([148, 238, 14, 208, 161, 59, 195, 11]);
     const buffer = Buffer.alloc(1000);
     const len = exports.layout.encode({

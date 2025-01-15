@@ -10,6 +10,7 @@ export declare const toPublicKey: (key: string | PublicKey | boolean) => any;
 export declare const getMetadataPDA: (mint: any) => Promise<PublicKey>;
 export declare const getEditionPDA: (mint: any, full: any) => Promise<[PublicKey, number]>;
 export declare const collectionAuthorityRecord: ({ mint, new_authority, }: any) => Promise<[PublicKey, number]>;
+export declare const poolCreatorRegistryPDA: ({ user, currency, store, type, }: any) => Promise<[PublicKey, number]>;
 export declare const creatorRegistryPDA: ({ user, currency, store }: any) => Promise<[PublicKey, number]>;
 export declare const userActivityPDA: ({ user, store }: any) => Promise<[PublicKey, number]>;
 export declare const collectorArtistRegistryPDA: ({ user, artist, currency, store, }: any) => Promise<[PublicKey, number]>;
@@ -17,4 +18,5 @@ export declare const collectorGlobalRegistryPDA: ({ user, currency, store }: any
 export declare const buyPaymentPDA: ({ owner, itemAccount }: any) => Promise<[PublicKey, number]>;
 export declare const treeAuthority: ({ tree }: any) => [PublicKey, number];
 export declare const getATAPDA: ({ owner, mint }: any) => Promise<PublicKey>;
+export declare const poolVaultPDA: ({ creator, store, currency, type, name }: any) => Promise<[PublicKey, number]>;
 //# sourceMappingURL=PdaManager.d.ts.map

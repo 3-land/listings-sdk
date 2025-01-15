@@ -72,51 +72,6 @@ export declare class PdaCreator {
         };
     };
 }
-export type CollectionFields = {
-    metadata: types.VerifyCollectionMetadataFields;
-    subtype: types.DepositSubtypeKind;
-};
-export type CollectionValue = {
-    metadata: types.VerifyCollectionMetadata;
-    subtype: types.DepositSubtypeKind;
-};
-export interface CollectionJSON {
-    kind: "Collection";
-    value: {
-        metadata: types.VerifyCollectionMetadataJSON;
-        subtype: types.DepositSubtypeJSON;
-    };
-}
-export declare class Collection {
-    static readonly discriminator = 2;
-    static readonly kind = "Collection";
-    readonly discriminator = 2;
-    readonly kind = "Collection";
-    readonly value: CollectionValue;
-    constructor(value: CollectionFields);
-    toJSON(): CollectionJSON;
-    toEncodable(): {
-        Collection: {
-            metadata: {
-                name: string;
-                symbol: string;
-                uri: string;
-                royalty: number;
-                collection: number;
-                creators: {
-                    address: PublicKey;
-                    verified: boolean;
-                    share: number;
-                }[];
-            };
-            subtype: {
-                None: {};
-            } | {
-                Three: {};
-            };
-        };
-    };
-}
 export declare function fromDecoded(obj: any): types.DepositTypeKind;
 export declare function fromJSON(obj: types.DepositTypeJSON): types.DepositTypeKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;

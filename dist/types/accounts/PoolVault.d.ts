@@ -8,12 +8,22 @@ export interface PoolVaultFields {
     currency: PublicKey;
     creator: PublicKey;
     poolType: types.PoolTypeKind;
+    poolHash: BN;
     access: types.PoolAccessKind;
     deposit: BN;
     secured: BN;
     decimals: number;
     managers: Array<PublicKey>;
     name: string;
+    ins: number;
+    outs: number;
+    volumeOut: BN;
+    volumeIn: BN;
+    defaultCurrency: number;
+    createdAt: number;
+    flags: Array<number>;
+    config: Array<types.PoolConfigKind>;
+    otherCurrencies: Array<types.CurrencyFields>;
 }
 export interface PoolVaultJSON {
     class: types.AccountClassJSON;
@@ -22,12 +32,22 @@ export interface PoolVaultJSON {
     currency: string;
     creator: string;
     poolType: types.PoolTypeJSON;
+    poolHash: string;
     access: types.PoolAccessJSON;
     deposit: string;
     secured: string;
     decimals: number;
     managers: Array<string>;
     name: string;
+    ins: number;
+    outs: number;
+    volumeOut: string;
+    volumeIn: string;
+    defaultCurrency: number;
+    createdAt: number;
+    flags: Array<number>;
+    config: Array<types.PoolConfigJSON>;
+    otherCurrencies: Array<types.CurrencyJSON>;
 }
 export declare class PoolVault {
     readonly class: types.AccountClassKind;
@@ -36,12 +56,22 @@ export declare class PoolVault {
     readonly currency: PublicKey;
     readonly creator: PublicKey;
     readonly poolType: types.PoolTypeKind;
+    readonly poolHash: BN;
     readonly access: types.PoolAccessKind;
     readonly deposit: BN;
     readonly secured: BN;
     readonly decimals: number;
     readonly managers: Array<PublicKey>;
     readonly name: string;
+    readonly ins: number;
+    readonly outs: number;
+    readonly volumeOut: BN;
+    readonly volumeIn: BN;
+    readonly defaultCurrency: number;
+    readonly createdAt: number;
+    readonly flags: Array<number>;
+    readonly config: Array<types.PoolConfigKind>;
+    readonly otherCurrencies: Array<types.Currency>;
     static readonly discriminator: Buffer;
     static readonly layout: any;
     constructor(fields: PoolVaultFields);

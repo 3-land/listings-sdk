@@ -25,7 +25,7 @@ export declare class VerifyCollectionMetadata {
     readonly creators: Array<types.Creator>;
     constructor(fields: VerifyCollectionMetadataFields);
     static layout(property?: string): any;
-    static fromDecoded(obj: any): types.VerifyCollectionMetadata;
+    static fromDecoded(obj: any): VerifyCollectionMetadata;
     static toEncodable(fields: VerifyCollectionMetadataFields): {
         name: string;
         symbol: string;

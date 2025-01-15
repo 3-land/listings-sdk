@@ -1,4 +1,3 @@
-import * as types from "../types";
 export interface CompactCnftDataFields {
     root: Array<number>;
     arweave: string;
@@ -15,7 +14,7 @@ export declare class CompactCnftData {
     readonly index: number;
     constructor(fields: CompactCnftDataFields);
     static layout(property?: string): any;
-    static fromDecoded(obj: any): types.CompactCnftData;
+    static fromDecoded(obj: any): CompactCnftData;
     static toEncodable(fields: CompactCnftDataFields): {
         root: number[];
         arweave: string;

@@ -38,29 +38,29 @@ class Single {
         this.globalState = fields.globalState;
         this.holder = fields.holder;
         this.creator = fields.creator;
-        this.dates = new types.IndexDates({ ...fields.dates });
+        this.createdHour = fields.createdHour;
+        this.createdDates = new types.IndexDateNoHour({ ...fields.createdDates });
+        this.activityHour = fields.activityHour;
+        this.activityDates = new types.IndexDateNoHour({ ...fields.activityDates });
         this.category = new types.Category({ ...fields.category });
         this.superCategory = new types.SuperCategory({ ...fields.superCategory });
         this.eventCategory = fields.eventCategory;
         this.trackType = fields.trackType;
         this.mainCurrencyHash = fields.mainCurrencyHash;
-        this.track = new types.ItemTrack({ ...fields.track });
+        this.state = fields.state;
+        this.supply = fields.supply;
+        this.createdPieces = fields.createdPieces;
         this.popularity = new types.Popularity({ ...fields.popularity });
         this.filtering = new types.Filter({ ...fields.filtering });
         this.page = fields.page;
         this.manager = fields.manager;
-        this.isServerless = fields.isServerless;
-        this.availableOption = fields.availableOption;
-        this.hasWrappedTokens = fields.hasWrappedTokens;
-        this.burntPieces = fields.burntPieces;
-        this.flag = fields.flag;
+        this.extra = fields.extra;
         this.item = new types.Item({ ...fields.item });
         this.saleConfig = new types.SaleConfig({ ...fields.saleConfig });
         this.identifier = fields.identifier;
         this.hash = fields.hash;
         this.hashTraits = fields.hashTraits;
         this.volume = fields.volume.map((item) => new types.FakeVolumeTrack({ ...item }));
-        this.extra = fields.extra;
     }
     static async fetch(c, address, programId = programId_1.PROGRAM_ID) {
         const info = await c.getAccountInfo(address);
@@ -94,29 +94,29 @@ class Single {
             globalState: types.GlobalState.fromDecoded(dec.globalState),
             holder: dec.holder,
             creator: dec.creator,
-            dates: types.IndexDates.fromDecoded(dec.dates),
+            createdHour: dec.createdHour,
+            createdDates: types.IndexDateNoHour.fromDecoded(dec.createdDates),
+            activityHour: dec.activityHour,
+            activityDates: types.IndexDateNoHour.fromDecoded(dec.activityDates),
             category: types.Category.fromDecoded(dec.category),
             superCategory: types.SuperCategory.fromDecoded(dec.superCategory),
             eventCategory: dec.eventCategory,
             trackType: types.TrackRegistry.fromDecoded(dec.trackType),
             mainCurrencyHash: dec.mainCurrencyHash,
-            track: types.ItemTrack.fromDecoded(dec.track),
+            state: types.ItemState.fromDecoded(dec.state),
+            supply: dec.supply,
+            createdPieces: dec.createdPieces,
             popularity: types.Popularity.fromDecoded(dec.popularity),
             filtering: types.Filter.fromDecoded(dec.filtering),
             page: dec.page,
             manager: dec.manager,
-            isServerless: dec.isServerless,
-            availableOption: dec.availableOption,
-            hasWrappedTokens: dec.hasWrappedTokens,
-            burntPieces: dec.burntPieces,
-            flag: dec.flag,
+            extra: dec.extra,
             item: types.Item.fromDecoded(dec.item),
             saleConfig: types.SaleConfig.fromDecoded(dec.saleConfig),
             identifier: dec.identifier,
             hash: dec.hash,
             hashTraits: dec.hashTraits,
             volume: dec.volume.map((item /* eslint-disable-line @typescript-eslint/no-explicit-any */) => types.FakeVolumeTrack.fromDecoded(item)),
-            extra: dec.extra,
         });
     }
     toJSON() {
@@ -125,29 +125,29 @@ class Single {
             globalState: this.globalState.toJSON(),
             holder: this.holder.toString(),
             creator: this.creator.toString(),
-            dates: this.dates.toJSON(),
+            createdHour: this.createdHour,
+            createdDates: this.createdDates.toJSON(),
+            activityHour: this.activityHour,
+            activityDates: this.activityDates.toJSON(),
             category: this.category.toJSON(),
             superCategory: this.superCategory.toJSON(),
             eventCategory: this.eventCategory,
             trackType: this.trackType.toJSON(),
             mainCurrencyHash: this.mainCurrencyHash.toString(),
-            track: this.track.toJSON(),
+            state: this.state.toJSON(),
+            supply: this.supply.toString(),
+            createdPieces: this.createdPieces.toString(),
             popularity: this.popularity.toJSON(),
             filtering: this.filtering.toJSON(),
             page: this.page.toString(),
             manager: this.manager.toString(),
-            isServerless: this.isServerless,
-            availableOption: this.availableOption,
-            hasWrappedTokens: this.hasWrappedTokens,
-            burntPieces: this.burntPieces,
-            flag: this.flag,
+            extra: this.extra,
             item: this.item.toJSON(),
             saleConfig: this.saleConfig.toJSON(),
             identifier: this.identifier.toString(),
             hash: this.hash.toString(),
             hashTraits: this.hashTraits.toString(),
             volume: this.volume.map((item) => item.toJSON()),
-            extra: this.extra,
         };
     }
     static fromJSON(obj) {
@@ -156,29 +156,29 @@ class Single {
             globalState: types.GlobalState.fromJSON(obj.globalState),
             holder: new web3_js_1.PublicKey(obj.holder),
             creator: new web3_js_1.PublicKey(obj.creator),
-            dates: types.IndexDates.fromJSON(obj.dates),
+            createdHour: obj.createdHour,
+            createdDates: types.IndexDateNoHour.fromJSON(obj.createdDates),
+            activityHour: obj.activityHour,
+            activityDates: types.IndexDateNoHour.fromJSON(obj.activityDates),
             category: types.Category.fromJSON(obj.category),
             superCategory: types.SuperCategory.fromJSON(obj.superCategory),
             eventCategory: obj.eventCategory,
             trackType: types.TrackRegistry.fromJSON(obj.trackType),
             mainCurrencyHash: new bn_js_1.default(obj.mainCurrencyHash),
-            track: types.ItemTrack.fromJSON(obj.track),
+            state: types.ItemState.fromJSON(obj.state),
+            supply: new bn_js_1.default(obj.supply),
+            createdPieces: new bn_js_1.default(obj.createdPieces),
             popularity: types.Popularity.fromJSON(obj.popularity),
             filtering: types.Filter.fromJSON(obj.filtering),
             page: new bn_js_1.default(obj.page),
             manager: new web3_js_1.PublicKey(obj.manager),
-            isServerless: obj.isServerless,
-            availableOption: obj.availableOption,
-            hasWrappedTokens: obj.hasWrappedTokens,
-            burntPieces: obj.burntPieces,
-            flag: obj.flag,
+            extra: obj.extra,
             item: types.Item.fromJSON(obj.item),
             saleConfig: types.SaleConfig.fromJSON(obj.saleConfig),
             identifier: new bn_js_1.default(obj.identifier),
             hash: new bn_js_1.default(obj.hash),
             hashTraits: new bn_js_1.default(obj.hashTraits),
             volume: obj.volume.map((item) => types.FakeVolumeTrack.fromJSON(item)),
-            extra: obj.extra,
         });
     }
 }
@@ -189,28 +189,28 @@ Single.layout = borsh.struct([
     types.GlobalState.layout("globalState"),
     borsh.publicKey("holder"),
     borsh.publicKey("creator"),
-    types.IndexDates.layout("dates"),
+    borsh.u32("createdHour"),
+    types.IndexDateNoHour.layout("createdDates"),
+    borsh.u32("activityHour"),
+    types.IndexDateNoHour.layout("activityDates"),
     types.Category.layout("category"),
     types.SuperCategory.layout("superCategory"),
     borsh.u16("eventCategory"),
     types.TrackRegistry.layout("trackType"),
     borsh.u64("mainCurrencyHash"),
-    types.ItemTrack.layout("track"),
+    types.ItemState.layout("state"),
+    borsh.u64("supply"),
+    borsh.u64("createdPieces"),
     types.Popularity.layout("popularity"),
     types.Filter.layout("filtering"),
     borsh.u64("page"),
     borsh.publicKey("manager"),
-    borsh.u8("isServerless"),
-    borsh.u8("availableOption"),
-    borsh.u8("hasWrappedTokens"),
-    borsh.u32("burntPieces"),
-    borsh.array(borsh.u8(), 1, "flag"),
+    borsh.array(borsh.u8(), 8, "extra"),
     types.Item.layout("item"),
     types.SaleConfig.layout("saleConfig"),
     borsh.u64("identifier"),
     borsh.u64("hash"),
     borsh.u64("hashTraits"),
     borsh.vec(types.FakeVolumeTrack.layout(), "volume"),
-    borsh.array(borsh.u8(), 4, "extra"),
 ]);
 //# sourceMappingURL=Single.js.map

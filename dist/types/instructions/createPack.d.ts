@@ -3,7 +3,6 @@ import BN from "bn.js";
 import * as types from "../types";
 export interface CreatePackArgs {
     metadata: types.MetadataArgsFields;
-    saleConfig: types.SaleConfigFields;
     identifier: BN;
     category: Array<number>;
     superCategory: Array<number>;
@@ -14,8 +13,8 @@ export interface CreatePackArgs {
 export interface CreatePackAccounts {
     storeAccount: PublicKey;
     creatorAuthority: PublicKey;
+    packTraits: PublicKey;
     packAccount: PublicKey;
-    packReserveList: PublicKey;
     creator: PublicKey;
     payer: PublicKey;
     systemProgram: PublicKey;

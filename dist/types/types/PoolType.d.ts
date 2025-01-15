@@ -26,6 +26,19 @@ export declare class Token {
         Token: {};
     };
 }
+export interface MultiTokenJSON {
+    kind: "MultiToken";
+}
+export declare class MultiToken {
+    static readonly discriminator = 2;
+    static readonly kind = "MultiToken";
+    readonly discriminator = 2;
+    readonly kind = "MultiToken";
+    toJSON(): MultiTokenJSON;
+    toEncodable(): {
+        MultiToken: {};
+    };
+}
 export declare function fromDecoded(obj: any): types.PoolTypeKind;
 export declare function fromJSON(obj: types.PoolTypeJSON): types.PoolTypeKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;

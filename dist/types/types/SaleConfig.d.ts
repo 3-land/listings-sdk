@@ -101,16 +101,20 @@ export declare class SaleConfig {
                     track: number;
                 };
             };
+        } | {
+            WrappedDestiny: {
+                rule: {
+                    pool: PublicKey;
+                    destinyType: number;
+                    flag1: number;
+                };
+            };
         })[];
         sendToVault: number;
         saleType: {
             Normal: {};
         } | {
             NoMarketFee: {};
-        } | {
-            Partnership: {};
-        } | {
-            LocksInVault: {};
         };
     };
     toJSON(): SaleConfigJSON;
@@ -192,16 +196,20 @@ export declare class SaleConfig {
                     track: number;
                 };
             };
+        } | {
+            WrappedDestiny: {
+                rule: {
+                    pool: PublicKey;
+                    destinyType: number;
+                    flag1: number;
+                };
+            };
         })[];
         sendToVault: number;
         saleType: {
             Normal: {};
         } | {
             NoMarketFee: {};
-        } | {
-            Partnership: {};
-        } | {
-            LocksInVault: {};
         };
     };
 }

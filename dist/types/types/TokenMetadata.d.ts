@@ -1,4 +1,3 @@
-import * as types from "../types";
 export interface TokenMetadataFields {
     name: string;
     symbol: string;
@@ -15,7 +14,7 @@ export declare class TokenMetadata {
     readonly arweave: string;
     constructor(fields: TokenMetadataFields);
     static layout(property?: string): any;
-    static fromDecoded(obj: any): types.TokenMetadata;
+    static fromDecoded(obj: any): TokenMetadata;
     static toEncodable(fields: TokenMetadataFields): {
         name: string;
         symbol: string;

@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Token = exports.None = void 0;
+exports.MultiToken = exports.Token = exports.None = void 0;
 exports.fromDecoded = fromDecoded;
 exports.fromJSON = fromJSON;
 exports.layout = layout;
@@ -66,6 +66,25 @@ class Token {
 exports.Token = Token;
 Token.discriminator = 1;
 Token.kind = "Token";
+class MultiToken {
+    constructor() {
+        this.discriminator = 2;
+        this.kind = "MultiToken";
+    }
+    toJSON() {
+        return {
+            kind: "MultiToken",
+        };
+    }
+    toEncodable() {
+        return {
+            MultiToken: {},
+        };
+    }
+}
+exports.MultiToken = MultiToken;
+MultiToken.discriminator = 2;
+MultiToken.kind = "MultiToken";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function fromDecoded(obj) {
     if (typeof obj !== "object") {
@@ -77,6 +96,9 @@ function fromDecoded(obj) {
     if ("Token" in obj) {
         return new Token();
     }
+    if ("MultiToken" in obj) {
+        return new MultiToken();
+    }
     throw new Error("Invalid enum object");
 }
 function fromJSON(obj) {
@@ -87,12 +109,16 @@ function fromJSON(obj) {
         case "Token": {
             return new Token();
         }
+        case "MultiToken": {
+            return new MultiToken();
+        }
     }
 }
 function layout(property) {
     const ret = borsh.rustEnum([
         borsh.struct([], "None"),
         borsh.struct([], "Token"),
+        borsh.struct([], "MultiToken"),
     ]);
     if (property !== undefined) {
         return ret.replicate(property);

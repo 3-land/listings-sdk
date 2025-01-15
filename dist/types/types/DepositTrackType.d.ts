@@ -26,19 +26,6 @@ export declare class PdaCreator {
         PdaCreator: {};
     };
 }
-export interface CollectionJSON {
-    kind: "Collection";
-}
-export declare class Collection {
-    static readonly discriminator = 2;
-    static readonly kind = "Collection";
-    readonly discriminator = 2;
-    readonly kind = "Collection";
-    toJSON(): CollectionJSON;
-    toEncodable(): {
-        Collection: {};
-    };
-}
 export declare function fromDecoded(obj: any): types.DepositTrackTypeKind;
 export declare function fromJSON(obj: types.DepositTrackTypeJSON): types.DepositTrackTypeKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;

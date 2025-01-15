@@ -40,12 +40,22 @@ class PoolVault {
         this.currency = fields.currency;
         this.creator = fields.creator;
         this.poolType = fields.poolType;
+        this.poolHash = fields.poolHash;
         this.access = fields.access;
         this.deposit = fields.deposit;
         this.secured = fields.secured;
         this.decimals = fields.decimals;
         this.managers = fields.managers;
         this.name = fields.name;
+        this.ins = fields.ins;
+        this.outs = fields.outs;
+        this.volumeOut = fields.volumeOut;
+        this.volumeIn = fields.volumeIn;
+        this.defaultCurrency = fields.defaultCurrency;
+        this.createdAt = fields.createdAt;
+        this.flags = fields.flags;
+        this.config = fields.config;
+        this.otherCurrencies = fields.otherCurrencies.map((item) => new types.Currency({ ...item }));
     }
     static async fetch(c, address, programId = programId_1.PROGRAM_ID) {
         const info = await c.getAccountInfo(address);
@@ -81,12 +91,22 @@ class PoolVault {
             currency: dec.currency,
             creator: dec.creator,
             poolType: types.PoolType.fromDecoded(dec.poolType),
+            poolHash: dec.poolHash,
             access: types.PoolAccess.fromDecoded(dec.access),
             deposit: dec.deposit,
             secured: dec.secured,
             decimals: dec.decimals,
             managers: dec.managers,
             name: dec.name,
+            ins: dec.ins,
+            outs: dec.outs,
+            volumeOut: dec.volumeOut,
+            volumeIn: dec.volumeIn,
+            defaultCurrency: dec.defaultCurrency,
+            createdAt: dec.createdAt,
+            flags: dec.flags,
+            config: dec.config.map((item /* eslint-disable-line @typescript-eslint/no-explicit-any */) => types.PoolConfig.fromDecoded(item)),
+            otherCurrencies: dec.otherCurrencies.map((item /* eslint-disable-line @typescript-eslint/no-explicit-any */) => types.Currency.fromDecoded(item)),
         });
     }
     toJSON() {
@@ -97,12 +117,22 @@ class PoolVault {
             currency: this.currency.toString(),
             creator: this.creator.toString(),
             poolType: this.poolType.toJSON(),
+            poolHash: this.poolHash.toString(),
             access: this.access.toJSON(),
             deposit: this.deposit.toString(),
             secured: this.secured.toString(),
             decimals: this.decimals,
             managers: this.managers.map((item) => item.toString()),
             name: this.name,
+            ins: this.ins,
+            outs: this.outs,
+            volumeOut: this.volumeOut.toString(),
+            volumeIn: this.volumeIn.toString(),
+            defaultCurrency: this.defaultCurrency,
+            createdAt: this.createdAt,
+            flags: this.flags,
+            config: this.config.map((item) => item.toJSON()),
+            otherCurrencies: this.otherCurrencies.map((item) => item.toJSON()),
         };
     }
     static fromJSON(obj) {
@@ -113,12 +143,22 @@ class PoolVault {
             currency: new web3_js_1.PublicKey(obj.currency),
             creator: new web3_js_1.PublicKey(obj.creator),
             poolType: types.PoolType.fromJSON(obj.poolType),
+            poolHash: new bn_js_1.default(obj.poolHash),
             access: types.PoolAccess.fromJSON(obj.access),
             deposit: new bn_js_1.default(obj.deposit),
             secured: new bn_js_1.default(obj.secured),
             decimals: obj.decimals,
             managers: obj.managers.map((item) => new web3_js_1.PublicKey(item)),
             name: obj.name,
+            ins: obj.ins,
+            outs: obj.outs,
+            volumeOut: new bn_js_1.default(obj.volumeOut),
+            volumeIn: new bn_js_1.default(obj.volumeIn),
+            defaultCurrency: obj.defaultCurrency,
+            createdAt: obj.createdAt,
+            flags: obj.flags,
+            config: obj.config.map((item) => types.PoolConfig.fromJSON(item)),
+            otherCurrencies: obj.otherCurrencies.map((item) => types.Currency.fromJSON(item)),
         });
     }
 }
@@ -133,11 +173,21 @@ PoolVault.layout = borsh.struct([
     borsh.publicKey("currency"),
     borsh.publicKey("creator"),
     types.PoolType.layout("poolType"),
+    borsh.u64("poolHash"),
     types.PoolAccess.layout("access"),
     borsh.u64("deposit"),
     borsh.u64("secured"),
     borsh.u8("decimals"),
     borsh.vec(borsh.publicKey(), "managers"),
     borsh.str("name"),
+    borsh.u32("ins"),
+    borsh.u32("outs"),
+    borsh.u64("volumeOut"),
+    borsh.u64("volumeIn"),
+    borsh.u8("defaultCurrency"),
+    borsh.u32("createdAt"),
+    borsh.array(borsh.u8(), 3, "flags"),
+    borsh.vec(types.PoolConfig.layout(), "config"),
+    borsh.vec(types.Currency.layout(), "otherCurrencies"),
 ]);
 //# sourceMappingURL=PoolVault.js.map

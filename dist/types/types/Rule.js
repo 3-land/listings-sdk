@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WrappedSource = exports.UnwrapsAfter = exports.UnlocksAfter = void 0;
+exports.WrappedDestiny = exports.WrappedSource = exports.UnwrapsAfter = exports.UnlocksAfter = void 0;
 exports.fromDecoded = fromDecoded;
 exports.fromJSON = fromJSON;
 exports.layout = layout;
@@ -110,6 +110,33 @@ class WrappedSource {
 exports.WrappedSource = WrappedSource;
 WrappedSource.discriminator = 2;
 WrappedSource.kind = "WrappedSource";
+class WrappedDestiny {
+    constructor(value) {
+        this.discriminator = 3;
+        this.kind = "WrappedDestiny";
+        this.value = {
+            rule: new types.WrappedDestiny({ ...value.rule }),
+        };
+    }
+    toJSON() {
+        return {
+            kind: "WrappedDestiny",
+            value: {
+                rule: this.value.rule.toJSON(),
+            },
+        };
+    }
+    toEncodable() {
+        return {
+            WrappedDestiny: {
+                rule: types.WrappedDestiny.toEncodable(this.value.rule),
+            },
+        };
+    }
+}
+exports.WrappedDestiny = WrappedDestiny;
+WrappedDestiny.discriminator = 3;
+WrappedDestiny.kind = "WrappedDestiny";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function fromDecoded(obj) {
     if (typeof obj !== "object") {
@@ -133,6 +160,12 @@ function fromDecoded(obj) {
             rule: types.WrappedSource.fromDecoded(val["rule"]),
         });
     }
+    if ("WrappedDestiny" in obj) {
+        const val = obj["WrappedDestiny"];
+        return new WrappedDestiny({
+            rule: types.WrappedDestiny.fromDecoded(val["rule"]),
+        });
+    }
     throw new Error("Invalid enum object");
 }
 function fromJSON(obj) {
@@ -152,6 +185,11 @@ function fromJSON(obj) {
                 rule: types.WrappedSource.fromJSON(obj.value.rule),
             });
         }
+        case "WrappedDestiny": {
+            return new WrappedDestiny({
+                rule: types.WrappedDestiny.fromJSON(obj.value.rule),
+            });
+        }
     }
 }
 function layout(property) {
@@ -159,6 +197,7 @@ function layout(property) {
         borsh.struct([types.ActionAfter.layout("rule")], "UnlocksAfter"),
         borsh.struct([types.ActionAfter.layout("rule")], "UnwrapsAfter"),
         borsh.struct([types.WrappedSource.layout("rule")], "WrappedSource"),
+        borsh.struct([types.WrappedDestiny.layout("rule")], "WrappedDestiny"),
     ]);
     if (property !== undefined) {
         return ret.replicate(property);

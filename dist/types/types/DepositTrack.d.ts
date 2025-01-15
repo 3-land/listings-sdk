@@ -18,8 +18,6 @@ export declare class DepositTrack {
             Creator: {};
         } | {
             PdaCreator: {};
-        } | {
-            Collection: {};
         };
         depositState: {
             Available: {};
@@ -34,8 +32,6 @@ export declare class DepositTrack {
             Creator: {};
         } | {
             PdaCreator: {};
-        } | {
-            Collection: {};
         };
         depositState: {
             Available: {};

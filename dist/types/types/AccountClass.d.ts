@@ -338,32 +338,6 @@ export declare class PoolVaultV1 {
         PoolVaultV1: {};
     };
 }
-export interface GenericUserV1JSON {
-    kind: "GenericUserV1";
-}
-export declare class GenericUserV1 {
-    static readonly discriminator = 26;
-    static readonly kind = "GenericUserV1";
-    readonly discriminator = 26;
-    readonly kind = "GenericUserV1";
-    toJSON(): GenericUserV1JSON;
-    toEncodable(): {
-        GenericUserV1: {};
-    };
-}
-export interface TokenManagerV1JSON {
-    kind: "TokenManagerV1";
-}
-export declare class TokenManagerV1 {
-    static readonly discriminator = 27;
-    static readonly kind = "TokenManagerV1";
-    readonly discriminator = 27;
-    readonly kind = "TokenManagerV1";
-    toJSON(): TokenManagerV1JSON;
-    toEncodable(): {
-        TokenManagerV1: {};
-    };
-}
 export declare function fromDecoded(obj: any): types.AccountClassKind;
 export declare function fromJSON(obj: types.AccountClassJSON): types.AccountClassKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;

@@ -9,7 +9,9 @@ export interface CollectorRegistryFields {
     currency: PublicKey;
     date: types.IndexDateFields;
     filters: Array<number>;
-    track: types.CollectTrackFields;
+    registryType: types.RegistryTypeKind;
+    collected: BN;
+    spent: BN;
 }
 export interface CollectorRegistryJSON {
     class: types.AccountClassJSON;
@@ -19,7 +21,9 @@ export interface CollectorRegistryJSON {
     currency: string;
     date: types.IndexDateJSON;
     filters: Array<number>;
-    track: types.CollectTrackJSON;
+    registryType: types.RegistryTypeJSON;
+    collected: string;
+    spent: string;
 }
 export declare class CollectorRegistry {
     readonly class: types.AccountClassKind;
@@ -29,7 +33,9 @@ export declare class CollectorRegistry {
     readonly currency: PublicKey;
     readonly date: types.IndexDate;
     readonly filters: Array<number>;
-    readonly track: types.CollectTrack;
+    readonly registryType: types.RegistryTypeKind;
+    readonly collected: BN;
+    readonly spent: BN;
     static readonly discriminator: Buffer;
     static readonly layout: any;
     constructor(fields: CollectorRegistryFields);

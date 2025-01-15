@@ -1,3 +1,4 @@
+import { PublicKey } from "@solana/web3.js";
 import { FileData } from "../library/instructions/store/uploadFilesIryis";
 export declare function bytesToU32(slice: any): number;
 export declare const cyrb53: (str: any, seed?: number) => number;
@@ -12,4 +13,8 @@ export declare function getFileType(file: any): string | null;
 export declare function validateFileType(type: string): void;
 export declare function getFileCategory(file: any): string | null;
 export declare function isAnimatable(type: string): boolean;
+export declare const buildTree: (prev_layer: any, layers: any) => any;
+export declare const mapTraits: (attributes: any, anchor: any) => any;
+export declare const findAssociatedTokenAccountAddress2: (mint: string, wallet: string) => Promise<[PublicKey, number]>;
+export declare const createATA: ({ owner, payer, nft }: any) => Promise<import("@solana/web3.js").TransactionInstruction>;
 //# sourceMappingURL=utils.d.ts.map

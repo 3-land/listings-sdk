@@ -24,8 +24,6 @@ export declare class FakeDeposit {
                         Creator: {};
                     } | {
                         PdaCreator: {};
-                    } | {
-                        Collection: {};
                     };
                     depositState: {
                         Available: {};
@@ -48,8 +46,6 @@ export declare class FakeDeposit {
                         Creator: {};
                     } | {
                         PdaCreator: {};
-                    } | {
-                        Collection: {};
                     };
                     depositState: {
                         Available: {};

@@ -32,7 +32,6 @@ exports.layout = borsh.struct([
     borsh.array(borsh.u8(), 6, "distributionBumps"),
 ]);
 function buyPay(args, accounts, extraAccounts, programId = programId_1.PROGRAM_ID) {
-    console.log("reer: ", extraAccounts[0].pubkey);
     const keys = [
         { pubkey: accounts.paymentAccount, isSigner: false, isWritable: true },
         { pubkey: accounts.itemAccount, isSigner: false, isWritable: false },
@@ -43,9 +42,7 @@ function buyPay(args, accounts, extraAccounts, programId = programId_1.PROGRAM_I
         { pubkey: accounts.owner, isSigner: false, isWritable: false },
         { pubkey: accounts.payer, isSigner: true, isWritable: true },
         { pubkey: accounts.systemProgram, isSigner: false, isWritable: false },
-        { pubkey: accounts.payer, isSigner: true, isWritable: true },
     ];
-    console.log("keyss: ", keys.length);
     for (let item of extraAccounts) {
         keys.push({
             pubkey: item.pubkey,
@@ -53,7 +50,6 @@ function buyPay(args, accounts, extraAccounts, programId = programId_1.PROGRAM_I
             isWritable: item.isWritable,
         });
     }
-    console.log("keyss afte: ", keys.length, keys);
     const identifier = Buffer.from([100, 229, 162, 27, 130, 173, 68, 1]);
     const buffer = Buffer.alloc(1000);
     const len = exports.layout.encode({

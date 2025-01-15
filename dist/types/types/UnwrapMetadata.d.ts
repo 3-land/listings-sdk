@@ -41,7 +41,7 @@ export declare class UnwrapMetadata {
     readonly bumps: Array<number>;
     constructor(fields: UnwrapMetadataFields);
     static layout(property?: string): any;
-    static fromDecoded(obj: any): types.UnwrapMetadata;
+    static fromDecoded(obj: any): UnwrapMetadata;
     static toEncodable(fields: UnwrapMetadataFields): {
         wrappedAmount: BN;
         decimals: number;

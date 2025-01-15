@@ -41,7 +41,10 @@ class CollectionRegistry {
         this.donations = fields.donations;
         this.date = new types.IndexDate({ ...fields.date });
         this.filters = fields.filters;
-        this.track = new types.SaleTrack({ ...fields.track });
+        this.created = fields.created;
+        this.sold = fields.sold;
+        this.earned = fields.earned;
+        this.collectors = fields.collectors;
     }
     static async fetch(c, address, programId = programId_1.PROGRAM_ID) {
         const info = await c.getAccountInfo(address);
@@ -78,7 +81,10 @@ class CollectionRegistry {
             donations: dec.donations,
             date: types.IndexDate.fromDecoded(dec.date),
             filters: dec.filters,
-            track: types.SaleTrack.fromDecoded(dec.track),
+            created: dec.created,
+            sold: dec.sold,
+            earned: dec.earned,
+            collectors: dec.collectors,
         });
     }
     toJSON() {
@@ -90,7 +96,10 @@ class CollectionRegistry {
             donations: this.donations.toString(),
             date: this.date.toJSON(),
             filters: this.filters,
-            track: this.track.toJSON(),
+            created: this.created.toString(),
+            sold: this.sold.toString(),
+            earned: this.earned.toString(),
+            collectors: this.collectors.toString(),
         };
     }
     static fromJSON(obj) {
@@ -102,7 +111,10 @@ class CollectionRegistry {
             donations: new bn_js_1.default(obj.donations),
             date: types.IndexDate.fromJSON(obj.date),
             filters: obj.filters,
-            track: types.SaleTrack.fromJSON(obj.track),
+            created: new bn_js_1.default(obj.created),
+            sold: new bn_js_1.default(obj.sold),
+            earned: new bn_js_1.default(obj.earned),
+            collectors: new bn_js_1.default(obj.collectors),
         });
     }
 }
@@ -118,6 +130,9 @@ CollectionRegistry.layout = borsh.struct([
     borsh.u64("donations"),
     types.IndexDate.layout("date"),
     borsh.array(borsh.u8(), 8, "filters"),
-    types.SaleTrack.layout("track"),
+    borsh.u64("created"),
+    borsh.u64("sold"),
+    borsh.u64("earned"),
+    borsh.u64("collectors"),
 ]);
 //# sourceMappingURL=CollectionRegistry.js.map

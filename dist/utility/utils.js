@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkCategory = exports.checkFileType = exports.validateSolAddress = exports.nowS = exports.sleep = exports.cyrb53 = void 0;
+exports.createATA = exports.findAssociatedTokenAccountAddress2 = exports.mapTraits = exports.buildTree = exports.checkCategory = exports.checkFileType = exports.validateSolAddress = exports.nowS = exports.sleep = exports.cyrb53 = void 0;
 exports.bytesToU32 = bytesToU32;
 exports.normalizeFileData = normalizeFileData;
 exports.getUrlFileType = getUrlFileType;
@@ -13,6 +13,9 @@ exports.getFileCategory = getFileCategory;
 exports.isAnimatable = isAnimatable;
 const web3_js_1 = require("@solana/web3.js");
 const node_fetch_1 = __importDefault(require("node-fetch"));
+const bn_js_1 = __importDefault(require("bn.js"));
+const PdaManager_1 = require("./PdaManager");
+const spl_token_1 = require("@solana/spl-token");
 function bytesToU32(slice) {
     let result = 0;
     for (let i = slice.length - 1; i >= 0; i--) {
@@ -234,4 +237,63 @@ function isAnimatable(type) {
         type?.includes("audio/") ||
         type === "model/gltf-binary");
 }
+const buildTree = (prev_layer, layers) => {
+    if (prev_layer.length === 1) {
+        return prev_layer;
+    }
+    const next_layer = [];
+    for (let i = 0; i < prev_layer.length; i += 2) {
+        const a = prev_layer[i];
+        const b = prev_layer[i + 1] || 0;
+        const aN = new bn_js_1.default(a).toArrayLike(Buffer, "le", 8);
+        const bN = new bn_js_1.default(b).toArrayLike(Buffer, "le", 8);
+        next_layer.push((0, exports.cyrb53)([...aN, ...bN], 0));
+    }
+    if (next_layer.length % 2 == 1)
+        layers.unshift(next_layer);
+    if (layers.length > 100)
+        return layers;
+    return (0, exports.buildTree)(next_layer, layers);
+};
+exports.buildTree = buildTree;
+const mapTraits = (attributes, anchor) => {
+    const hashes = [];
+    if (!attributes.length)
+        return [[0]];
+    for (const attr of attributes) {
+        if (attr.offchain)
+            continue;
+        const typeBytes = new bn_js_1.default((0, exports.cyrb53)(attr.trait_type + "", 0)).toArrayLike(Buffer, "le", 8);
+        const valueBytes = new bn_js_1.default((0, exports.cyrb53)(attr.value + "", 0)).toArrayLike(Buffer, "le", 8);
+        hashes.push((0, exports.cyrb53)([...typeBytes, ...valueBytes], 0));
+    }
+    const layers = [hashes];
+    (0, exports.buildTree)(layers[0], layers);
+    return layers;
+};
+exports.mapTraits = mapTraits;
+const findAssociatedTokenAccountAddress2 = async (mint, wallet) => {
+    return web3_js_1.PublicKey.findProgramAddress([
+        (0, PdaManager_1.toPublicKey)(wallet).toBuffer(),
+        (0, PdaManager_1.toPublicKey)("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA").toBuffer(),
+        (0, PdaManager_1.toPublicKey)(mint).toBuffer(),
+    ], (0, PdaManager_1.toPublicKey)("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"));
+};
+exports.findAssociatedTokenAccountAddress2 = findAssociatedTokenAccountAddress2;
+const createATA = async ({ owner, payer, nft }) => {
+    owner = (0, PdaManager_1.toPublicKey)(owner);
+    nft = (0, PdaManager_1.toPublicKey)(nft);
+    payer = (0, PdaManager_1.toPublicKey)(payer || owner);
+    const [destination] = await (0, exports.findAssociatedTokenAccountAddress2)(nft, owner);
+    // const instructions = [];
+    // instructions.push(
+    // );
+    const ix = (0, spl_token_1.createAssociatedTokenAccountInstruction)(payer, //payer
+    destination, owner, //walletAddress
+    nft //mintAddress
+    );
+    // return { instructions };
+    return ix;
+};
+exports.createATA = createATA;
 //# sourceMappingURL=utils.js.map

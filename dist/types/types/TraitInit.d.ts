@@ -83,6 +83,32 @@ export declare class NonFungible {
         };
     };
 }
+export type DataFields = {
+    hash: BN;
+};
+export type DataValue = {
+    hash: BN;
+};
+export interface DataJSON {
+    kind: "Data";
+    value: {
+        hash: string;
+    };
+}
+export declare class Data {
+    static readonly discriminator = 3;
+    static readonly kind = "Data";
+    readonly discriminator = 3;
+    readonly kind = "Data";
+    readonly value: DataValue;
+    constructor(value: DataFields);
+    toJSON(): DataJSON;
+    toEncodable(): {
+        Data: {
+            hash: BN;
+        };
+    };
+}
 export declare function fromDecoded(obj: any): types.TraitInitKind;
 export declare function fromJSON(obj: types.TraitInitJSON): types.TraitInitKind;
 export declare function layout(property?: string): borsh.EnumLayout<unknown>;

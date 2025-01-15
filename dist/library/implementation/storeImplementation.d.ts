@@ -7,7 +7,7 @@ declare function createCollectionImp(options: StoreInitOptions, collectionOpts: 
     success: boolean;
     error: unknown;
 }>;
-declare function createSingleImp(options: StoreInitOptions, storeAccount: string, collectionAccount: string, createOptions: CreateSingleOptions): Promise<{
+declare function createSingleImp(options: StoreInitOptions, storeAccount: string, collectionAccount: string, createOptions: CreateSingleOptions, isAI: boolean, withPool?: boolean): Promise<{
     transactionId: string;
     payerPublicKey: string;
 }>;

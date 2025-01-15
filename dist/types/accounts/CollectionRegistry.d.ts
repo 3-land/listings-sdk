@@ -9,7 +9,10 @@ export interface CollectionRegistryFields {
     donations: BN;
     date: types.IndexDateFields;
     filters: Array<number>;
-    track: types.SaleTrackFields;
+    created: BN;
+    sold: BN;
+    earned: BN;
+    collectors: BN;
 }
 export interface CollectionRegistryJSON {
     class: types.AccountClassJSON;
@@ -19,7 +22,10 @@ export interface CollectionRegistryJSON {
     donations: string;
     date: types.IndexDateJSON;
     filters: Array<number>;
-    track: types.SaleTrackJSON;
+    created: string;
+    sold: string;
+    earned: string;
+    collectors: string;
 }
 export declare class CollectionRegistry {
     readonly class: types.AccountClassKind;
@@ -29,7 +35,10 @@ export declare class CollectionRegistry {
     readonly donations: BN;
     readonly date: types.IndexDate;
     readonly filters: Array<number>;
-    readonly track: types.SaleTrack;
+    readonly created: BN;
+    readonly sold: BN;
+    readonly earned: BN;
+    readonly collectors: BN;
     static readonly discriminator: Buffer;
     static readonly layout: any;
     constructor(fields: CollectionRegistryFields);
