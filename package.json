@@ -17,6 +17,7 @@
     "@metaplex-foundation/beet": "^0.7.2",
     "@metaplex-foundation/mpl-token-metadata": "^2.13.0",
     "@project-serum/anchor": "^0.26.0",
+    "@solana/spl-token": "^0.2.0",
     "@solana/web3.js": "^1.95.4",
     "anchor-client-gen": "^0.28.1",
     "bn": "^1.0.5",

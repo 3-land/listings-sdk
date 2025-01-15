@@ -1,4 +1,4 @@
-import { SendTransactionError } from "@solana/web3.js";
+import { SendTransactionError, Transaction } from "@solana/web3.js";
 import {
   createSingleImp,
   createStoreImp,
@@ -12,11 +12,12 @@ import {
   CreateStoreParams,
   StoreInitOptions,
 } from "./types/implementation/implementationTypes";
+import { createATA } from "./utility/utils";
 
 const CONFIG = {
   DEVNET: {
     STORE: "GyPCu89S63P9NcCQAtuSJesiefhhgpGWrNVJs4bF2cSK",
-    COLLECTION: "Dj91sSU6EErETscXj4mv4tMV6GM8HgJKFvqDqmq3F7Fz",
+    COLLECTION: "2TPnfy9DhNQp5sr3j6PFNtBDfXL5GTFFdjfm17nfkT9C",
     TEST_COLLECTION: "2F5RPqTi74FkGNhguPE4oNropVsdWT45gKUvwHFKocG3",
   },
   MAINNET: {
@@ -74,19 +75,16 @@ async function testCreateCollection() {
 async function testCreateSingleEdition(withPool: boolean = false) {
   const options = getBaseConfig();
   const createItemOptions: CreateSingleOptions = {
-    itemName: "testtest55",
-    sellerFee: 500,
-    itemAmount: 55,
-    itemSymbol: "t35t",
-    itemDescription: "test",
-    traits: [
-      { trait_type: "type", value: "cool" },
-      { trait_type: "creator", value: "me" },
-    ],
-    price: 10000000, // 0.1 SOL
+    itemName: "pokemonWithPool2",
+    sellerFee: 500, //5%
+    itemAmount: 100,
+    itemSymbol: "PWP",
+    itemDescription: "All the pokemons of the Kanto region",
+    traits: [{ trait_type: "region", value: "kanto" }],
+    price: 1000, //100000000 == 0.1 sol,
     splHash: "BaJicugPa1n8FJ3o5bYMwqGVLVTkAgTxChVijUaMS9u1",
-    // poolName: "NEWtestpool",
-    mainImageUrl: "https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg",
+    poolName: "PokePool",
+    mainImageUrl: "https://pbs.twimg.com/media/GhTI2QwXEAAKVTX?format=jpg", //"https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg",
   };
 
   try {
@@ -130,8 +128,8 @@ async function main() {
   try {
     // await testCreateStore();
     // await testCreateCollection();
-    await testCreateSingleEdition();
-    //await testCreateSingleEdition(true); // with pool
+    // await testCreateSingleEdition();
+    await testCreateSingleEdition(true); // with pool
     // await testBuySingleEdition("item-account");
   } catch (error) {
     console.error("Test execution failed:");

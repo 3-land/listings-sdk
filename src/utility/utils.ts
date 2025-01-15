@@ -299,6 +299,9 @@ export const createATA = async ({ owner, payer, nft }: any) => {
 
   // );
 
+  console.log("data ata: ", payer, destination, owner, nft);
+  console.log('create ass tok: ', createAssociatedTokenAccountInstruction)
+
   const ix = createAssociatedTokenAccountInstruction(
     payer, //payer
     destination,
