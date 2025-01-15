@@ -5,7 +5,6 @@ import {
   buySingleImp,
   handleError,
   createCollectionImp,
-  createSingleWithPoolImp,
 } from "./library/implementation/storeImplementation";
 import {
   CreateCollectionOptions,
@@ -14,91 +13,128 @@ import {
   StoreInitOptions,
 } from "./types/implementation/implementationTypes";
 
-async function main() {
-  //   const options: StoreInitOptions = {
-  //     walletPath: "", //route to keypair.json generated from the solana cli
-  //   };
+const CONFIG = {
+  DEVNET: {
+    STORE: "GyPCu89S63P9NcCQAtuSJesiefhhgpGWrNVJs4bF2cSK",
+    COLLECTION: "Dj91sSU6EErETscXj4mv4tMV6GM8HgJKFvqDqmq3F7Fz",
+    TEST_COLLECTION: "2F5RPqTi74FkGNhguPE4oNropVsdWT45gKUvwHFKocG3",
+  },
+  MAINNET: {
+    STORE: "AmQNs2kgw4LvS9sm6yE9JJ4Hs3JpVu65eyx9pxMG2xA",
+    COLLECTION: "GKLBspqHCKJMFKSn46CNdSP3AUeKDvcyF5knXxsJmhLj",
+  },
+};
 
-  const optionsWithBase58: StoreInitOptions = {
-    privateKey:
-      "3zB3ii8Mvsy5qFRLr1HRqc2QGRtegNa2nTLUXsqLS1UDjdr98sYH5WStgbwnJzVeg811LVCYMVCY4fUag8ifDPri", //your private key
-    isMainnet: false,
+function getBaseConfig(isMainnet: boolean = false): StoreInitOptions {
+  return {
+    privateKey: "",
+    isMainnet,
   };
+}
 
+async function testCreateStore() {
+  const options = getBaseConfig();
   const storeSetup: CreateStoreParams = {
-    storeName: "Super cool store",
+    storeName: "Super new cool store",
     storeFee: 5,
   };
 
+  try {
+    const storeResult = await createStoreImp(options, storeSetup);
+    console.log("Store created successfully:", {
+      transactionId: storeResult.transactionId,
+    });
+    return storeResult;
+  } catch (error) {
+    console.error("Failed to create store:");
+    handleError(error);
+    throw error;
+  }
+}
+
+async function testCreateCollection() {
+  const options = getBaseConfig();
   const collectionOpts: CreateCollectionOptions = {
-    collectionName: "Super awesome Collection",
-    collectionSymbol: "SAC",
-    collectionDescription: "This is a collection for the cool guys",
+    collectionName: "NEW Super awesome Collection",
+    collectionSymbol: "NSAC",
+    collectionDescription: "This is a new collection ",
   };
 
+  try {
+    const collection = await createCollectionImp(options, collectionOpts);
+    console.log("Collection created successfully:", collection);
+    return collection;
+  } catch (error) {
+    console.error("Failed to create collection:");
+    handleError(error);
+    throw error;
+  }
+}
+
+async function testCreateSingleEdition(withPool: boolean = false) {
+  const options = getBaseConfig();
   const createItemOptions: CreateSingleOptions = {
-    itemName: "hellowithpool619",
+    itemName: "testtest55",
     sellerFee: 500,
     itemAmount: 55,
-    itemSymbol: "hwps333",
-    itemDescription: "this nft uses the same pool as hellowithpool333",
+    itemSymbol: "t35t",
+    itemDescription: "test",
     traits: [
       { trait_type: "type", value: "cool" },
       { trait_type: "creator", value: "me" },
     ],
-    price: 10000000, //100000000 == 0.1 sol
-    splHash: "HabTivxE5cnR1G9CmXf3kysdKSmzJncedPstiqiUZBMv",
-    mainImageUrl:
-      "https://arweave.net/FMkKYYsheEImBfejYaPPoJbI3CxJxunwvErD9VYzxOY?ext=jpeg",
+    price: 10000000, // 0.1 SOL
+    splHash: "BaJicugPa1n8FJ3o5bYMwqGVLVTkAgTxChVijUaMS9u1",
+    // poolName: "NEWtestpool",
+    mainImageUrl: "https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg",
   };
 
   try {
-    //image url: https://arweave.net/FMkKYYsheEImBfejYaPPoJbI3CxJxunwvErD9VYzxOY?ext=jpeg
-    //image aI:  https://oaidalleapiprodscus.blob.core.windows.net/private/org-gqKriRsgW5z3sjYXrQv0vXPk/user-dhUswyb2oCg8NHc1yhPldLys/img-vX5am1Oagbimd9uSWnrSlUPb.png?st=2024-12-29T02%3A12%3A51Z&se=2024-12-29T04%3A12%3A51Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=d505667d-d6c1-4a0a-bac7-5c84a87759f8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-12-28T21%3A04%3A53Z&ske=2024-12-29T21%3A04%3A53Z&sks=b&skv=2024-08-04&sig=ltGieu7AXXJUhIF7hyTPXmnnFVKTu5BwmifIB3kLqAY%3D
-    // Create store
-    //const storeResult = await createStoreTest(optionsWithBase58, storeSetup);
-    //console.log("Store created. Transaction ID:", storeResult.transactionId);
-    const landStoreMainnet = "AmQNs2kgw4LvS9sm6yE9JJ4Hs3JpVu65eyx9pxMG2xA";
-    const landStoreDevnet = "GyPCu89S63P9NcCQAtuSJesiefhhgpGWrNVJs4bF2cSK";
-    // Create Collection
-    // const collection = await createCollectionImp(
-    //   optionsWithBase58,
-    //   collectionOpts
-    // );
-    // console.log("collection mint: ", collection);
-    // Create single edition
-    // const storeAccount = "3MwBR619SgJ35ek7vDLxxE5QvBaNq1fmmEZSXKW2X3Lf"; //"P1c4bboejX24NbY3vMw8EncKVmvcGEryznWLs4PGp9j"; //current store created for testing
-    const collectionAccountMain =
-      "GKLBspqHCKJMFKSn46CNdSP3AUeKDvcyF5knXxsJmhLj";
-    const collectionAccountDev = "Dj91sSU6EErETscXj4mv4tMV6GM8HgJKFvqDqmq3F7Fz";
-    // const singleEditionResult = await createSingleImp(
-    //   optionsWithBase58,
-    //   landStoreDevnet,
-    //   // landStoreMainnet,
-    //   // collectionAccountMain,
-    //   collectionAccountDev,
-    //   createItemOptions
-    // );
-    const singleEditionResult = await createSingleWithPoolImp(
-      optionsWithBase58,
-      landStoreDevnet,
-      // landStoreMainnet,
-      // collectionAccountMain,
-      collectionAccountDev,
-      createItemOptions
+    const singleEditionResult = await createSingleImp(
+      options,
+      CONFIG.DEVNET.STORE,
+      CONFIG.DEVNET.COLLECTION,
+      createItemOptions,
+      false, // isAI
+      withPool // whether to create with pool
     );
-    console.log(
-      "Single edition created. Transaction ID:",
-      singleEditionResult.transactionId
-    );
-    // Buy single edition
-    // const itemAccount = "8iUHPXuZWQdSGTV9X8hPdUgxSLfdXX7YjZYMck2TALBc"; //"7BhKXmc5obiwn5hhrUhErVBrAT7TErYcTpRYE8ggfjKV"; //current item created for testing
-    // const buyResult = await buySingleTest(options, itemAccount);
-    // console.log(
-    //   "Single edition purchased. Transaction ID:",
-    //   buyResult.transactionId
-    // );
+
+    console.log("Single edition created successfully:", {
+      transactionId: singleEditionResult.transactionId,
+    });
+    return singleEditionResult;
   } catch (error) {
+    console.error("Failed to create single edition:");
+    handleError(error);
+    throw error;
+  }
+}
+
+async function testBuySingleEdition(itemAccount: string) {
+  const options = getBaseConfig();
+
+  try {
+    const buyResult = await buySingleImp(options, itemAccount);
+    console.log("Single edition purchased successfully:", {
+      transactionId: buyResult.transactionId,
+    });
+    return buyResult;
+  } catch (error) {
+    console.error("Failed to buy single edition:");
+    handleError(error);
+    throw error;
+  }
+}
+
+async function main() {
+  try {
+    // await testCreateStore();
+    // await testCreateCollection();
+    await testCreateSingleEdition();
+    //await testCreateSingleEdition(true); // with pool
+    // await testBuySingleEdition("item-account");
+  } catch (error) {
+    console.error("Test execution failed:");
     handleError(error);
   }
 }

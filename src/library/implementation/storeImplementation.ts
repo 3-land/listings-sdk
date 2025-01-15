@@ -242,15 +242,19 @@ async function createSingleImp(
   options: StoreInitOptions,
   storeAccount: string,
   collectionAccount: string,
-  createOptions: CreateSingleOptions
+  createOptions: CreateSingleOptions,
+  isAI: boolean,
+  withPool: boolean = false
 ) {
+  // Initialize SDK and wallet
   const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
 
   try {
+    // Create metadata with conditional creator share
     const creator = new Creator({
       address: payer.publicKey,
       verified: false,
-      share: 100,
+      share: withPool ? 0 : 100, // 0% for pool creation, 100% for regular
     });
 
     const metadata: ShortMetadataArgs = {
@@ -268,52 +272,20 @@ async function createSingleImp(
       },
     };
 
-    /*
-      For MP4
-      const videoBuffer = await fs2.promises.readFile(
-        path.join(process.cwd(), "assets", "video.mp4")
-      );
-
-      For MP3
-      const audioBuffer = await fs2.promises.readFile(
-        path.join(process.cwd(), "assets", "audio.mp3")
-      );
-
-      For WebP
-      const webpBuffer = await fs2.promises.readFile(
-        path.join(process.cwd(), "assets", "image.webp")
-      );
-
-      For GLB
-      const glbBuffer = await fs2.promises.readFile(
-        path.join(process.cwd(), "assets", "model.glb")
-);
-    */
-    let options;
+    // Handle metadata files configuration
+    let options: any;
     if (createOptions.mainImageUrl) {
-      // Define the type for metadata files
-      interface MetadataFiles {
-        file: {
-          url: string;
-        };
-        cover?: {
-          url: string;
-        };
-      }
-
-      // Create base metadata files object
-      let baseMetadataFiles: MetadataFiles = {
+      // URL-based metadata configuration
+      const baseMetadataFiles = {
         file: {
           url: createOptions.mainImageUrl,
         },
+        ...(createOptions.coverImageUrl && {
+          cover: {
+            url: createOptions.coverImageUrl,
+          },
+        }),
       };
-
-      // Add cover if present
-      if (createOptions.coverImageUrl) {
-        baseMetadataFiles.cover = {
-          url: createOptions.coverImageUrl,
-        };
-      }
 
       options = {
         symbol: createOptions.itemSymbol,
@@ -327,21 +299,21 @@ async function createSingleImp(
         sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
       };
     } else {
+      // File-based metadata configuration
       const imageBuffer = await fs2.promises.readFile(
         path.join(process.cwd(), "assets", "og.png")
       );
-
-      if (!imageBuffer || imageBuffer.byteLength === 0) {
+      if (!imageBuffer?.byteLength) {
         throw new Error("Failed to read main image file");
       }
 
       const coverBuffer = await fs2.promises.readFile(
         path.join(process.cwd(), "assets", "niicl.gif")
       );
-
       if (!coverBuffer) {
         throw new Error("Failed to read cover file");
       }
+
       options = {
         symbol: createOptions.itemSymbol,
         metadata: {
@@ -368,49 +340,33 @@ async function createSingleImp(
       };
     }
 
-    let priceConfig: Price[];
-    if (createOptions?.price! <= 0) {
-      priceConfig = [];
-      console.log("price is zero");
-    } else {
-      if (createOptions.splHash) {
-        priceConfig = [
-          {
-            amount: new BN(createOptions.price!),
-            priceType: new CurrencyType.Spl({
-              id: new PublicKey(createOptions.splHash),
-            }),
-            toJSON: function (): PriceJSON {
-              throw new Error("Function not implemented.");
+    // Configure pricing
+    const priceConfig: Price[] =
+      createOptions?.price! <= 0
+        ? []
+        : [
+            {
+              amount: new BN(createOptions.price!),
+              priceType: createOptions.splHash
+                ? new CurrencyType.Spl({
+                    id: new PublicKey(createOptions.splHash),
+                  })
+                : new CurrencyType.Native(),
+              toJSON: function (): PriceJSON {
+                throw new Error("Function not implemented.");
+              },
+              toEncodable: function () {
+                throw new Error("Function not implemented.");
+              },
             },
-            toEncodable: function () {
-              throw new Error("Function not implemented.");
-            },
-          },
-        ];
-        console.log("spl hash: ", createOptions.splHash);
-      } else {
-        priceConfig = [
-          {
-            amount: new BN(createOptions.price!),
-            priceType: new CurrencyType.Native(),
-            toJSON: function (): PriceJSON {
-              throw new Error("Function not implemented.");
-            },
-            toEncodable: function () {
-              throw new Error("Function not implemented.");
-            },
-          },
-        ];
-      }
-    }
+          ];
 
-    console.log("priceConfig: ", priceConfig);
+    // Create sale configuration
     const saleConfig: SaleConfig = {
       prices: priceConfig,
       priceType: new PriceRule.None(),
       rules: [],
-      sendToVault: 0,
+      sendToVault: withPool ? 1 : 0, // 1 for pool creation, 0 for regular
       saleType: new SaleType.Normal(),
       toJSON: function (): SaleConfigJSON {
         throw new Error("Function not implemented.");
@@ -420,214 +376,7 @@ async function createSingleImp(
       },
     };
 
-    const createSingleEditionTxId = await sdk.createSingleEdition(
-      walletKeypair,
-      new PublicKey(storeAccount),
-      createOptions.itemAmount,
-      metadata,
-      saleConfig,
-      [1, 0, 0],
-      [1, 0],
-      0,
-      12345,
-      new PublicKey(collectionAccount),
-      {
-        options: options,
-      }
-    );
-
-    return {
-      transactionId: createSingleEditionTxId,
-      payerPublicKey: payer.publicKey.toString(),
-    };
-  } catch (error) {
-    handleError(error);
-    throw error;
-  }
-}
-
-async function createSingleWithPoolImp(
-  options: StoreInitOptions,
-  storeAccount: string,
-  collectionAccount: string,
-  createOptions: CreateSingleOptions
-) {
-  const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
-
-  try {
-    const creator = new Creator({
-      address: payer.publicKey,
-      verified: false,
-      share: 0,
-    });
-
-    const metadata: ShortMetadataArgs = {
-      name: createOptions.itemName,
-      uri: "",
-      uriType: 1,
-      sellerFeeBasisPoints: createOptions.sellerFee,
-      collection: new PublicKey(collectionAccount),
-      creators: [creator],
-      toJSON: function (): ShortMetadataArgsJSON {
-        throw new Error("Function not implemented.");
-      },
-      toEncodable: function () {
-        throw new Error("Function not implemented.");
-      },
-    };
-
-    /*
-      For MP4
-      const videoBuffer = await fs2.promises.readFile(
-        path.join(process.cwd(), "assets", "video.mp4")
-      );
-
-      For MP3
-      const audioBuffer = await fs2.promises.readFile(
-        path.join(process.cwd(), "assets", "audio.mp3")
-      );
-
-      For WebP
-      const webpBuffer = await fs2.promises.readFile(
-        path.join(process.cwd(), "assets", "image.webp")
-      );
-
-      For GLB
-      const glbBuffer = await fs2.promises.readFile(
-        path.join(process.cwd(), "assets", "model.glb")
-);
-    */
-    let options;
-    if (createOptions.mainImageUrl) {
-      // Define the type for metadata files
-      interface MetadataFiles {
-        file: {
-          url: string;
-        };
-        cover?: {
-          url: string;
-        };
-      }
-
-      // Create base metadata files object
-      let baseMetadataFiles: MetadataFiles = {
-        file: {
-          url: createOptions.mainImageUrl,
-        },
-      };
-
-      // Add cover if present
-      if (createOptions.coverImageUrl) {
-        baseMetadataFiles.cover = {
-          url: createOptions.coverImageUrl,
-        };
-      }
-
-      options = {
-        symbol: createOptions.itemSymbol,
-        metadata: {
-          name: metadata.name,
-          description: createOptions.itemDescription,
-          files: baseMetadataFiles,
-        },
-        creators: metadata.creators,
-        traits: createOptions.traits,
-        sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
-      };
-    } else {
-      const imageBuffer = await fs2.promises.readFile(
-        path.join(process.cwd(), "assets", "og.png")
-      );
-
-      if (!imageBuffer || imageBuffer.byteLength === 0) {
-        throw new Error("Failed to read main image file");
-      }
-
-      const coverBuffer = await fs2.promises.readFile(
-        path.join(process.cwd(), "assets", "niicl.gif")
-      );
-
-      if (!coverBuffer) {
-        throw new Error("Failed to read cover file");
-      }
-      options = {
-        symbol: createOptions.itemSymbol,
-        metadata: {
-          name: metadata.name,
-          description: createOptions.itemDescription,
-          files: {
-            file: {
-              arrayBuffer: () => imageBuffer,
-              type: "image/png",
-              name: "og.png",
-              size: imageBuffer.length,
-            },
-            cover: {
-              arrayBuffer: () => coverBuffer,
-              type: "image/gif",
-              name: "niicl.gif",
-              size: coverBuffer.length,
-            },
-          },
-        },
-        creators: metadata.creators,
-        traits: createOptions.traits,
-        sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
-      };
-    }
-
-    let priceConfig: Price[];
-    if (createOptions?.price! <= 0) {
-      priceConfig = [];
-      console.log("price is zero");
-    } else {
-      if (createOptions.splHash) {
-        priceConfig = [
-          {
-            amount: new BN(createOptions.price!),
-            priceType: new CurrencyType.Spl({
-              id: new PublicKey(createOptions.splHash),
-            }),
-            toJSON: function (): PriceJSON {
-              throw new Error("Function not implemented.");
-            },
-            toEncodable: function () {
-              throw new Error("Function not implemented.");
-            },
-          },
-        ];
-        console.log("spl hash: ", createOptions.splHash);
-      } else {
-        priceConfig = [
-          {
-            amount: new BN(createOptions.price!),
-            priceType: new CurrencyType.Native(),
-            toJSON: function (): PriceJSON {
-              throw new Error("Function not implemented.");
-            },
-            toEncodable: function () {
-              throw new Error("Function not implemented.");
-            },
-          },
-        ];
-      }
-    }
-
-    console.log("priceConfig: ", priceConfig);
-    const saleConfig: SaleConfig = {
-      prices: priceConfig,
-      priceType: new PriceRule.None(),
-      rules: [],
-      sendToVault: 1,
-      saleType: new SaleType.Normal(),
-      toJSON: function (): SaleConfigJSON {
-        throw new Error("Function not implemented.");
-      },
-      toEncodable: function () {
-        throw new Error("Function not implemented.");
-      },
-    };
-
+    // Process traits
     const t = mapTraits(
       options.traits.map((x: any) => ({
         trait_type: x.trait_type + "",
@@ -637,22 +386,55 @@ async function createSingleWithPoolImp(
     );
     const hashTraits = new BN(t[0][0]);
 
-    const createSingleEditionTxId = await sdk.createSingleEditionWithPool(
-      walletKeypair,
-      new PublicKey(storeAccount),
-      createOptions.itemAmount,
-      metadata,
-      saleConfig,
-      [1, 0, 0],
-      [1, 0],
-      0,
-      hashTraits,
-      new PublicKey(collectionAccount),
-      {
-        options: options,
-      },
-      new PublicKey(createOptions.splHash!)
-    );
+    // Set category based on AI flag
+    const category = isAI ? [1, 0, 55] : [1, 0, 0];
+
+    if (withPool && !createOptions.splHash) {
+      throw new Error("Pool creation requires a SPL token hash");
+    } else if (
+      createOptions.splHash === "So11111111111111111111111111111111111111112"
+    ) {
+      throw new Error(
+        "Invalid SPL token hash, you can't use SOL as a SPL token"
+      );
+    }
+
+    // Create single edition with or without pool
+    const createSingleEditionTxId = withPool
+      ? await sdk.createSingleEdition(
+          walletKeypair,
+          new PublicKey(storeAccount),
+          createOptions.itemAmount,
+          metadata,
+          saleConfig,
+          category,
+          [1, 0],
+          0,
+          hashTraits,
+          new PublicKey(collectionAccount),
+          {
+            options: options,
+          },
+          {
+            currencyHash: new PublicKey(createOptions.splHash!),
+            poolName: createOptions.poolName!,
+          }
+        )
+      : await sdk.createSingleEdition(
+          walletKeypair,
+          new PublicKey(storeAccount),
+          createOptions.itemAmount,
+          metadata,
+          saleConfig,
+          category,
+          [1, 0],
+          0,
+          hashTraits,
+          new PublicKey(collectionAccount),
+          {
+            options: options,
+          }
+        );
 
     return {
       transactionId: createSingleEditionTxId,
@@ -699,7 +481,6 @@ export {
   createStoreImp,
   createCollectionImp,
   createSingleImp,
-  createSingleWithPoolImp,
   buySingleImp,
   handleError,
 };

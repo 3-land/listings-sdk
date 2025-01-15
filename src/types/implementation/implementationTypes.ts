@@ -29,4 +29,5 @@ export interface CreateSingleOptions {
   mainImageUrl?: string;
   coverImageUrl?: string;
   splHash?: string;
+  poolName?: string;
 }
