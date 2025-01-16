@@ -4,7 +4,7 @@ const storeImplementation_1 = require("./library/implementation/storeImplementat
 const CONFIG = {
     DEVNET: {
         STORE: "GyPCu89S63P9NcCQAtuSJesiefhhgpGWrNVJs4bF2cSK",
-        COLLECTION: "Dj91sSU6EErETscXj4mv4tMV6GM8HgJKFvqDqmq3F7Fz",
+        COLLECTION: "2Tu5dCJKHYt7K2XBYBRK7p7uUmusMJnijaMkag6PdB8z",
         TEST_COLLECTION: "2F5RPqTi74FkGNhguPE4oNropVsdWT45gKUvwHFKocG3",
     },
     MAINNET: {
@@ -40,9 +40,9 @@ async function testCreateStore() {
 async function testCreateCollection() {
     const options = getBaseConfig();
     const collectionOpts = {
-        collectionName: "NEW Super awesome Collection",
-        collectionSymbol: "NSAC",
-        collectionDescription: "This is a new collection ",
+        collectionName: "サイバーパンク",
+        collectionSymbol: "日本",
+        collectionDescription: "未来は近い",
     };
     try {
         const collection = await (0, storeImplementation_1.createCollectionImp)(options, collectionOpts);
@@ -58,19 +58,16 @@ async function testCreateCollection() {
 async function testCreateSingleEdition(withPool = false) {
     const options = getBaseConfig();
     const createItemOptions = {
-        itemName: "testtest55",
-        sellerFee: 500,
-        itemAmount: 55,
-        itemSymbol: "t35t",
-        itemDescription: "test",
-        traits: [
-            { trait_type: "type", value: "cool" },
-            { trait_type: "creator", value: "me" },
-        ],
-        price: 10000000, // 0.1 SOL
-        splHash: "BaJicugPa1n8FJ3o5bYMwqGVLVTkAgTxChVijUaMS9u1",
-        // poolName: "NEWtestpool",
-        mainImageUrl: "https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg",
+        itemName: "鬼滅の刃 - 3rd pool",
+        sellerFee: 500, //5%
+        itemAmount: 100,
+        itemSymbol: "技術",
+        itemDescription: "テクノロジーは素晴らしい",
+        traits: [{ trait_type: "タイプ", value: "高度な" }],
+        price: 1000000, //100000000 == 0.1 sol,
+        splHash: "BaJicugPa1n8FJ3o5bYMwqGVLVTkAgTxChVijUaMS9u1", //"BaJicugPa1n8FJ3o5bYMwqGVLVTkAgTxChVijUaMS9u1",
+        poolName: "slayer",
+        mainImageUrl: "https://i.pinimg.com/736x/f5/ad/58/f5ad58bde10cda4637ad1ada6a77c562.jpg", //"https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg",
     };
     try {
         const singleEditionResult = await (0, storeImplementation_1.createSingleImp)(options, CONFIG.DEVNET.STORE, CONFIG.DEVNET.COLLECTION, createItemOptions, false, // isAI
@@ -106,8 +103,8 @@ async function main() {
     try {
         // await testCreateStore();
         // await testCreateCollection();
-        await testCreateSingleEdition();
-        //await testCreateSingleEdition(true); // with pool
+        // await testCreateSingleEdition();
+        await testCreateSingleEdition(true); // with pool
         // await testBuySingleEdition("item-account");
     }
     catch (error) {

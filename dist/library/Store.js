@@ -233,17 +233,22 @@ class Store {
                         payer: payer.publicKey,
                         systemProgram: web3_js_1.PublicKey.default,
                     }));
-                    console.log("pool val: ", pool, creator);
+                    console.log("pool val: ", pool.toBase58());
+                    console.log("pool val 2: ", typeof pool.toBase58());
+                    console.log("currency val: ", poolConfig.currencyHash.toBase58());
+                    console.log("currency val 2: ", typeof poolConfig.currencyHash.toBase58());
                     instructions.push(await (0, utils_1.createATA)({
-                        owner: pool,
+                        owner: pool.toBase58(),
                         payer: payer.publicKey,
-                        nft: poolConfig.currencyHash,
+                        nft: poolConfig.currencyHash.toBase58(),
                     }));
-                    instructions.push(await (0, utils_1.createATA)({
-                        owner: creator,
-                        payer: payer.publicKey,
-                        nft: poolConfig.currencyHash,
-                    }));
+                    // instructions.push(
+                    //   await createATA({
+                    //     owner: creator,
+                    //     payer: payer.publicKey,
+                    //     nft: poolConfig.currencyHash,
+                    //   })
+                    // );
                 }
                 metadata.creators.push(new types_1.Creator({ verified: false, address: pool, share: 100 }));
                 saleConfig.rules.push(new types_1.Rule.WrappedDestiny({

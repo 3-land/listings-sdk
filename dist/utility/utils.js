@@ -288,6 +288,8 @@ const createATA = async ({ owner, payer, nft }) => {
     // const instructions = [];
     // instructions.push(
     // );
+    console.log("data ata: ", payer, destination, owner, nft);
+    console.log('create ass tok: ', spl_token_1.createAssociatedTokenAccountInstruction);
     const ix = (0, spl_token_1.createAssociatedTokenAccountInstruction)(payer, //payer
     destination, owner, //walletAddress
     nft //mintAddress
