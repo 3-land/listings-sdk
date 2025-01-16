@@ -1,4 +1,3 @@
-import { SendTransactionError, Transaction } from "@solana/web3.js";
 import {
   createSingleImp,
   createStoreImp,
@@ -12,12 +11,11 @@ import {
   CreateStoreParams,
   StoreInitOptions,
 } from "./types/implementation/implementationTypes";
-import { createATA } from "./utility/utils";
 
 const CONFIG = {
   DEVNET: {
     STORE: "GyPCu89S63P9NcCQAtuSJesiefhhgpGWrNVJs4bF2cSK",
-    COLLECTION: "2TPnfy9DhNQp5sr3j6PFNtBDfXL5GTFFdjfm17nfkT9C",
+    COLLECTION: "2Tu5dCJKHYt7K2XBYBRK7p7uUmusMJnijaMkag6PdB8z",
     TEST_COLLECTION: "2F5RPqTi74FkGNhguPE4oNropVsdWT45gKUvwHFKocG3",
   },
   MAINNET: {
@@ -56,9 +54,9 @@ async function testCreateStore() {
 async function testCreateCollection() {
   const options = getBaseConfig();
   const collectionOpts: CreateCollectionOptions = {
-    collectionName: "NEW Super awesome Collection",
-    collectionSymbol: "NSAC",
-    collectionDescription: "This is a new collection ",
+    collectionName: "サイバーパンク",
+    collectionSymbol: "日本",
+    collectionDescription: "未来は近い",
   };
 
   try {
@@ -75,16 +73,17 @@ async function testCreateCollection() {
 async function testCreateSingleEdition(withPool: boolean = false) {
   const options = getBaseConfig();
   const createItemOptions: CreateSingleOptions = {
-    itemName: "pokemonWithPool2",
+    itemName: "鬼滅の刃 - 3rd pool",
     sellerFee: 500, //5%
     itemAmount: 100,
-    itemSymbol: "PWP",
-    itemDescription: "All the pokemons of the Kanto region",
-    traits: [{ trait_type: "region", value: "kanto" }],
-    price: 1000, //100000000 == 0.1 sol,
-    splHash: "BaJicugPa1n8FJ3o5bYMwqGVLVTkAgTxChVijUaMS9u1",
-    poolName: "PokePool",
-    mainImageUrl: "https://pbs.twimg.com/media/GhTI2QwXEAAKVTX?format=jpg", //"https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg",
+    itemSymbol: "技術",
+    itemDescription: "テクノロジーは素晴らしい",
+    traits: [{ trait_type: "タイプ", value: "高度な" }],
+    price: 1000000, //100000000 == 0.1 sol,
+    splHash: "BaJicugPa1n8FJ3o5bYMwqGVLVTkAgTxChVijUaMS9u1", //"BaJicugPa1n8FJ3o5bYMwqGVLVTkAgTxChVijUaMS9u1",
+    poolName: "slayer",
+    mainImageUrl:
+      "https://i.pinimg.com/736x/f5/ad/58/f5ad58bde10cda4637ad1ada6a77c562.jpg", //"https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg",
   };
 
   try {

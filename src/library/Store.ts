@@ -418,23 +418,29 @@ export class Store {
               }
             )
           );
-          console.log("pool val: ", pool, creator);
-
-          instructions.push(
-            await createATA({
-              owner: pool,
-              payer: payer.publicKey,
-              nft: poolConfig.currencyHash,
-            })
+          console.log("pool val: ", pool.toBase58());
+          console.log("pool val 2: ", typeof pool.toBase58());
+          console.log("currency val: ", poolConfig.currencyHash.toBase58());
+          console.log(
+            "currency val 2: ",
+            typeof poolConfig.currencyHash.toBase58()
           );
 
           instructions.push(
             await createATA({
-              owner: creator,
+              owner: pool.toBase58(),
               payer: payer.publicKey,
-              nft: poolConfig.currencyHash,
+              nft: poolConfig.currencyHash.toBase58(),
             })
           );
+
+          // instructions.push(
+          //   await createATA({
+          //     owner: creator,
+          //     payer: payer.publicKey,
+          //     nft: poolConfig.currencyHash,
+          //   })
+          // );
         }
 
         metadata.creators.push(
