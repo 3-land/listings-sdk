@@ -1,6 +1,10 @@
 {
   "name": "@3land/listings-sdk",
+<<<<<<< HEAD
   "version": "0.0.7",
+=======
+  "version": "0.0.6",
+>>>>>>> c2eb7a66300af0c3871aed236f7c79e05fec4d49
   "description": "sdk for interacting with 3land's solana program",
   "main": "./dist/library/implementation/storeImplementation.js",
   "types": "./dist/library/implementation/storeImplementation.d.ts",
