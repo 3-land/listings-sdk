@@ -8,6 +8,12 @@ import {
   clusterApiUrl as clusterApiUrl2,
   Keypair,
   TransactionInstruction,
+  VersionedTransaction,
+  TransactionMessage,
+  sendAndConfirmRawTransaction,
+  TransactionConfirmationStrategy,
+  ConfirmOptions,
+  ComputeBudgetProgram,
 } from "@solana/web3.js";
 import {
   ApproveCollectionAuthorityInstructionAccounts,
@@ -107,7 +113,6 @@ export class Store {
   constructor(options: StoreOptions = {}) {
     const {
       network = NetworkType.DEVNET,
-      // network = NetworkType.MAINNET,
       customEndpoint,
       customConfig,
     } = options;
@@ -119,8 +124,11 @@ export class Store {
       ...customConfig,
       endpoint: customEndpoint || baseConfig.endpoint,
     };
+    console.log("endpoint b4: ", this.networkConfig);
 
     this.connection = getConnection(this.networkConfig.endpoint);
+
+    console.log("endpoint aft: ", this.connection);
   }
 
   async createStore(
@@ -181,6 +189,7 @@ export class Store {
     collectionDetails: any,
     metadata: any,
     irysData: any,
+    priorityFeeParam: number = 50000,
     mutable: Boolean = false,
     supply: number = 0
   ) {
@@ -204,7 +213,7 @@ export class Store {
 
       if (metadata.uri.length !== 0) throw new Error("-- URI must be empty --");
 
-      const irysConfig = this.networkConfig.endpoint.includes(
+      const irysConfig =   this.networkConfig.endpoint.includes("mainnet") || this.networkConfig.endpoint.includes(
         NetworkType.MAINNET
       )
         ? {
@@ -314,7 +323,12 @@ export class Store {
       const args = { createMasterEditionArgs: { ...supplies } };
       instructions.push(createCreateMasterEditionV3Instruction(accounts, args));
 
-      const transaction = new Transaction().add(...instructions);
+      const transaction = new Transaction().add(
+        ComputeBudgetProgram.setComputeUnitPrice({
+          microLamports: priorityFeeParam,
+        }),
+        ...instructions
+      );
 
       const sendedconfirmedTransaction = await sendAndConfirmTransaction(
         this.connection,
@@ -349,7 +363,8 @@ export class Store {
     poolConfig?: {
       currencyHash: PublicKey;
       poolName: string;
-    }
+    },
+    priorityFeeParam: number = 50000
   ): Promise<string> {
     if (!payer?.publicKey) throw new ValidationError("Invalid payer");
     if (!storeAccount) throw new ValidationError("Store account is required");
@@ -365,18 +380,19 @@ export class Store {
     let signers = [payer];
 
     try {
-      const irysConfig = this.networkConfig.endpoint.includes(
-        NetworkType.MAINNET
-      )
-        ? {
-            arweave_rpc: "https://node2.irys.xyz",
-            rpc: "https://api.mainnet-beta.solana.com",
-            network: "mainnet",
-          }
-        : {};
+      const irysConfig =
+        this.networkConfig.endpoint.includes("mainnet") ||
+        this.networkConfig.endpoint.includes(NetworkType.MAINNET)
+          ? {
+              arweave_rpc: "https://node2.irys.xyz",
+              rpc: "https://api.mainnet-beta.solana.com",
+              network: "mainnet",
+            }
+          : {};
 
       const irys = await Irys(payer.publicKey.toBase58(), irysConfig);
       const uuid = "random_uuid_per_upload_session";
+      console.log("irys config: ", irys, irysConfig);
 
       const [itemAccount] = await itemAccountPDA({
         creator,
@@ -403,7 +419,7 @@ export class Store {
           type: 2,
           name: poolName,
         });
-
+        console.log("connection b4 get pool info: ", this.connection);
         const poolAccount = await this.connection.getAccountInfo(pool);
         if (!poolAccount) {
           instructions.push(
@@ -565,7 +581,13 @@ export class Store {
         )
       );
 
-      const transaction = new Transaction().add(...instructions);
+      const transaction = new Transaction().add(
+        ComputeBudgetProgram.setComputeUnitPrice({
+          microLamports: priorityFeeParam,
+        }),
+        ...instructions
+      );
+
       const signature = await sendAndConfirmTransaction(
         this.connection,
         transaction,

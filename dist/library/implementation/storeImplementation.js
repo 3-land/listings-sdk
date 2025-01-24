@@ -46,6 +46,9 @@ function initializeSDKAndWallet(options) {
     if (options.isMainnet) {
         sdk = new Store_1.Store({ network: config_1.NetworkType.MAINNET });
     }
+    else if (options.customRPC) {
+        sdk = new Store_1.Store({ customEndpoint: options.customRPC });
+    }
     else {
         sdk = new Store_1.Store();
     }
@@ -108,7 +111,7 @@ async function createStoreImp(options, storeSetup) {
         throw error;
     }
 }
-async function createCollectionImp(options, collectionOpts) {
+async function createCollectionImp(options, collectionOpts, priorityFeeParam) {
     const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
     const collectionDetails = { __kind: "V1", size: 0 };
     const creator = new types_1.Creator({
@@ -212,7 +215,7 @@ async function createCollectionImp(options, collectionOpts) {
     try {
         const collectionTx = await sdk.createCollection(walletKeypair, collectionDetails, metadata, {
             options: optionsCollection,
-        });
+        }, priorityFeeParam);
         console.log("create collection tx: ", collectionTx);
         return collectionTx;
     }
@@ -221,7 +224,7 @@ async function createCollectionImp(options, collectionOpts) {
         return { success: false, error: error };
     }
 }
-async function createSingleImp(options, storeAccount, collectionAccount, createOptions, isAI, withPool = false) {
+async function createSingleImp(options, storeAccount, collectionAccount, createOptions, isAI, withPool = false, priorityFeeParam) {
     // Initialize SDK and wallet
     const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
     try {
@@ -360,10 +363,10 @@ async function createSingleImp(options, storeAccount, collectionAccount, createO
             }, {
                 currencyHash: new web3_js_1.PublicKey(createOptions.splHash),
                 poolName: createOptions.poolName,
-            })
+            }, priorityFeeParam)
             : await sdk.createSingleEdition(walletKeypair, new web3_js_1.PublicKey(storeAccount), createOptions.itemAmount, metadata, saleConfig, category, [1, 0], 0, hashTraits, new web3_js_1.PublicKey(collectionAccount), {
                 options: options,
-            });
+            }, undefined, priorityFeeParam);
         return {
             transactionId: createSingleEditionTxId,
             payerPublicKey: payer.publicKey.toString(),

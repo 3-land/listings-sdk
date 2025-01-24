@@ -20,7 +20,7 @@ const CONFIG = {
   },
   MAINNET: {
     STORE: "AmQNs2kgw4LvS9sm6yE9JJ4Hs3JpVu65eyx9pxMG2xA",
-    COLLECTION: "GKLBspqHCKJMFKSn46CNdSP3AUeKDvcyF5knXxsJmhLj",
+    COLLECTION: "93T38vkVwE7zW3JMGcCfrym6quQJX4y6ndYyqHmJBzAW",
   },
 };
 
@@ -28,6 +28,7 @@ function getBaseConfig(isMainnet: boolean = false): StoreInitOptions {
   return {
     privateKey: "",
     isMainnet,
+    //customRPC: "",
   };
 }
 
@@ -52,11 +53,11 @@ async function testCreateStore() {
 }
 
 async function testCreateCollection() {
-  const options = getBaseConfig();
+  const options = getBaseConfig(true);
   const collectionOpts: CreateCollectionOptions = {
-    collectionName: "サイバーパンク",
-    collectionSymbol: "日本",
-    collectionDescription: "未来は近い",
+    collectionName: "t3stCollection",
+    collectionSymbol: "t3st",
+    collectionDescription: "this is a collection test",
   };
 
   try {
@@ -71,29 +72,33 @@ async function testCreateCollection() {
 }
 
 async function testCreateSingleEdition(withPool: boolean = false) {
-  const options = getBaseConfig();
+  const options = getBaseConfig(true);
   const createItemOptions: CreateSingleOptions = {
-    itemName: "鬼滅の刃 - 3rd pool",
+    itemName: "lepool",
     sellerFee: 500, //5%
     itemAmount: 100,
-    itemSymbol: "技術",
-    itemDescription: "テクノロジーは素晴らしい",
-    traits: [{ trait_type: "タイプ", value: "高度な" }],
+    itemSymbol: "lp",
+    itemDescription: "a test pool on mainnet",
+    traits: [{ trait_type: "type", value: "pool" }],
     price: 1000000, //100000000 == 0.1 sol,
-    splHash: "BaJicugPa1n8FJ3o5bYMwqGVLVTkAgTxChVijUaMS9u1", //"BaJicugPa1n8FJ3o5bYMwqGVLVTkAgTxChVijUaMS9u1",
-    poolName: "slayer",
-    mainImageUrl:
-      "https://i.pinimg.com/736x/f5/ad/58/f5ad58bde10cda4637ad1ada6a77c562.jpg", //"https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg",
+    splHash: "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN", //"BaJicugPa1n8FJ3o5bYMwqGVLVTkAgTxChVijUaMS9u1",
+    poolName: "lepool",
+    mainImageUrl: "https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg", //"https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg",
   };
+
+  //const priorityFeeParam = 100000;
+
+  console.log("options init: ", options);
 
   try {
     const singleEditionResult = await createSingleImp(
       options,
-      CONFIG.DEVNET.STORE,
-      CONFIG.DEVNET.COLLECTION,
+      CONFIG.MAINNET.STORE,
+      CONFIG.MAINNET.COLLECTION,
       createItemOptions,
       false, // isAI
       withPool // whether to create with pool
+      //priorityFeeParam
     );
 
     console.log("Single edition created successfully:", {
@@ -128,7 +133,7 @@ async function main() {
     // await testCreateStore();
     // await testCreateCollection();
     // await testCreateSingleEdition();
-    await testCreateSingleEdition(true); // with pool
+    // await testCreateSingleEdition(true); // with pool
     // await testBuySingleEdition("item-account");
   } catch (error) {
     console.error("Test execution failed:");

@@ -32,6 +32,8 @@ function initializeSDKAndWallet(options: StoreInitOptions) {
   let sdk;
   if (options.isMainnet) {
     sdk = new Store({ network: NetworkType.MAINNET });
+  } else if (options.customRPC) {
+    sdk = new Store({ customEndpoint: options.customRPC });
   } else {
     sdk = new Store();
   }
@@ -107,7 +109,8 @@ async function createStoreImp(
 
 async function createCollectionImp(
   options: StoreInitOptions,
-  collectionOpts: CreateCollectionOptions
+  collectionOpts: CreateCollectionOptions,
+  priorityFeeParam?: number
 ) {
   const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
 
@@ -228,7 +231,8 @@ async function createCollectionImp(
       metadata,
       {
         options: optionsCollection,
-      }
+      },
+      priorityFeeParam
     );
     console.log("create collection tx: ", collectionTx);
     return collectionTx;
@@ -244,7 +248,8 @@ async function createSingleImp(
   collectionAccount: string,
   createOptions: CreateSingleOptions,
   isAI: boolean,
-  withPool: boolean = false
+  withPool: boolean = false,
+  priorityFeeParam?: number
 ) {
   // Initialize SDK and wallet
   const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
@@ -418,7 +423,8 @@ async function createSingleImp(
           {
             currencyHash: new PublicKey(createOptions.splHash!),
             poolName: createOptions.poolName!,
-          }
+          },
+          priorityFeeParam
         )
       : await sdk.createSingleEdition(
           walletKeypair,
@@ -433,7 +439,9 @@ async function createSingleImp(
           new PublicKey(collectionAccount),
           {
             options: options,
-          }
+          },
+          undefined,
+          priorityFeeParam
         );
 
     return {

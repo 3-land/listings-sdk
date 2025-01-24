@@ -37,16 +37,16 @@ const extraAccount = [
 ];
 class Store {
     constructor(options = {}) {
-        const { network = config_1.NetworkType.DEVNET, 
-        // network = NetworkType.MAINNET,
-        customEndpoint, customConfig, } = options;
+        const { network = config_1.NetworkType.DEVNET, customEndpoint, customConfig, } = options;
         const baseConfig = config_1.NETWORK_CONFIGS[network];
         this.networkConfig = {
             ...baseConfig,
             ...customConfig,
             endpoint: customEndpoint || baseConfig.endpoint,
         };
+        console.log("endpoint b4: ", this.networkConfig);
         this.connection = (0, Connection_1.getConnection)(this.networkConfig.endpoint);
+        console.log("endpoint aft: ", this.connection);
     }
     async createStore(payer, name, storeConfig, creator, storeId) {
         if (!payer || !payer.publicKey) {
@@ -80,7 +80,7 @@ class Store {
             throw new Error(`Failed to create store: ${error}`);
         }
     }
-    async createCollection(payer, collectionDetails, metadata, irysData, mutable = false, supply = 0) {
+    async createCollection(payer, collectionDetails, metadata, irysData, priorityFeeParam = 50000, mutable = false, supply = 0) {
         try {
             if (!payer || !payer.publicKey) {
                 throw new validation_1.ValidationError("Invalid payer");
@@ -96,7 +96,7 @@ class Store {
             let signers = [payer];
             if (metadata.uri.length !== 0)
                 throw new Error("-- URI must be empty --");
-            const irysConfig = this.networkConfig.endpoint.includes(config_1.NetworkType.MAINNET)
+            const irysConfig = this.networkConfig.endpoint.includes("mainnet") || this.networkConfig.endpoint.includes(config_1.NetworkType.MAINNET)
                 ? {
                     arweave_rpc: "https://node2.irys.xyz",
                     rpc: "https://api.mainnet-beta.solana.com",
@@ -165,7 +165,9 @@ class Store {
             };
             const args = { createMasterEditionArgs: { ...supplies } };
             instructions.push((0, mpl_token_metadata_1.createCreateMasterEditionV3Instruction)(accounts, args));
-            const transaction = new web3_js_1.Transaction().add(...instructions);
+            const transaction = new web3_js_1.Transaction().add(web3_js_1.ComputeBudgetProgram.setComputeUnitPrice({
+                microLamports: priorityFeeParam,
+            }), ...instructions);
             const sendedconfirmedTransaction = await (0, web3_js_1.sendAndConfirmTransaction)(this.connection, transaction, signers);
             const { errors, succeeds } = await irys?.uploadFiles({
                 uuid,
@@ -180,7 +182,7 @@ class Store {
             throw new Error(`Failed to create collection: ${error}`);
         }
     }
-    async createSingleEdition(payer, storeAccount, supply, metadata, saleConfig, category, superCategory, eventCategory, hashTraits, collection, irysData, poolConfig) {
+    async createSingleEdition(payer, storeAccount, supply, metadata, saleConfig, category, superCategory, eventCategory, hashTraits, collection, irysData, poolConfig, priorityFeeParam = 50000) {
         if (!payer?.publicKey)
             throw new validation_1.ValidationError("Invalid payer");
         if (!storeAccount)
@@ -193,7 +195,8 @@ class Store {
         let instructions = [];
         let signers = [payer];
         try {
-            const irysConfig = this.networkConfig.endpoint.includes(config_1.NetworkType.MAINNET)
+            const irysConfig = this.networkConfig.endpoint.includes("mainnet") ||
+                this.networkConfig.endpoint.includes(config_1.NetworkType.MAINNET)
                 ? {
                     arweave_rpc: "https://node2.irys.xyz",
                     rpc: "https://api.mainnet-beta.solana.com",
@@ -202,6 +205,7 @@ class Store {
                 : {};
             const irys = await (0, irys_1.init)(payer.publicKey.toBase58(), irysConfig);
             const uuid = "random_uuid_per_upload_session";
+            console.log("irys config: ", irys, irysConfig);
             const [itemAccount] = await (0, PdaManager_1.itemAccountPDA)({
                 creator,
                 store: storeAccount,
@@ -224,6 +228,7 @@ class Store {
                     type: 2,
                     name: poolName,
                 });
+                console.log("connection b4 get pool info: ", this.connection);
                 const poolAccount = await this.connection.getAccountInfo(pool);
                 if (!poolAccount) {
                     instructions.push((0, instructions_1.createPool)({ name: poolName }, {
@@ -316,7 +321,9 @@ class Store {
                 payer: payer.publicKey,
                 systemProgram: web3_js_1.SystemProgram.programId,
             }));
-            const transaction = new web3_js_1.Transaction().add(...instructions);
+            const transaction = new web3_js_1.Transaction().add(web3_js_1.ComputeBudgetProgram.setComputeUnitPrice({
+                microLamports: priorityFeeParam,
+            }), ...instructions);
             const signature = await (0, web3_js_1.sendAndConfirmTransaction)(this.connection, transaction, signers);
             await irys?.uploadFiles({
                 uuid,

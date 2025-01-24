@@ -3,11 +3,11 @@ declare function createStoreImp(options: StoreInitOptions, storeSetup: CreateSto
     transactionId: string;
     payerPublicKey: string;
 }>;
-declare function createCollectionImp(options: StoreInitOptions, collectionOpts: CreateCollectionOptions): Promise<string | {
+declare function createCollectionImp(options: StoreInitOptions, collectionOpts: CreateCollectionOptions, priorityFeeParam?: number): Promise<string | {
     success: boolean;
     error: unknown;
 }>;
-declare function createSingleImp(options: StoreInitOptions, storeAccount: string, collectionAccount: string, createOptions: CreateSingleOptions, isAI: boolean, withPool?: boolean): Promise<{
+declare function createSingleImp(options: StoreInitOptions, storeAccount: string, collectionAccount: string, createOptions: CreateSingleOptions, isAI: boolean, withPool?: boolean, priorityFeeParam?: number): Promise<{
     transactionId: string;
     payerPublicKey: string;
 }>;

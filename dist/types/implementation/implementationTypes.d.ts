@@ -2,6 +2,7 @@ export interface StoreInitOptions {
     walletPath?: string;
     privateKey?: number[] | Uint8Array | string;
     isMainnet?: boolean;
+    customRPC?: string;
 }
 export interface CreateStoreParams {
     storeName: string;
