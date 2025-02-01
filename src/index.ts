@@ -7,6 +7,7 @@ import {
 } from "./library/implementation/storeImplementation";
 import {
   CreateCollectionOptions,
+  CreateSingleEditionParams,
   CreateSingleOptions,
   CreateStoreParams,
   StoreInitOptions,
@@ -81,23 +82,22 @@ async function testCreateSingleEdition(withPool: boolean = false) {
     itemDescription: "a test on dev",
     traits: [{ trait_type: "type", value: "pool" }],
     price: 1000000, //100000000 == 0.1 sol,
-    // splHash: "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN", //"BaJicugPa1n8FJ3o5bYMwqGVLVTkAgTxChVijUaMS9u1",
+    // splHash: "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
     // poolName: "lepool",
-    mainImageUrl: "https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg", //"https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg",
+    mainImageUrl: "https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg",
   };
 
-  //const priorityFeeParam = 100000;
-
   try {
-    const singleEditionResult = await createSingleImp(
-      options,
-      CONFIG.DEVNET.STORE,
-      CONFIG.DEVNET.COLLECTION,
-      createItemOptions,
-      false, // isAI
-      withPool // whether to create with pool
-      //priorityFeeParam
-    );
+    const params: CreateSingleEditionParams = {
+      sdkConfig: options,
+      storeAccount: CONFIG.DEVNET.STORE,
+      collectionAccount: CONFIG.DEVNET.COLLECTION,
+      createOptions: createItemOptions,
+      isAI: false,
+      //priorityFee: 100000,
+    };
+
+    const singleEditionResult = await createSingleImp(params);
 
     console.log("Single edition created successfully:", {
       transactionId: singleEditionResult.transactionId,

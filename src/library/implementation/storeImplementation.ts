@@ -21,6 +21,7 @@ import { arrayBuffer } from "stream/consumers";
 import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
 import {
   CreateCollectionOptions,
+  CreateSingleEditionParams,
   CreateSingleOptions,
   CreateStoreParams,
   StoreInitOptions,
@@ -242,17 +243,20 @@ async function createCollectionImp(
   }
 }
 
-async function createSingleImp(
-  options: StoreInitOptions,
-  storeAccount: string,
-  collectionAccount: string,
-  createOptions: CreateSingleOptions,
-  isAI: boolean,
-  withPool: boolean = false,
-  priorityFeeParam?: number
-) {
+async function createSingleImp(params: CreateSingleEditionParams) {
+  const {
+    sdkConfig,
+    storeAccount,
+    collectionAccount,
+    createOptions,
+    isAI,
+    priorityFee,
+  } = params;
+
+  const withPool = createOptions.poolName ? true : false;
+
   // Initialize SDK and wallet
-  const { sdk, walletKeypair, payer } = initializeSDKAndWallet(options);
+  const { sdk, walletKeypair, payer } = initializeSDKAndWallet(sdkConfig);
 
   try {
     // Create metadata with conditional creator share
@@ -404,45 +408,28 @@ async function createSingleImp(
       );
     }
 
-    // Create single edition with or without pool
-    const createSingleEditionTxId = withPool
-      ? await sdk.createSingleEdition(
-          walletKeypair,
-          new PublicKey(storeAccount),
-          createOptions.itemAmount,
-          metadata,
-          saleConfig,
-          category,
-          [1, 0],
-          0,
-          hashTraits,
-          new PublicKey(collectionAccount),
-          {
-            options: options,
-          },
-          {
-            currencyHash: new PublicKey(createOptions.splHash!),
-            poolName: createOptions.poolName!,
-          },
-          priorityFeeParam
-        )
-      : await sdk.createSingleEdition(
-          walletKeypair,
-          new PublicKey(storeAccount),
-          createOptions.itemAmount,
-          metadata,
-          saleConfig,
-          category,
-          [1, 0],
-          0,
-          hashTraits,
-          new PublicKey(collectionAccount),
-          {
-            options: options,
-          },
-          undefined,
-          priorityFeeParam
-        );
+    const poolConfig = withPool
+      ? {
+          currencyHash: new PublicKey(createOptions.splHash!),
+          poolName: createOptions.poolName!,
+        }
+      : undefined;
+
+    const createSingleEditionTxId = await sdk.createSingleEdition(
+      walletKeypair,
+      new PublicKey(storeAccount),
+      createOptions.itemAmount,
+      metadata,
+      saleConfig,
+      category,
+      [1, 0],
+      0,
+      hashTraits,
+      new PublicKey(collectionAccount),
+      { options: options },
+      poolConfig,
+      priorityFee
+    );
 
     return {
       transactionId: createSingleEditionTxId,

@@ -32,3 +32,12 @@ export interface CreateSingleOptions {
   splHash?: string;
   poolName?: string;
 }
+
+export interface CreateSingleEditionParams {
+  sdkConfig: StoreInitOptions;
+  storeAccount: string;
+  collectionAccount: string;
+  createOptions: CreateSingleOptions;
+  isAI: boolean;
+  priorityFee?: number;
+}
