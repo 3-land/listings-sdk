@@ -186,6 +186,7 @@ export async function buySingleEditionInstruction(
   if (!storedata) {
     throw new Error("no store data in print single");
   }
+
   const store_decoded = coder.accounts.decode("Store", storedata.data);
   const [_, storeBump] = await storePDA({ ...store_decoded });
   data.storeBump = storeBump;

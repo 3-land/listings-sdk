@@ -50,8 +50,8 @@ class IrysHelper {
         return this.irys.getLoadedBalance();
     }
     async bundle(file, is_metadata = false) {
-        console.log("BUNDLE: ", file);
-        console.log("BUNDLE method: ", file.arrayBuffer());
+        // console.log("BUNDLE: ", file);
+        // console.log("BUNDLE method: ", file.arrayBuffer());
         this.ensureInitialized();
         try {
             const { type, name } = file;

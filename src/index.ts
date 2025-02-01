@@ -15,8 +15,7 @@ import {
 const CONFIG = {
   DEVNET: {
     STORE: "GyPCu89S63P9NcCQAtuSJesiefhhgpGWrNVJs4bF2cSK",
-    COLLECTION: "2Tu5dCJKHYt7K2XBYBRK7p7uUmusMJnijaMkag6PdB8z",
-    TEST_COLLECTION: "2F5RPqTi74FkGNhguPE4oNropVsdWT45gKUvwHFKocG3",
+    COLLECTION: "2TPnfy9DhNQp5sr3j6PFNtBDfXL5GTFFdjfm17nfkT9C",
   },
   MAINNET: {
     STORE: "AmQNs2kgw4LvS9sm6yE9JJ4Hs3JpVu65eyx9pxMG2xA",
@@ -26,7 +25,8 @@ const CONFIG = {
 
 function getBaseConfig(isMainnet: boolean = false): StoreInitOptions {
   return {
-    privateKey: "",
+    privateKey:
+      "2xxw1VP8FBAPFjGRn4SVLzmYNq45TZ9ewnMoFfxdTU6CXYZL8UDrAGJPyNjUx4BL3Q3JMkA5u2z37N6gCn4QCz9C",
     isMainnet,
     //customRPC: "",
   };
@@ -35,7 +35,7 @@ function getBaseConfig(isMainnet: boolean = false): StoreInitOptions {
 async function testCreateStore() {
   const options = getBaseConfig();
   const storeSetup: CreateStoreParams = {
-    storeName: "Super new cool store",
+    storeName: "ultra new cool store",
     storeFee: 5,
   };
 
@@ -53,7 +53,7 @@ async function testCreateStore() {
 }
 
 async function testCreateCollection() {
-  const options = getBaseConfig(true);
+  const options = getBaseConfig();
   const collectionOpts: CreateCollectionOptions = {
     collectionName: "t3stCollection",
     collectionSymbol: "t3st",
@@ -72,29 +72,27 @@ async function testCreateCollection() {
 }
 
 async function testCreateSingleEdition(withPool: boolean = false) {
-  const options = getBaseConfig(true);
+  const options = getBaseConfig();
   const createItemOptions: CreateSingleOptions = {
-    itemName: "lepool",
+    itemName: "elitem",
     sellerFee: 500, //5%
     itemAmount: 100,
     itemSymbol: "lp",
-    itemDescription: "a test pool on mainnet",
+    itemDescription: "a test on dev",
     traits: [{ trait_type: "type", value: "pool" }],
     price: 1000000, //100000000 == 0.1 sol,
-    splHash: "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN", //"BaJicugPa1n8FJ3o5bYMwqGVLVTkAgTxChVijUaMS9u1",
-    poolName: "lepool",
+    // splHash: "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN", //"BaJicugPa1n8FJ3o5bYMwqGVLVTkAgTxChVijUaMS9u1",
+    // poolName: "lepool",
     mainImageUrl: "https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg", //"https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg",
   };
 
   //const priorityFeeParam = 100000;
 
-  console.log("options init: ", options);
-
   try {
     const singleEditionResult = await createSingleImp(
       options,
-      CONFIG.MAINNET.STORE,
-      CONFIG.MAINNET.COLLECTION,
+      CONFIG.DEVNET.STORE,
+      CONFIG.DEVNET.COLLECTION,
       createItemOptions,
       false, // isAI
       withPool // whether to create with pool
@@ -131,10 +129,10 @@ async function testBuySingleEdition(itemAccount: string) {
 async function main() {
   try {
     // await testCreateStore();
-    // await testCreateCollection();
+    //await testCreateCollection();
     // await testCreateSingleEdition();
     // await testCreateSingleEdition(true); // with pool
-    // await testBuySingleEdition("item-account");
+    await testBuySingleEdition("5gV7MDNzHGqgGzxRWSETzdpf2aApWfUQCGrtDPjtc87z");
   } catch (error) {
     console.error("Test execution failed:");
     handleError(error);

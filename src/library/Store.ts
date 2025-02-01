@@ -124,11 +124,8 @@ export class Store {
       ...customConfig,
       endpoint: customEndpoint || baseConfig.endpoint,
     };
-    console.log("endpoint b4: ", this.networkConfig);
 
     this.connection = getConnection(this.networkConfig.endpoint);
-
-    console.log("endpoint aft: ", this.connection);
   }
 
   async createStore(
@@ -213,15 +210,15 @@ export class Store {
 
       if (metadata.uri.length !== 0) throw new Error("-- URI must be empty --");
 
-      const irysConfig =   this.networkConfig.endpoint.includes("mainnet") || this.networkConfig.endpoint.includes(
-        NetworkType.MAINNET
-      )
-        ? {
-            arweave_rpc: "https://node2.irys.xyz",
-            rpc: "https://api.mainnet-beta.solana.com",
-            network: "mainnet",
-          }
-        : {};
+      const irysConfig =
+        this.networkConfig.endpoint.includes("mainnet") ||
+        this.networkConfig.endpoint.includes(NetworkType.MAINNET)
+          ? {
+              arweave_rpc: "https://node2.irys.xyz",
+              rpc: "https://api.mainnet-beta.solana.com",
+              network: "mainnet",
+            }
+          : {};
       const irys = await Irys(payer.publicKey.toBase58(), irysConfig);
       const uuid = "random_uuid_per_upload_session";
 
@@ -283,7 +280,7 @@ export class Store {
 
       const metadataObj = { ...metadata, uri: metadataUrl };
 
-      console.log("metatadaobj: ", metadataObj);
+      // console.log("metatadaobj: ", metadataObj);
 
       const create_args = {
         createMetadataAccountArgsV3: {
@@ -392,7 +389,6 @@ export class Store {
 
       const irys = await Irys(payer.publicKey.toBase58(), irysConfig);
       const uuid = "random_uuid_per_upload_session";
-      console.log("irys config: ", irys, irysConfig);
 
       const [itemAccount] = await itemAccountPDA({
         creator,
@@ -419,7 +415,7 @@ export class Store {
           type: 2,
           name: poolName,
         });
-        console.log("connection b4 get pool info: ", this.connection);
+
         const poolAccount = await this.connection.getAccountInfo(pool);
         if (!poolAccount) {
           instructions.push(
@@ -433,13 +429,6 @@ export class Store {
                 systemProgram: PublicKey.default,
               }
             )
-          );
-          console.log("pool val: ", pool.toBase58());
-          console.log("pool val 2: ", typeof pool.toBase58());
-          console.log("currency val: ", poolConfig.currencyHash.toBase58());
-          console.log(
-            "currency val 2: ",
-            typeof poolConfig.currencyHash.toBase58()
           );
 
           instructions.push(
@@ -624,6 +613,7 @@ export class Store {
         itemAddress,
         PROGRAM_ID
       );
+
       const identifier = parseInt(single?.identifier?.toString() || "none");
       const creator = single?.creator;
       const storeAccount = single?.holder;

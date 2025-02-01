@@ -5141,6 +5141,42 @@ exports.idl = {
             },
         },
         {
+            name: "ChangingMetadata",
+            type: {
+                kind: "struct",
+                fields: [
+                    {
+                        name: "edition",
+                        type: "u64"
+                    },
+                    {
+                        name: "name",
+                        type: {
+                            option: "string"
+                        }
+                    },
+                    {
+                        name: "uri",
+                        type: {
+                            option: "string"
+                        }
+                    },
+                    {
+                        name: "hashTraits",
+                        type: {
+                            option: "u64"
+                        }
+                    },
+                    {
+                        name: "afterTraits",
+                        type: {
+                            option: "string"
+                        }
+                    }
+                ]
+            }
+        },
+        {
             name: "TraitType",
             type: {
                 kind: "enum",

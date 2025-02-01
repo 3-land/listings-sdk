@@ -32,7 +32,7 @@ export async function uploadFilesIrysInstruction(
   let main_file: any = false;
   let cover_file: any = false;
   try {
-    console.log("FILEE: ", options.metadata.files.file.url);
+    // console.log("FILEE: ", options.metadata.files.file.url);
     if (options.metadata.files.file && !options.metadata.files.file.url) {
       const normalizedMainFile = await normalizeFileData(
         options.metadata.files.file
@@ -84,7 +84,7 @@ export async function uploadFilesIrysInstruction(
         : undefined,
     };
 
-    console.log("offchain_metadata: ", offchain_metadata);
+    // console.log("offchain_metadata: ", offchain_metadata);
 
     const metadata_blob = new Blob([JSON.stringify(offchain_metadata)], {
       type: "application/json",
@@ -101,7 +101,7 @@ export async function uploadFilesIrysInstruction(
     const bundled_metadata_file = await irys?.bundle(metadata_file, true);
     const irys_url = bundled_metadata_file?.irys?.url;
 
-    console.log("arweave url: ", irys_url);
+    // console.log("arweave url: ", irys_url);
 
     const irys_files = [bundled_metadata_file];
     if (main_file) irys_files.push(main_file);

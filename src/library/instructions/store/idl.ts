@@ -5140,6 +5140,66 @@ export const idl = {
       },
     },
     {
+      name: "ChangingMetadata",
+      type: {
+        kind: "struct",
+        fields: [
+          {
+            name: "edition",
+            type: "u64",
+          },
+          {
+            name: "name",
+            type: {
+              option: "string",
+            },
+          },
+          {
+            name: "uri",
+            type: {
+              option: "string",
+            },
+          },
+          {
+            name: "hashTraits",
+            type: {
+              option: "u64",
+            },
+          },
+          {
+            name: "afterTraits",
+            type: {
+              option: "string",
+            },
+          },
+        ],
+      },
+    },
+    {
+      name: "UpdateMetadata",
+      type: {
+        kind: "struct",
+        fields: [
+          {
+            name: "name",
+            type: "string",
+          },
+          {
+            name: "uri",
+            type: "string",
+          },
+          {
+            name: "uriType",
+            type: "u8",
+          },
+          {
+            name: "hashTraits",
+            type: "u64",
+          },
+        ],
+      },
+    },
+    {
       name: "TraitType",
       type: {
         kind: "enum",

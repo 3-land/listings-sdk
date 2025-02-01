@@ -102,8 +102,8 @@ export class IrysHelper {
   }
 
   async bundle(file: IrysFile, is_metadata = false): Promise<IrysFile> {
-    console.log("BUNDLE: ", file);
-    console.log("BUNDLE method: ", file.arrayBuffer());
+    // console.log("BUNDLE: ", file);
+    // console.log("BUNDLE method: ", file.arrayBuffer());
 
     this.ensureInitialized();
     try {
@@ -113,16 +113,16 @@ export class IrysHelper {
       const tags = [{ name: "Content-Type", value: type }];
       const irys_wallet = this.irys.address;
       const arrayBuffer = await file.arrayBuffer();
-      console.log("main image buffer 2: ", arrayBuffer);
+      // console.log("main image buffer 2: ", arrayBuffer);
       const buffer = Buffer.from(arrayBuffer);
-      console.log("main image buffer 3: ", arrayBuffer);
+      // console.log("main image buffer 3: ", arrayBuffer);
 
       let transaction = this.irys.createTransaction(buffer, {
         anchor: nonce,
         tags,
       });
 
-      console.log("TRANSACTION: ", transaction);
+      // console.log("TRANSACTION: ", transaction);
 
       const { size } = transaction;
       const price = await this.irys.getPrice(transaction.size);
@@ -386,7 +386,6 @@ export class IrysHelper {
       config: { providerUrl: irys_network },
       // wallet: { rpcUrl: rpc, provider },
     });
-    console.log("irysconfig inside: ", this.irys);
     await this.irys.ready();
     const to = await this.irys.utils.getBundlerAddress("solana");
     const bal = await this.getBalance();
