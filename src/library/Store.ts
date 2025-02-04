@@ -134,7 +134,7 @@ export class Store {
     storeConfig: StoreConfig,
     creator?: PublicKey,
     storeId?: number
-  ): Promise<string> {
+  ): Promise<[string, string]> {
     if (!payer || !payer.publicKey) {
       throw new ValidationError("Invalid payer");
     }
@@ -172,7 +172,10 @@ export class Store {
       );
 
       const transaction = new Transaction().add(instruction);
-      return sendAndConfirmTransaction(this.connection, transaction, [payer]);
+      const tx = await sendAndConfirmTransaction(this.connection, transaction, [
+        payer,
+      ]);
+      return [tx, storeAccount.toBase58()];
     } catch (error) {
       if (error instanceof ValidationError) {
         throw error;
@@ -336,7 +339,7 @@ export class Store {
         uuid,
         signature: sendedconfirmedTransaction,
       });
-      return sendedconfirmedTransaction;
+      return [sendedconfirmedTransaction, mint.publicKey.toBase58()];
     } catch (error) {
       if (error instanceof ValidationError) {
         throw error;
@@ -362,7 +365,7 @@ export class Store {
       poolName: string;
     },
     priorityFeeParam: number = 50000
-  ): Promise<string> {
+  ): Promise<[string, string]> {
     if (!payer?.publicKey) throw new ValidationError("Invalid payer");
     if (!storeAccount) throw new ValidationError("Store account is required");
 
@@ -588,7 +591,7 @@ export class Store {
         signature,
       });
 
-      return signature;
+      return [signature, itemAccount.toBase58()];
     } catch (error) {
       if (error instanceof ValidationError) throw error;
       throw new Error(`Failed to create single edition: ${error}`);

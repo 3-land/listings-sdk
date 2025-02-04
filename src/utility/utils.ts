@@ -166,7 +166,7 @@ export async function getUrlFileType(fileUrl: string): Promise<string> {
 
     const buffer = await response.arrayBuffer();
     const fileType = getMimeTypeFromBuffer(buffer);
-    console.log("file type in getUrl: ", fileType);
+    // console.log("file type in getUrl: ", fileType);
     return fileType;
   } catch (error) {
     console.error("Error getting file type from URL:", error);
@@ -293,15 +293,6 @@ export const createATA = async ({ owner, payer, nft }: any) => {
 
   const [destination] = await findAssociatedTokenAccountAddress2(nft, owner);
 
-  // const instructions = [];
-
-  // instructions.push(
-
-  // );
-
-  console.log("data ata: ", payer, destination, owner, nft);
-  console.log('create ass tok: ', createAssociatedTokenAccountInstruction)
-
   const ix = createAssociatedTokenAccountInstruction(
     payer, //payer
     destination,
@@ -309,6 +300,5 @@ export const createATA = async ({ owner, payer, nft }: any) => {
     nft //mintAddress
   );
 
-  // return { instructions };
   return ix;
 };

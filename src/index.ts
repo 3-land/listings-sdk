@@ -36,15 +36,13 @@ function getBaseConfig(isMainnet: boolean = false): StoreInitOptions {
 async function testCreateStore() {
   const options = getBaseConfig();
   const storeSetup: CreateStoreParams = {
-    storeName: "ultra new cool store",
+    storeName: "super n3w cool store",
     storeFee: 5,
   };
 
   try {
     const storeResult = await createStoreImp(options, storeSetup);
-    console.log("Store created successfully:", {
-      transactionId: storeResult.transactionId,
-    });
+    console.log("Store created successfully:", storeResult);
     return storeResult;
   } catch (error) {
     console.error("Failed to create store:");
@@ -56,7 +54,7 @@ async function testCreateStore() {
 async function testCreateCollection() {
   const options = getBaseConfig();
   const collectionOpts: CreateCollectionOptions = {
-    collectionName: "t3stCollection",
+    collectionName: "testCollect1on",
     collectionSymbol: "t3st",
     collectionDescription: "this is a collection test",
   };
@@ -72,18 +70,18 @@ async function testCreateCollection() {
   }
 }
 
-async function testCreateSingleEdition(withPool: boolean = false) {
+async function testCreateSingleEdition() {
   const options = getBaseConfig();
   const createItemOptions: CreateSingleOptions = {
-    itemName: "elitem",
+    itemName: "elitem5",
     sellerFee: 500, //5%
     itemAmount: 100,
     itemSymbol: "lp",
     itemDescription: "a test on dev",
     traits: [{ trait_type: "type", value: "pool" }],
     price: 1000000, //100000000 == 0.1 sol,
-    // splHash: "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
-    // poolName: "lepool",
+    splHash: "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr",
+    poolName: "alberca",
     mainImageUrl: "https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg",
   };
 
@@ -99,9 +97,7 @@ async function testCreateSingleEdition(withPool: boolean = false) {
 
     const singleEditionResult = await createSingleImp(params);
 
-    console.log("Single edition created successfully:", {
-      transactionId: singleEditionResult.transactionId,
-    });
+    console.log("Single edition created successfully:", singleEditionResult);
     return singleEditionResult;
   } catch (error) {
     console.error("Failed to create single edition:");
@@ -128,11 +124,10 @@ async function testBuySingleEdition(itemAccount: string) {
 
 async function main() {
   try {
-    // await testCreateStore();
-    //await testCreateCollection();
+    await testCreateStore();
+    // await testCreateCollection();
     // await testCreateSingleEdition();
-    // await testCreateSingleEdition(true); // with pool
-    await testBuySingleEdition("5gV7MDNzHGqgGzxRWSETzdpf2aApWfUQCGrtDPjtc87z");
+    //await testBuySingleEdition("item hash");
   } catch (error) {
     console.error("Test execution failed:");
     handleError(error);

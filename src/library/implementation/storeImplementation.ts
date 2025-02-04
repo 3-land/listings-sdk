@@ -92,15 +92,15 @@ async function createStoreImp(
       },
     };
 
-    const createStoreTxId = await sdk.createStore(
+    const createStore = await sdk.createStore(
       walletKeypair,
       storeSetup.storeName,
       storeConfig
     );
 
     return {
-      transactionId: createStoreTxId,
-      payerPublicKey: payer.publicKey.toString(),
+      transactionId: createStore[0],
+      storeAddress: createStore[1],
     };
   } catch (error) {
     handleError(error);
@@ -235,8 +235,10 @@ async function createCollectionImp(
       },
       priorityFeeParam
     );
-    console.log("create collection tx: ", collectionTx);
-    return collectionTx;
+    return {
+      transactionId: collectionTx[0],
+      collectionAddress: collectionTx[1],
+    };
   } catch (error) {
     handleError(error);
     return { success: false, error: error };
@@ -432,8 +434,8 @@ async function createSingleImp(params: CreateSingleEditionParams) {
     );
 
     return {
-      transactionId: createSingleEditionTxId,
-      payerPublicKey: payer.publicKey.toString(),
+      transactionId: createSingleEditionTxId[0],
+      nftAddress: createSingleEditionTxId[1],
     };
   } catch (error) {
     handleError(error);
