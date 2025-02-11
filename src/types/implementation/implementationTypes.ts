@@ -31,6 +31,16 @@ export interface CreateSingleOptions {
   coverImageUrl?: string;
   splHash?: string;
   poolName?: string;
+  mainImageFile?: {
+    buffer: Buffer;
+    type: string;
+    name: string;
+  };
+  coverImageFile?: {
+    buffer: Buffer;
+    type: string;
+    name: string;
+  };
 }
 
 export interface CreateSingleEditionParams {

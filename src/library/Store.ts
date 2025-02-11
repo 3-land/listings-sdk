@@ -622,30 +622,34 @@ export class Store {
       const storeAccount = single?.holder;
       const collectionAddress = single?.item?.metadata?.collection;
 
+      console.log('vt5: ', collectionAddress, storeAccount, creator, identifier)
+
       validateIdentifier(identifier);
 
       if (!creator) throw new Error("Missing creator...");
       if (!storeAccount) throw new Error("Missing creator...");
       if (!collectionAddress) throw new Error("Missing collection...");
 
-      validateBuySingleArgs(
-        payer,
-        packAccount,
-        burnProgress,
-        owner,
-        distributionBumps,
-        globalStoreAccount,
-        extraAccounts,
-        collectionAddress.key,
-        storeAccount,
-        creator
-      );
+      // validateBuySingleArgs(
+      //   payer,
+      //   packAccount,
+      //   burnProgress,
+      //   owner,
+      //   distributionBumps,
+      //   globalStoreAccount,
+      //   extraAccounts,
+      //   collectionAddress.key,
+      //   storeAccount,
+      //   creator
+      // );
 
       const [itemAccount] = await itemAccountPDA({
         creator: creator,
         store: storeAccount,
         identifier: new BN(identifier),
       });
+
+      console.log('vt5 item acc: ', itemAccount)
 
       const [paymentAccount] = await buyPaymentPDA({
         owner: owner,
@@ -718,7 +722,6 @@ export class Store {
       instructions.push(registerIX);
 
       const transaction = new Transaction().add(...instructions);
-      console.log("transaction: ", payer.publicKey);
       return sendAndConfirmTransaction(this.connection, transaction, [payer]);
     } catch (error) {
       if (error instanceof ValidationError) {

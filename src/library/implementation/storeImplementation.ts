@@ -285,18 +285,31 @@ async function createSingleImp(params: CreateSingleEditionParams) {
 
     // Handle metadata files configuration
     let options: any;
-    if (createOptions.mainImageUrl) {
-      // URL-based metadata configuration
-      const baseMetadataFiles = {
-        file: {
-          url: createOptions.mainImageUrl,
-        },
-        ...(createOptions.coverImageUrl && {
-          cover: {
-            url: createOptions.coverImageUrl,
-          },
-        }),
-      };
+    if (createOptions.mainImageUrl || createOptions.mainImageFile) {
+      // URL or File-based metadata configuration
+      const baseMetadataFiles: any = {};
+
+      if (createOptions.mainImageUrl) {
+        baseMetadataFiles.file = { url: createOptions.mainImageUrl };
+      } else if (createOptions.mainImageFile) {
+        baseMetadataFiles.file = {
+          arrayBuffer: () => createOptions.mainImageFile!.buffer,
+          type: createOptions.mainImageFile!.type,
+          name: createOptions.mainImageFile!.name,
+          size: createOptions.mainImageFile!.buffer.length,
+        };
+      }
+
+      if (createOptions.coverImageUrl) {
+        baseMetadataFiles.cover = { url: createOptions.coverImageUrl };
+      } else if (createOptions.coverImageFile) {
+        baseMetadataFiles.cover = {
+          arrayBuffer: () => createOptions.coverImageFile!.buffer,
+          type: createOptions.coverImageFile!.type,
+          name: createOptions.coverImageFile!.name,
+          size: createOptions.coverImageFile!.buffer.length,
+        };
+      }
 
       options = {
         symbol: createOptions.itemSymbol,

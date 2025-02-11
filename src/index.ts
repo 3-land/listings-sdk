@@ -13,6 +13,9 @@ import {
   StoreInitOptions,
 } from "./types/implementation/implementationTypes";
 
+import * as fs2 from "fs";
+import path from "path";
+
 const CONFIG = {
   DEVNET: {
     STORE: "GyPCu89S63P9NcCQAtuSJesiefhhgpGWrNVJs4bF2cSK",
@@ -27,7 +30,7 @@ const CONFIG = {
 function getBaseConfig(isMainnet: boolean = false): StoreInitOptions {
   return {
     privateKey:
-      "2xxw1VP8FBAPFjGRn4SVLzmYNq45TZ9ewnMoFfxdTU6CXYZL8UDrAGJPyNjUx4BL3Q3JMkA5u2z37N6gCn4QCz9C",
+      "",
     isMainnet,
     //customRPC: "",
   };
@@ -72,17 +75,35 @@ async function testCreateCollection() {
 
 async function testCreateSingleEdition() {
   const options = getBaseConfig();
+
+  const mainImageBuffer = await fs2.promises.readFile(
+    path.join(process.cwd(), "assets", "donaltron.jpg")
+  );
+  const coverImageBuffer = await fs2.promises.readFile(
+    path.join(process.cwd(), "assets", "niicl.gif")
+  );
+
   const createItemOptions: CreateSingleOptions = {
-    itemName: "elitem5",
+    itemName: "elitem7",
     sellerFee: 500, //5%
     itemAmount: 100,
     itemSymbol: "lp",
     itemDescription: "a test on dev",
     traits: [{ trait_type: "type", value: "pool" }],
     price: 1000000, //100000000 == 0.1 sol,
-    splHash: "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr",
-    poolName: "alberca",
-    mainImageUrl: "https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg",
+    //splHash: "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr",
+    //poolName: "alberca",
+    //mainImageUrl: "https://pbs.twimg.com/media/GTDGt3wbAAAmYQ5?format=jpg",
+    mainImageFile: {
+      buffer: mainImageBuffer,
+      type: "image/jpeg",
+      name: "astro.png",
+    },
+    coverImageFile: {
+      buffer: coverImageBuffer,
+      type: "image/gif",
+      name: "niicl.gif",
+    },
   };
 
   try {
@@ -124,10 +145,10 @@ async function testBuySingleEdition(itemAccount: string) {
 
 async function main() {
   try {
-    await testCreateStore();
+    // await testCreateStore();
     // await testCreateCollection();
-    // await testCreateSingleEdition();
-    //await testBuySingleEdition("item hash");
+    //await testCreateSingleEdition();
+    await testBuySingleEdition("5amcPgSnhEFfPWrvcDptoffR96gv2tLeSxKW9QNNhZTv");
   } catch (error) {
     console.error("Test execution failed:");
     handleError(error);

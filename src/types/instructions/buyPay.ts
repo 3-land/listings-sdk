@@ -45,13 +45,16 @@ export function buyPay(
     { pubkey: accounts.owner, isSigner: false, isWritable: false },
     { pubkey: accounts.payer, isSigner: true, isWritable: true },
     { pubkey: accounts.systemProgram, isSigner: false, isWritable: false },
+    { pubkey: accounts.payer, isSigner: true, isWritable: true },
   ];
-  for (let item of extraAccounts) {
-    keys.push({
-      pubkey: item.pubkey,
-      isSigner: item.isSigner,
-      isWritable: item.isWritable,
-    });
+  if (extraAccounts){
+    for (let item of extraAccounts) {
+      keys.push({
+        pubkey: item.pubkey,
+        isSigner: item.isSigner,
+        isWritable: item.isWritable,
+      });
+    }
   }
   const identifier = Buffer.from([100, 229, 162, 27, 130, 173, 68, 1]);
   const buffer = Buffer.alloc(1000);
